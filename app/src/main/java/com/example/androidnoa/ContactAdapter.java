@@ -1,5 +1,9 @@
 package com.example.androidnoa;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +18,8 @@ public class ContactAdapter extends BaseAdapter {
 
     List<Contact> contactList;
 
+    Context prevActivity;
+
     private class ViewHolder {
         int id;
         TextView displayName;
@@ -23,8 +29,9 @@ public class ContactAdapter extends BaseAdapter {
     }
 
     //Constructor
-    public ContactAdapter(List<Contact> contactList) {
+    public ContactAdapter(List<Contact> contactList, Context prevActivity) {
         this.contactList = contactList;
+        this.prevActivity = prevActivity;
     }
 
     @Override
@@ -75,7 +82,8 @@ public class ContactAdapter extends BaseAdapter {
         viewHolder.profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked on image", Toast.LENGTH_LONG).show();
+                Intent moveToChatIntent = new Intent(prevActivity, ChatActivity.class);
+                prevActivity.startActivity(moveToChatIntent);
             }
         });
 

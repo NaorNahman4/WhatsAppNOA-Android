@@ -22,7 +22,7 @@ public class ContactsView extends AppCompatActivity {
         ListView lstFeed = (ListView) findViewById(R.id.lstContacts);
 
         contactList = generateContacts();
-        final ContactAdapter feedAdapter = new ContactAdapter(contactList);
+        final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this);
         lstFeed.setAdapter(feedAdapter);
 
     }
