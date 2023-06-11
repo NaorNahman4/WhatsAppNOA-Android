@@ -1,5 +1,6 @@
 package com.example.androidnoa;
 
+
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,16 +48,16 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
-        btnRegister.setOnClickListener(v -> {
-
-            //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        //    startActivity(intent);
-        });
-        btnAlreadyHaveAnAccount.setOnClickListener(v -> {
-           // Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-         //   startActivity(intent);
-        });
     }
+//        btnRegister.setOnClickListener(v -> {
+////            //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+////        //    startActivity(intent);
+////        });
+////        btnAlreadyHaveAnAccount.setOnClickListener(v -> {
+////           // Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+////         //   startActivity(intent);
+////        });
+////    }
 
 
     private void openGallery() {
