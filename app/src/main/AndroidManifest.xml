@@ -18,6 +18,9 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".AddChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
