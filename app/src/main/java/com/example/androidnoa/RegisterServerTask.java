@@ -2,19 +2,12 @@ package com.example.androidnoa;
 
 import android.os.AsyncTask;
 
-import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class RegisterServerTask extends AsyncTask<String, Void, Integer> {
-    private RegisterCallback callback;
-
-    public RegisterServerTask(RegisterCallback callback) {
-        this.callback = callback;
-    }
 
     @Override
     protected Integer doInBackground(String... params) {
@@ -37,16 +30,5 @@ public class RegisterServerTask extends AsyncTask<String, Void, Integer> {
             e.printStackTrace();
             return -1;
         }
-    }
-
-    @Override
-    protected void onPostExecute(Integer statusCode) {
-        if (callback != null) {
-            callback.onRegistrationComplete(statusCode);
-        }
-    }
-
-    public interface RegisterCallback {
-        void onRegistrationComplete(int statusCode);
     }
 }

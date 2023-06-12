@@ -11,8 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import androidx.activity.result.ActivityResultLauncher;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -48,16 +52,38 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        btnRegister.setOnClickListener(v -> {
+            // Get the values from the input fields
+            EditText editTextUser = findViewById(R.id.editTextUser);
+            EditText editTextPassword = findViewById(R.id.editTextPassword);
+            EditText editTextDisplayName = findViewById(R.id.editTextDisplayName);
+
+            String user = editTextUser.getText().toString();
+            String password = editTextPassword.getText().toString();
+            String displayName = editTextDisplayName.getText().toString();
+
+            // Create a JSON object with the user data
+            JSONObject json = new JSONObject();
+            try {
+                json.put("username", user);
+                json.put("password", password);
+                json.put("displayName", displayName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Execute the RegisterServerTask
+            RegisterServerTask registerServerTask = new RegisterServerTask();
+            registerServerTask.execute(json.toString());
+            Intent intent = new Intent(RegisterActivity.this, loginActivity.class);
+            startActivity(intent);
+        });
+        btnAlreadyHaveAnAccount.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, loginActivity.class);
+           startActivity(intent);
+        });
     }
-//        btnRegister.setOnClickListener(v -> {
-////            //Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-////        //    startActivity(intent);
-////        });
-////        btnAlreadyHaveAnAccount.setOnClickListener(v -> {
-////           // Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-////         //   startActivity(intent);
-////        });
-////    }
 
 
     private void openGallery() {
