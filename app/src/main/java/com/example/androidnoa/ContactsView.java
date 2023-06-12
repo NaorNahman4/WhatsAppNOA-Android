@@ -34,12 +34,12 @@ public class ContactsView extends AppCompatActivity {
             startActivity(intent);
         });
 
+
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(view ->{
             Intent intent = new Intent(this, AddChatActivity.class);
             startActivity(intent);
         });
-
     }
 
     private List<Chat> generateContacts() {

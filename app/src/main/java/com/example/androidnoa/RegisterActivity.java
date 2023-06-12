@@ -10,10 +10,18 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+        buttonAddPicture.setOnClickListener(v -> openGallery());
 
         buttonAddPicture.setOnClickListener(v -> openGallery());
         btnRegister.setOnClickListener(v -> {
