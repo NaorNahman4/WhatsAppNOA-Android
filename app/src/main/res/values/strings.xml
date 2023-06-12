@@ -3,4 +3,9 @@
     <string name="tvTitle">This is the list</string>
     <string name="btnLogout">Logout</string>
     <string name="btnSettings">Settings</string>
+    <string name="type_a_message">Type a message...</string>
+    <string name="send">Send</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="login">Login</string>
+    <string name="password">Password:</string>
 </resources>

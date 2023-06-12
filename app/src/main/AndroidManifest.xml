@@ -13,11 +13,18 @@
         android:theme="@style/Theme.AndroidNOA"
         tools:targetApi="31">
         <activity
-            android:name=".ContactsView"
+            android:name=".ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactsView"
+            android:exported="false"/>
+        <activity
+            android:name=".loginActivity"
+            android:exported="true" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
