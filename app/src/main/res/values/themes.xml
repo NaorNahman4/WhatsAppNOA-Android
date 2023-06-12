@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.AndroidNOA" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/white</item>
+        <!-- Add more customizations as needed -->
     </style>
 
     <style name="Theme.AndroidNOA" parent="Base.Theme.AndroidNOA" />
