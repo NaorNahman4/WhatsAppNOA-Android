@@ -53,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
 
+        buttonAddPicture.setOnClickListener(v -> openGallery());
         btnRegister.setOnClickListener(v -> {
             // Get the values from the input fields
             EditText editTextUser = findViewById(R.id.editTextUser);

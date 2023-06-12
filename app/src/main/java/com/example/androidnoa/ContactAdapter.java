@@ -1,22 +1,18 @@
 package com.example.androidnoa;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 public class ContactAdapter extends BaseAdapter {
 
-    List<Contact> contactList;
+    List<Chat> contactList;
 
     Context prevActivity;
 
@@ -29,7 +25,7 @@ public class ContactAdapter extends BaseAdapter {
     }
 
     //Constructor
-    public ContactAdapter(List<Contact> contactList, Context prevActivity) {
+    public ContactAdapter(List<Chat> contactList, Context prevActivity) {
         this.contactList = contactList;
         this.prevActivity = prevActivity;
     }
@@ -40,8 +36,8 @@ public class ContactAdapter extends BaseAdapter {
     }
 
     @Override
-    public Contact getItem(int id){
-        for (Contact contact : this.contactList){
+    public Chat getItem(int id){
+        for (Chat contact : this.contactList){
             if(contact.id == id){
                 return contact;
             }
@@ -72,20 +68,12 @@ public class ContactAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
         }
 
-        Contact c = this.contactList.get(position);
+        Chat chat = this.contactList.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.displayName.setText(c.getDisplayName());
-        viewHolder.profilePic.setImageResource(c.getProfilePic());
-        viewHolder.lastMessageContent.setText(c.getLastMessageContent());
-        viewHolder.lastMessageDate.setText(c.getLastMessageDate());
-
-        viewHolder.profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent moveToChatIntent = new Intent(prevActivity, ChatActivity.class);
-                prevActivity.startActivity(moveToChatIntent);
-            }
-        });
+        viewHolder.displayName.setText(chat.getUsers().get(0).getDisplayName());
+        viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
+        viewHolder.lastMessageContent.setText(chat.getFictiveLastMessage());
+        viewHolder.lastMessageDate.setText(chat.getFictiveLastMessageDate());
 
         return convertView;
     }
