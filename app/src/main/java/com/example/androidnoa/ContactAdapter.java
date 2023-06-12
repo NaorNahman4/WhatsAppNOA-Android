@@ -79,14 +79,6 @@ public class ContactAdapter extends BaseAdapter {
         viewHolder.lastMessageContent.setText(c.getLastMessageContent());
         viewHolder.lastMessageDate.setText(c.getLastMessageDate());
 
-        viewHolder.profilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent moveToChatIntent = new Intent(prevActivity, ChatActivity.class);
-                prevActivity.startActivity(moveToChatIntent);
-            }
-        });
-
         return convertView;
     }
 }

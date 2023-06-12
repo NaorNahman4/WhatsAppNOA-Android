@@ -2,6 +2,7 @@ package com.example.androidnoa;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -25,6 +26,10 @@ public class ContactsView extends AppCompatActivity {
         final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this);
         lstFeed.setAdapter(feedAdapter);
 
+        lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(this, ChatActivity.class);
+            startActivity(intent);
+        });
     }
 
     private List<Contact> generateContacts() {
