@@ -1,6 +1,8 @@
 package com.example.androidnoa;
 
 
+import androidx.annotation.NonNull;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +33,7 @@ public class UsersApi {
         Call<ResponseBody> call = webServiceAPI.registerUser(request);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 System.out.println("naor User registered successfully");
                 int statusCode = response.code();
                 if (statusCode == 200) {
@@ -44,7 +46,7 @@ public class UsersApi {
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                System.out.println("Failed to register user44444444444");
+                System.out.println("naor Failed to register user44444444444" + t.getMessage());
             }
         });
     }
