@@ -29,5 +29,12 @@ public class loginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //FOR TESTING THE LOCAL DB !!!
+        Button btnShowAllUsers = findViewById(R.id.btnShowAllUsers);
+        btnShowAllUsers.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ShowAllUsersActivity.class);
+            startActivity(intent);
+        });
     }
 }

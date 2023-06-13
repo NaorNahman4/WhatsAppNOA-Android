@@ -21,6 +21,14 @@ public class User {
         this.profilePic = profilePic;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -51,5 +59,15 @@ public class User {
 
     public void setProfilePic(int profilePic) {
         this.profilePic = profilePic;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", displayName='" + displayName + '\'' +
+                '}';
     }
 }

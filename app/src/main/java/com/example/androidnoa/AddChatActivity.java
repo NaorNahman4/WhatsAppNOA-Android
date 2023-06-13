@@ -1,12 +1,15 @@
 package com.example.androidnoa;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
 public class AddChatActivity extends AppCompatActivity {
+    private appDB db;
+    private UserDao userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +18,7 @@ public class AddChatActivity extends AppCompatActivity {
 
         Button addBtn = findViewById(R.id.btnAdd);
         addBtn.setOnClickListener(view -> {
+
             Intent intent = new Intent(this, ContactsView.class);
             startActivity(intent);
         });

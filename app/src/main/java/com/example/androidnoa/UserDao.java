@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserDao {
 
     @Query("SELECT * FROM User")
-    ArrayList<User> index();
+    List<User> index();
 
     @Query("SELECT * FROM User WHERE id = :id")
     User getUserById(int id);

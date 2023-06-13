@@ -4,16 +4,17 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Chat {
     @PrimaryKey(autoGenerate=true)
     int id;
-    ArrayList<User> users;
+    List<User> users;
 
-    ArrayList<Message> messages;
+    List<Message> messages;
 
-    public Chat(ArrayList<User> users) {
+    public Chat(List<User> users) {
         this.users = users;
         this.messages = null;
     }
@@ -26,19 +27,19 @@ public class Chat {
         this.id = id;
     }
 
-    public ArrayList<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(ArrayList<User> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
-    public ArrayList<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(ArrayList<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
 

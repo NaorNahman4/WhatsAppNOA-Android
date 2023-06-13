@@ -10,22 +10,22 @@ public class Message {
 
     @PrimaryKey(autoGenerate=true)
     private int id;
-    private Date created;
+    private String created;
     private User sender;
-    private String Content;
+    private String content;
 
     //Constructor
-    public Message(Date created, User sender, String content) {
+    public Message(String created, User sender, String content) {
         this.created = created;
         this.sender = sender;
-        Content = content;
+        this.content = content;
     }
 
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -38,10 +38,18 @@ public class Message {
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        content = content;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
