@@ -10,9 +10,9 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import static com.example.androidnoa.loginActivity.db;
 
 public class ShowAllUsersActivity extends AppCompatActivity {
-    private appDB db;
     private UserDao userDao;
     private List<User> users;
 
@@ -21,17 +21,17 @@ public class ShowAllUsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all_users);
         try {
-            db = Room.databaseBuilder(getApplicationContext(),
-                            appDB.class, "Users")
-                    .build();
             userDao = db.userDao();
+            AsyncTask.execute(() -> {
                 users = userDao.index();
-            if(users != null) {
-                ListView lvUsers = findViewById(R.id.lvUsers);
-                ArrayAdapter<User> adapter = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1, users);
+                if (users != null) {
+                    ListView lvUsers = findViewById(R.id.lvUsers);
+                    ArrayAdapter<User> adapter = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1, users);
 
-                lvUsers.setAdapter(adapter);
-            }
+                    lvUsers.setAdapter(adapter);
+                }
+            });
+
         } catch (Exception e) {
 
         }
