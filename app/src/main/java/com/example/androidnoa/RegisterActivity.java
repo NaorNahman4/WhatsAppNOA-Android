@@ -105,20 +105,9 @@ public class RegisterActivity extends AppCompatActivity {
             String password = editTextPassword.getText().toString();
             String displayName = editTextDisplayName.getText().toString();
 
-//            // Create a JSON object with the user data
-//            JSONObject json = new JSONObject();
-//            try {
-//                json.put("username", user);
-//                json.put("password", password);
-//                json.put("displayName", displayName);
-//                json.put("profilePic",img);
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
             UsersApi usersApi = new UsersApi();
             usersApi.Register(user, password, displayName, img);
-
-            //   finish();
+            finish();
         });
         btnAlreadyHaveAnAccount.setOnClickListener(v -> {
             //Instead of create more intents, just return to the last one

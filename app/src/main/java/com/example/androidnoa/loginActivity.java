@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class loginActivity extends AppCompatActivity {
 
@@ -17,6 +18,14 @@ public class loginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EditText editTextUser = findViewById(R.id.editTextUser);
+                EditText editTextPassword = findViewById(R.id.editTextPassword);
+                String user = editTextUser.getText().toString();
+                String password = editTextPassword.getText().toString();
+                UsersApi usersApi = new UsersApi();
+
+                usersApi.Login(user, password);
+
                 Intent intent2 = new Intent(loginActivity.this, ContactsView.class);
                 startActivity(intent2);
             }

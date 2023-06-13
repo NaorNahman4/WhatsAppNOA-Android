@@ -1,7 +1,14 @@
 package com.example.androidnoa;
 
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -29,24 +36,49 @@ public class UsersApi {
 
     public void Register(String username, String password, String name, String img){
         UserRegistrationRequest request = new UserRegistrationRequest(username, password, name, img);
-        System.out.println("web is :" + webServiceAPI);
         Call<ResponseBody> call = webServiceAPI.registerUser(request);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                System.out.println("naor User registered successfully");
                 int statusCode = response.code();
                 if (statusCode == 200) {
-                    System.out.println("naor User registered successfully");
+                    Toast.makeText(MyApplication.context, "User registered successfully", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    System.out.println("naor User registered failed");
+                    Toast.makeText(MyApplication.context, "User is taken", Toast.LENGTH_LONG).show();
                 }
-
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                System.out.println("naor Failed to register user44444444444" + t.getMessage());
+                System.out.println("On failure ");
+            }
+        });
+    }
+    public void Login(String username, String password){
+        UserNameAndPass data = new UserNameAndPass(username, password);
+        Call<ResponseBody> call = webServiceAPI.logInUser(data);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                        // Get the response body as a string
+                        String status = String.valueOf(response.code());
+                        System.out.println(status);
+                    try {
+                        String token = response.body().string();
+                        System.out.println(token);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    // Handle unsuccessful response
+                    System.out.println("Response unsuccessful");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                System.out.println("On failure ");
             }
         });
     }

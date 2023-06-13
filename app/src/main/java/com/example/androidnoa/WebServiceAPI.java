@@ -2,6 +2,9 @@ package com.example.androidnoa;
 
 
 import com.google.gson.JsonPrimitive;
+
+import org.json.JSONObject;
+
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -16,6 +19,9 @@ public interface WebServiceAPI {
 
     @POST("Users")
     Call<ResponseBody> registerUser(@Body UserRegistrationRequest request);
+
+    @POST("Tokens")
+    Call<ResponseBody> logInUser(@Body UserNameAndPass data);
 
 //
 //    @POST("api/LogIn")
