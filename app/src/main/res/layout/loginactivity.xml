@@ -73,10 +73,21 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:backgroundTint="#4CAF50"
-            android:text="Register"
+            android:text="@string/btnRegister"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnShowAllUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="#00ACC1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/btnShowAllUsers"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

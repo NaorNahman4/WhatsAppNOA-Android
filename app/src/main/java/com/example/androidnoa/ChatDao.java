@@ -7,12 +7,13 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface ChatDao {
 
     @Query("SELECT * FROM Chat")
-    ArrayList<Chat> index();
+    List<Chat> index();
 
     @Query("SELECT * FROM Chat WHERE id = :id")
     Chat getUserById(int id);

@@ -10,4 +10,6 @@
     <string name="password">Password:</string>
     <string name="etAddPesron">Enter username of the person you want to add</string>
     <string name="btnAdd">ADD</string>
+    <string name="btnRegister">Register</string>
+    <string name="btnShowAllUsers">Show All Users</string>
 </resources>

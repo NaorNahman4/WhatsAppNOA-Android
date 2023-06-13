@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -18,6 +19,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -30,6 +32,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class RegisterActivity extends AppCompatActivity {
+    private appDB db;
+    private UserDao userDao;
     int PICK_IMAGE = 1;
     ImageView imageViewPicture;
     Button buttonAddPicture;
@@ -74,24 +78,29 @@ public class RegisterActivity extends AppCompatActivity {
             String displayName = editTextDisplayName.getText().toString();
 
             // Create a JSON object with the user data
-            JSONObject json = new JSONObject();
+//            JSONObject json = new JSONObject();
             try {
-                json.put("username", user);
-                json.put("password", password);
-                json.put("displayName", displayName);
-            } catch (JSONException e) {
+                AsyncTask.execute(() -> {
+                    //Try to add the user to UserDao
+                    addUserLocaly(user, password,displayName);
+                });
+//                json.put("username", user);
+//                json.put("password", password);
+//                json.put("displayName", displayName);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             // Execute the RegisterServerTask
-            RegisterServerTask registerServerTask = new RegisterServerTask();
-            registerServerTask.execute(json.toString());
-            Intent intent = new Intent(RegisterActivity.this, loginActivity.class);
-            startActivity(intent);
+//            RegisterServerTask registerServerTask = new RegisterServerTask();
+//            registerServerTask.execute(json.toString());
+
+            //Instead of create more intents, just return to the last one
+            finish();
         });
         btnAlreadyHaveAnAccount.setOnClickListener(v -> {
-            Intent intent = new Intent(RegisterActivity.this, loginActivity.class);
-           startActivity(intent);
+            //Instead of create more intents, just return to the last one
+            finish();
         });
     }
 
@@ -100,5 +109,25 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryLauncher.launch(intent);
     }
+    private User addUserLocaly(String username, String password, String disName){
+        //Giving all the users this picture
+        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
+        User newUser = new User(username, password, disName, default_pic);
+        try{
+            db = Room.databaseBuilder(getApplicationContext(),
+                            appDB.class, "UsersDB")
+                    .build();
+                userDao = db.userDao();
+                db.userDao().insert(newUser);
+
+            return newUser;
+
+        } catch(Exception e){
+            return null;
+        }
+
+    }
 }
+
+
 

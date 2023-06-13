@@ -41,18 +41,22 @@
         android:orientation="horizontal"
         android:paddingStart="16dp">
 
-        <RadioButton
+        <Button
             android:id="@+id/lightThemeRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Light"
-            android:checked="true"/>
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:checked="true"
+            android:text="Light" />
 
-        <RadioButton
+        <Button
             android:id="@+id/darkThemeRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dark"/>
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:text="Dark" />
 
     </RadioGroup>
 
@@ -69,15 +73,17 @@
         android:paddingTop="16dp"/>
 
     <!-- Server IP Address -->
+
     <TextView
         android:id="@+id/serverIpTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Server IP Address"
-        app:layout_constraintTop_toBottomOf="@+id/serverTextView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="36dp"
         android:paddingStart="16dp"
-        android:paddingTop="16dp"/>
+        android:paddingTop="16dp"
+        android:text="Server IP Address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/serverTextView" />
 
     <EditText
         android:id="@+id/serverIpEditText"

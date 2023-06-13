@@ -2,6 +2,7 @@ package com.example.androidnoa;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -40,7 +41,9 @@ public class ContactsView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ContactsView.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
+                //here i want to get paramther from the settings activity
+
             }
         });
 
@@ -49,8 +52,20 @@ public class ContactsView extends AppCompatActivity {
             Intent intent = new Intent(this, AddChatActivity.class);
             startActivity(intent);
         });
-    }
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                int logOutValue = data.getIntExtra("logOut", -1);
+                if (logOutValue == 0) {
+                    finish(); // Exit the app
+                }
+            }
+        }
+    }
     private List<Chat> generateContacts() {
 
         List<Chat> contacts = new ArrayList<>();
