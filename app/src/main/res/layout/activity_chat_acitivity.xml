@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECECEC"
     tools:context=".ChatActivity">
 
     <LinearLayout
@@ -35,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#FFFFFF"
         android:clipToPadding="false"
         android:elevation="2dp"
         android:paddingStart="8dp"
@@ -52,7 +50,7 @@
         android:id="@+id/inputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="#756D6D"
         android:elevation="4dp"
         android:orientation="horizontal"
         android:paddingStart="8dp"
@@ -80,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="#2979FF"
+            android:background="#44FF00"
             android:text="Send"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
