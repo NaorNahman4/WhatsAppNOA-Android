@@ -1,5 +1,8 @@
 package com.example.androidnoa.activities;
 
+
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +18,7 @@ import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
 import com.example.androidnoa.api.ChatsApi;
-import com.example.androidnoa.api.UsersApi;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.ls.LSOutput;
@@ -30,6 +33,7 @@ import retrofit2.Response;
 
 
 public class ContactsView extends AppCompatActivity {
+
 
     List<Chat> contactList;
 
@@ -101,20 +105,20 @@ public class ContactsView extends AppCompatActivity {
 
         List<Chat> contacts = new ArrayList<>();
 
-//        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-//        User user1 = new User("oror", "oror", "Or Haroni", default_pic);
-//        User user2 = new User("123", "123", "Naor Nahman", default_pic);
-//        User user3 = new User("1234", "1234", "Adar Katz", default_pic);
-//        User user4 = new User("12345", "12345", "Hemi Lebovich", default_pic);
-//        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
-//        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
-//        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
-//        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
-//
-//        contacts.add(new Chat(chat1));
-//        contacts.add(new Chat(chat2));
-//        contacts.add(new Chat(chat3));
-//        contacts.add(new Chat(chat4));
+        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
+        User user1 = db.userDao().getUserById(1);
+        User user2 = db.userDao().getUserById(2);
+        User user3 = db.userDao().getUserById(3);
+        User user4 = db.userDao().getUserById(4);
+        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
+        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
+        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
+        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
+
+        contacts.add(new Chat(chat1));
+        contacts.add(new Chat(chat2));
+        contacts.add(new Chat(chat3));
+        contacts.add(new Chat(chat4));
 
         return contacts;
     }

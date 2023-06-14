@@ -1,6 +1,8 @@
 package com.example.androidnoa.activities;
 
 
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,8 +31,6 @@ import com.example.androidnoa.api.UsersApi;
 import com.example.androidnoa.appDB;
 
 public class RegisterActivity extends AppCompatActivity {
-    private appDB db;
-    private UserDao userDao;
     int PICK_IMAGE = 1;
     ImageView imageViewPicture;
     Button buttonAddPicture;
@@ -113,24 +113,6 @@ public class RegisterActivity extends AppCompatActivity {
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    private User addUserLocaly(String username, String password, String disName){
-        //Giving all the users this picture
-        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-        User newUser = new User(username, password, disName, "");
-        try{
-            db = Room.databaseBuilder(getApplicationContext(),
-                            appDB.class, "UsersDB")
-                    .build();
-                userDao = db.userDao();
-                db.userDao().insert(newUser);
-
-            return newUser;
-
-        } catch(Exception e){
-            return null;
-        }
-
-    }
 }
 
 

@@ -1,6 +1,7 @@
 package com.example.androidnoa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.androidnoa.R;
 import com.example.androidnoa.api.UsersApi;
+import com.example.androidnoa.appDB;
 
 import java.io.IOException;
 
@@ -21,10 +23,18 @@ import retrofit2.Callback;
 
 public class loginActivity extends AppCompatActivity {
 
+    public static appDB db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginactivity);
+
+        //Initialize Room
+        db = Room.databaseBuilder(getApplicationContext(),
+                appDB.class, "User")
+                .fallbackToDestructiveMigration()
+                .build();
+
         Button btnLogin = findViewById(R.id.buttonLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,7 @@
 package com.example.androidnoa.activities;
 
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -15,7 +17,7 @@ import com.example.androidnoa.appDB;
 
 import java.util.ArrayList;
 import java.util.List;
-import static com.example.androidnoa.loginActivity.db;
+
 
 public class ShowAllUsersActivity extends AppCompatActivity {
     private UserDao userDao;
