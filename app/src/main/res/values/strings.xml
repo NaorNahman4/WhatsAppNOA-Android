@@ -12,4 +12,5 @@
     <string name="btnAdd">ADD</string>
     <string name="btnRegister">Register</string>
     <string name="btnShowAllUsers">Show All Users</string>
+    <string name="BaseURL">http://10.0.2.2:8080/api/</string>
 </resources>

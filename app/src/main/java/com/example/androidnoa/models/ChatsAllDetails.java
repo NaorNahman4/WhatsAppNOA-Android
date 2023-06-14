@@ -1,25 +1,21 @@
-package com.example.androidnoa;
+package com.example.androidnoa.models;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import com.example.androidnoa.Message;
+import com.example.androidnoa.User;
 
-import com.example.androidnoa.models.UserAllDetails;
-import com.example.androidnoa.models.UserNameAndPass;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class Chat {
-    @PrimaryKey(autoGenerate=true)
-    int id;
+public class ChatsAllDetails {
+    private int id;
     List<User> users;
 
     List<Message> messages;
 
-    public Chat(List<User> users) {
+
+    public ChatsAllDetails(int id, List<User> users, List<Message> messages) {
+        this.id = id;
         this.users = users;
-        this.messages = null;
+        this.messages = messages;
     }
 
     public int getId() {
@@ -44,13 +40,5 @@ public class Chat {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
-    }
-
-    public String getFictiveLastMessage(){
-        return "Last Message";
-    }
-
-    public String getFictiveLastMessageDate(){
-        return "Last Date";
     }
 }

@@ -1,4 +1,4 @@
-package com.example.androidnoa;
+package com.example.androidnoa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+
+import com.example.androidnoa.R;
+import com.example.androidnoa.activities.loginActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 

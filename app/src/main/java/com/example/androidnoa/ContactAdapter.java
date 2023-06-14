@@ -71,7 +71,7 @@ public class ContactAdapter extends BaseAdapter {
         Chat chat = this.contactList.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.displayName.setText(chat.getUsers().get(0).getDisplayName());
-        viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
+       // viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
         viewHolder.lastMessageContent.setText(chat.getFictiveLastMessage());
         viewHolder.lastMessageDate.setText(chat.getFictiveLastMessageDate());
       
