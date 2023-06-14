@@ -28,6 +28,17 @@ public class ContactsView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_view);
 
+        // Retrieve the intent that started this activity
+        Intent intent = getIntent();
+
+        // Retrieve the token value from the intent
+        String token = intent.getStringExtra("token");
+        System.out.println("token: " + token);
+
+
+
+
+
         ListView lstFeed = (ListView) findViewById(R.id.lstContacts);
 
         contactList = generateContacts();

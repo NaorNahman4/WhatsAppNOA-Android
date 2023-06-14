@@ -31,14 +31,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_acitivity);
 
-        // Retrieve the intent that started this activity
-        Intent intent = getIntent();
-
-        // Retrieve the token value from the intent
-        String token = intent.getStringExtra("token");
-        System.out.println("token: " + token);
-
-
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
