@@ -68,6 +68,10 @@ public class RegisterActivity extends AppCompatActivity {
         defaultPictureBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_pic);
 
         btnRegister.setOnClickListener(v -> {
+            //Initialize empty strings in the next page
+            loginActivity.editTextUser.setText("");
+            loginActivity.editTextPassword.setText("");
+
             // Get the values from the input fields
             EditText editTextUser = findViewById(R.id.editTextUser);
             EditText editTextPassword = findViewById(R.id.editTextPassword);
@@ -97,6 +101,10 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
         btnAlreadyHaveAnAccount.setOnClickListener(v -> {
+            //Initialize empty strings in the next page
+            loginActivity.editTextUser.setText("");
+            loginActivity.editTextPassword.setText("");
+
             //Instead of create more intents, just return to the last one
             finish();
         });

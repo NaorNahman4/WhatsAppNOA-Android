@@ -2,6 +2,7 @@ package com.example.androidnoa.api;
 
 
 import com.example.androidnoa.Chat;
+import com.example.androidnoa.Message;
 import com.example.androidnoa.User;
 import com.example.androidnoa.models.UserNameAndPass;
 import com.example.androidnoa.models.UserAllDetails;
@@ -14,6 +15,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface WebServiceAPI {
 
@@ -25,6 +27,10 @@ public interface WebServiceAPI {
 
     @GET("Chats")
     Call<List<Chat>> GetChats(@Header("Authorization") String token);
+
+    @GET("/{id}/messages")
+    Call<List<Message>> GetMessagesByChatId(@Header("Authorization") String token,
+                                            @Path("id") int id);
 //
 //    @POST("api/ConnectToFirebase")
 //    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);

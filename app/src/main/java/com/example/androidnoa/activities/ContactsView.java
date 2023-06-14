@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.example.androidnoa.Chat;
 import com.example.androidnoa.ContactAdapter;
+import com.example.androidnoa.Message;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
 import com.example.androidnoa.api.ChatsApi;
@@ -33,8 +34,6 @@ import retrofit2.Response;
 
 
 public class ContactsView extends AppCompatActivity {
-
-
     List<Chat> contactList;
 
     @Override
@@ -81,6 +80,25 @@ public class ContactsView extends AppCompatActivity {
 //        lstFeed.setAdapter(feedAdapter);
 //
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
+            int chatId = contactList.get(i).getId();
+
+            chatsApi.GetMessagesByChatId(token, chatId, new Callback<List<Message>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
+                    if (response.isSuccessful()) {
+                        List<Message> messages = response.body();
+                    } else {
+                        // Handle unsuccessful response
+                        System.out.println("Cant get messages- unsuccesfull");
+                    }
+                }
+                @Override
+                public void onFailure(Call<List<Message>> call, Throwable t) {
+                    System.out.println("naor failed to get my chats");
+                    // Handle failure
+                }
+
+            });
             Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
         });
