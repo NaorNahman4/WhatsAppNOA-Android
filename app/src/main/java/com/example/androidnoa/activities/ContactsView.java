@@ -134,7 +134,5 @@ public class ContactsView extends AppCompatActivity {
                 // Handle failure
             }
         });
-
-
     }
 }
