@@ -56,33 +56,10 @@ public class UsersApi {
             }
         });
     }
-    public void Login(String username, String password){
+    public void Login(String username, String password, Callback<ResponseBody> callback){
         UserNameAndPass data = new UserNameAndPass(username, password);
         Call<ResponseBody> call = webServiceAPI.logInUser(data);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                        // Get the response body as a string
-                        String status = String.valueOf(response.code());
-                        System.out.println(status);
-                    try {
-                        String token = response.body().string();
-                        System.out.println(token);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    // Handle unsuccessful response
-                    System.out.println("Response unsuccessful");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                System.out.println("On failure ");
-            }
-        });
+        call.enqueue(callback);
     }
 
 }

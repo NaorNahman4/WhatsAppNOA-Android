@@ -17,9 +17,7 @@ public interface WebServiceAPI {
     @POST("Tokens")
     Call<ResponseBody> logInUser(@Body UserNameAndPass data);
 
-//
-//    @POST("api/LogIn")
-//    Call<JsonPrimitive> logIn(@Body Login login);
+
 //
 //    @POST("api/ConnectToFirebase")
 //    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);

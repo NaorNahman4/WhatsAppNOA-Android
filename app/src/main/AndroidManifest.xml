@@ -36,7 +36,7 @@
             android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ContactsView"
+            android:name=".activities.ContactsView"
             android:exported="false" />
         <activity
             android:name=".activities.loginActivity"

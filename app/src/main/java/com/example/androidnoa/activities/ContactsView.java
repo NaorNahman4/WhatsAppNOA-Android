@@ -1,4 +1,4 @@
-package com.example.androidnoa;
+package com.example.androidnoa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.ListView;
 
 
-import com.example.androidnoa.activities.AddChatActivity;
-import com.example.androidnoa.activities.ChatActivity;
-import com.example.androidnoa.activities.SettingsActivity;
+import com.example.androidnoa.Chat;
+import com.example.androidnoa.ContactAdapter;
+import com.example.androidnoa.R;
+import com.example.androidnoa.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
