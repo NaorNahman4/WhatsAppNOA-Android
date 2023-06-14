@@ -1,5 +1,8 @@
 package com.example.androidnoa.activities;
 
+
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +18,7 @@ import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
 import com.example.androidnoa.api.ChatsApi;
-import com.example.androidnoa.api.UsersApi;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.ls.LSOutput;
@@ -30,6 +33,7 @@ import retrofit2.Response;
 
 
 public class ContactsView extends AppCompatActivity {
+
 
     List<Chat> contactList;
 
@@ -56,9 +60,7 @@ public class ContactsView extends AppCompatActivity {
                     System.out.println("naor get my chats successful");
                     List<Chat> chats = response.body();
                     contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
-                            ContactsView.this,
-                            userName);
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this,userName);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
@@ -74,9 +76,12 @@ public class ContactsView extends AppCompatActivity {
         });
 
 
+//        contactList = generateContacts();
+//        final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this);
+//        lstFeed.setAdapter(feedAdapter);
+//
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(this, ChatActivity.class);
-            intent.putExtra("displayName", contactList.get(i).getOtherDisplayName(userName));
             startActivity(intent);
         });
 
@@ -99,6 +104,22 @@ public class ContactsView extends AppCompatActivity {
     private List<Chat> generateContacts() {
 
         List<Chat> contacts = new ArrayList<>();
+
+        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
+        User user1 = db.userDao().getUserById(1);
+        User user2 = db.userDao().getUserById(2);
+        User user3 = db.userDao().getUserById(3);
+        User user4 = db.userDao().getUserById(4);
+        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
+        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
+        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
+        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
+
+        contacts.add(new Chat(chat1));
+        contacts.add(new Chat(chat2));
+        contacts.add(new Chat(chat3));
+        contacts.add(new Chat(chat4));
+
         return contacts;
     }
 
