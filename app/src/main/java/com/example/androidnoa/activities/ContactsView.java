@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
+import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,6 +37,7 @@ import retrofit2.Response;
 
 public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
+    private List<Message> msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,6 @@ public class ContactsView extends AppCompatActivity {
         chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
             @Override
             public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-                System.out.println("naor get my chats response: ");
-                System.out.println("naor"  + response.code());
                 if (response.isSuccessful()) {
                     System.out.println("naor get my chats successful");
                     List<Chat> chats = response.body();
@@ -75,48 +76,14 @@ public class ContactsView extends AppCompatActivity {
         });
 
 
-//        contactList = generateContacts();
-//        final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this);
-//        lstFeed.setAdapter(feedAdapter);
-//
+
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
+            msg = chatsApi.GetMessagesByChatId(token, chatId);
+            handleResponse(msg);
 
-            chatsApi.GetMessagesByChatId(token, chatId, new Callback<List<Message>>() {
-                @Override
-                public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
-                    if (response.isSuccessful()) {
-                        List<Message> messages = response.body();
-                    } else {
-                        // Handle unsuccessful response
-                        System.out.println("Cant get messages- unsuccesfull");
-                    }
-                }
-                @Override
-                public void onFailure(Call<List<Message>> call, Throwable t) {
-                    System.out.println("naor failed to get my chats");
-                    // Handle failure
-                }
-
-            });
-            Intent intent = new Intent(this, ChatActivity.class);
-            startActivity(intent);
         });
 
-        Button btnSettings = findViewById(R.id.btnSettings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ContactsView.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(view ->{
-            Intent intent = new Intent(this, AddChatActivity.class);
-            startActivity(intent);
-        });
     }
 
     private List<Chat> generateContacts() {
@@ -139,6 +106,18 @@ public class ContactsView extends AppCompatActivity {
         contacts.add(new Chat(chat4));
 
         return contacts;
+    }
+
+
+    public void handleResponse(List<Message> msgList){
+        List<String> list = new ArrayList<>();
+        for(Message m : msgList){
+            list.add(m.getContent());
+        }
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putStringArrayListExtra("list", (ArrayList<String>) list);
+        startActivity(intent);
+
     }
 
 }
