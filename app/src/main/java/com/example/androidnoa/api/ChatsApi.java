@@ -10,6 +10,7 @@ import com.example.androidnoa.Chat;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.MyApplication;
 import com.example.androidnoa.R;
+import com.example.androidnoa.models.UserName;
 
 import java.util.List;
 
@@ -44,11 +45,22 @@ public class ChatsApi {
         call.enqueue(callback);
     }
 
+    //Add new Chat
+    public void CreateMyChat(String token, String userName,  Callback<Chat> callback){
+        //make the string without the first and the last chars
+        token = token.substring(1, token.length() - 1);
+        UserName userName1 = new UserName(userName);
+        Call<Chat> call = webServiceAPI.CreateChat(userName1, token);
+        call.enqueue(callback);
+    }
+
+
     public void GetMessagesByChatId(String token, int id, Callback<List<Message>> callback){
         //make the string without the first and the last chars
         token = token.substring(1, token.length() - 1);
         Call<List<Message>> call = webServiceAPI.GetMessagesByChatId(token, id);
         call.enqueue(callback);
     }
+
 
 }

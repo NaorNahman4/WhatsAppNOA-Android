@@ -101,6 +101,7 @@ public class ContactsView extends AppCompatActivity {
             });
             Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);
+
         });
 
         Button btnSettings = findViewById(R.id.btnSettings);
@@ -115,30 +116,46 @@ public class ContactsView extends AppCompatActivity {
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(view ->{
             Intent intent = new Intent(this, AddChatActivity.class);
+            intent.putExtra("token", token);
             startActivity(intent);
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve the intent that started this activity
+        Intent lastIntent = getIntent();
 
-    private List<Chat> generateContacts() {
+        // Retrieve the token value from the intent
+        String token = lastIntent.getStringExtra("token");
+        String userName = lastIntent.getStringExtra("user");
+        ListView lstFeed = findViewById(R.id.lstContacts);
+        ChatsApi chatsApi = new ChatsApi();
+        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                System.out.println("naor get my chats response: ");
+                System.out.println("naor" + response.code());
+                if (response.isSuccessful()) {
+                    System.out.println("naor get my chats successful");
+                    List<Chat> chats = response.body();
+                    contactList = chats;
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
+                            ContactsView.this,
+                            userName);
+                    lstFeed.setAdapter(feedAdapter);
+                } else {
+                    // Handle unsuccessful response
+                    System.out.println("naor get my chats unsuccessful");
+                }
+            }
 
-        List<Chat> contacts = new ArrayList<>();
 
-        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-        User user1 = db.userDao().getUserById(1);
-        User user2 = db.userDao().getUserById(2);
-        User user3 = db.userDao().getUserById(3);
-        User user4 = db.userDao().getUserById(4);
-        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
-        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
-        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
-        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
-
-        contacts.add(new Chat(chat1));
-        contacts.add(new Chat(chat2));
-        contacts.add(new Chat(chat3));
-        contacts.add(new Chat(chat4));
-
-        return contacts;
+            @Override
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
+                System.out.println("naor failed to get my chats");
+                // Handle failure
+            }
+        });
     }
-
 }
