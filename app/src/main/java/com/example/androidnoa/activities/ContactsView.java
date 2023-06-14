@@ -78,6 +78,7 @@ public class ContactsView extends AppCompatActivity {
             Intent intent = new Intent(this, ChatActivity.class);
             intent.putExtra("displayName", contactList.get(i).getOtherDisplayName(userName));
             startActivity(intent);
+
         });
 
         Button btnSettings = findViewById(R.id.btnSettings);
