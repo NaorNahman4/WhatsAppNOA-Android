@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
     private User addUserLocaly(String username, String password, String disName){
         //Giving all the users this picture
         int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-        User newUser = new User(username, password, disName, default_pic);
+        User newUser = new User(username, password, disName, "");
         try{
             db = Room.databaseBuilder(getApplicationContext(),
                             appDB.class, "UsersDB")

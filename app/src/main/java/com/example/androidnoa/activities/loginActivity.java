@@ -43,6 +43,8 @@ public class loginActivity extends AppCompatActivity {
                             try {
                                 String token = response.body().string();
                                 if (status.equals("200")) {
+                                    System.out.println("naor log in successful");
+                                    System.out.println("naor token befor log in: " + token);
                                     // Open the activity and pass the token as an extra
                                     Intent intent = new Intent(loginActivity.this, ContactsView.class);
                                     intent.putExtra("token", token);

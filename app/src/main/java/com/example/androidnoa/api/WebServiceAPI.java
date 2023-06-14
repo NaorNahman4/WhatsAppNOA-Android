@@ -1,23 +1,30 @@
 package com.example.androidnoa.api;
 
 
+import com.example.androidnoa.Chat;
+import com.example.androidnoa.User;
 import com.example.androidnoa.models.UserNameAndPass;
 import com.example.androidnoa.models.UserAllDetails;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface WebServiceAPI {
 
     @POST("Users")
-    Call<ResponseBody> registerUser(@Body UserAllDetails request);
+    Call<ResponseBody> registerUser(@Body User request);
 
     @POST("Tokens")
     Call<ResponseBody> logInUser(@Body UserNameAndPass data);
 
-
+    @GET("Chats")
+    Call<List<Chat>> GetChats(@Header("Authorization") String token);
 //
 //    @POST("api/ConnectToFirebase")
 //    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);

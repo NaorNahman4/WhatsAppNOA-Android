@@ -11,10 +11,10 @@ public class User {
     private String username;
     private String password;
     private String displayName;
-    private int profilePic;
+    private String profilePic;
 
     //Constructor
-    public User(String username, String password, String displayName, int profilePic) {
+    public User(String username, String password, String displayName, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
@@ -53,11 +53,11 @@ public class User {
         this.displayName = displayName;
     }
 
-    public int getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(int profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 

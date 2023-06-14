@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.androidnoa.MyApplication;
 import com.example.androidnoa.R;
+import com.example.androidnoa.User;
 import com.example.androidnoa.models.UserNameAndPass;
 import com.example.androidnoa.models.UserAllDetails;
 
@@ -37,7 +38,7 @@ public class UsersApi {
     }
 
     public void Register(String username, String password, String name, String img){
-        UserAllDetails request = new UserAllDetails(username, password, name, img);
+        User request = new User(username, password, name, img);
         Call<ResponseBody> call = webServiceAPI.registerUser(request);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
