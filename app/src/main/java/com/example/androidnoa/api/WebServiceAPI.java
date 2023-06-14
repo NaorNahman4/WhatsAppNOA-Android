@@ -1,24 +1,18 @@
-package com.example.androidnoa;
+package com.example.androidnoa.api;
 
 
-import com.google.gson.JsonPrimitive;
-
-import org.json.JSONObject;
-
-import java.util.List;
+import com.example.androidnoa.models.UserNameAndPass;
+import com.example.androidnoa.models.UserAllDetails;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 public interface WebServiceAPI {
 
     @POST("Users")
-    Call<ResponseBody> registerUser(@Body UserRegistrationRequest request);
+    Call<ResponseBody> registerUser(@Body UserAllDetails request);
 
     @POST("Tokens")
     Call<ResponseBody> logInUser(@Body UserNameAndPass data);

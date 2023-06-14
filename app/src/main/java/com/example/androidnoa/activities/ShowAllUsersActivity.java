@@ -1,4 +1,4 @@
-package com.example.androidnoa;
+package com.example.androidnoa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -7,6 +7,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.example.androidnoa.R;
+import com.example.androidnoa.User;
+import com.example.androidnoa.UserDao;
+import com.example.androidnoa.appDB;
 
 import java.util.ArrayList;
 import java.util.List;

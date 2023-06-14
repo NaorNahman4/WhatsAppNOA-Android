@@ -21,25 +21,25 @@
 
         <!-- Add your activity declarations -->
         <activity
-            android:name=".ShowAllUsersActivity"
+            android:name=".activities.ShowAllUsersActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".AddChatActivity"
+            android:name=".activities.AddChatActivity"
             android:exported="false" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".activities.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ContactsView"
             android:exported="false" />
         <activity
-            android:name=".loginActivity"
+            android:name=".activities.loginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

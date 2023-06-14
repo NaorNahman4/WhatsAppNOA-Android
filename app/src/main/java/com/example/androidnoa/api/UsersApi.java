@@ -1,12 +1,14 @@
-package com.example.androidnoa;
+package com.example.androidnoa.api;
 
 
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.androidnoa.MyApplication;
+import com.example.androidnoa.R;
+import com.example.androidnoa.models.UserNameAndPass;
+import com.example.androidnoa.models.UserAllDetails;
 
 import java.io.IOException;
 
@@ -35,7 +37,7 @@ public class UsersApi {
     }
 
     public void Register(String username, String password, String name, String img){
-        UserRegistrationRequest request = new UserRegistrationRequest(username, password, name, img);
+        UserAllDetails request = new UserAllDetails(username, password, name, img);
         Call<ResponseBody> call = webServiceAPI.registerUser(request);
         call.enqueue(new Callback<ResponseBody>() {
             @Override

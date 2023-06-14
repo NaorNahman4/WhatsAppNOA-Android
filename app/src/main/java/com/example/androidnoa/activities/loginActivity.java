@@ -1,4 +1,4 @@
-package com.example.androidnoa;
+package com.example.androidnoa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.androidnoa.ContactsView;
+import com.example.androidnoa.R;
+import com.example.androidnoa.api.UsersApi;
 
 public class loginActivity extends AppCompatActivity {
 

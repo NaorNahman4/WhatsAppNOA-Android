@@ -1,4 +1,4 @@
-package com.example.androidnoa;
+package com.example.androidnoa.activities;
 
 
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -8,18 +8,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import java.io.ByteArrayOutputStream;
@@ -27,19 +22,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import com.google.gson.JsonPrimitive;
+import com.example.androidnoa.R;
+import com.example.androidnoa.User;
+import com.example.androidnoa.UserDao;
+import com.example.androidnoa.api.UsersApi;
+import com.example.androidnoa.appDB;
 
 public class RegisterActivity extends AppCompatActivity {
     private appDB db;

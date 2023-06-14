@@ -1,10 +1,13 @@
-package com.example.androidnoa;
+package com.example.androidnoa.adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.example.androidnoa.R;
+
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {

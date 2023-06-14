@@ -1,12 +1,12 @@
-package com.example.androidnoa;
+package com.example.androidnoa.models;
 
-public class UserRegistrationRequest {
+public class UserAllDetails {
     private String username;
     private String password;
     private String displayName;
     private String profilePic;
 
-    public UserRegistrationRequest(String username, String password, String displayName, String profilePic) {
+    public UserAllDetails(String username, String password, String displayName, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;

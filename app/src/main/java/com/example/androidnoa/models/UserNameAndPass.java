@@ -1,4 +1,4 @@
-package com.example.androidnoa;
+package com.example.androidnoa.models;
 
 public class UserNameAndPass {
     private String username;
