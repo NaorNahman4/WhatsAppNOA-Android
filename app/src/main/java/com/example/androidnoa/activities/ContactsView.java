@@ -43,7 +43,7 @@ public class ContactsView extends AppCompatActivity {
 
         // Retrieve the token value from the intent
         String token = lastIntent.getStringExtra("token");
-        String user = lastIntent.getStringExtra("user");
+        String userName = lastIntent.getStringExtra("user");
 
         ListView lstFeed = findViewById(R.id.lstContacts);
         ChatsApi chatsApi = new ChatsApi();
@@ -58,7 +58,7 @@ public class ContactsView extends AppCompatActivity {
                     contactList = chats;
                     final ContactAdapter feedAdapter = new ContactAdapter(contactList,
                             ContactsView.this,
-                            user);
+                            userName);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
@@ -76,6 +76,7 @@ public class ContactsView extends AppCompatActivity {
 
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(this, ChatActivity.class);
+            intent.putExtra("displayName", contactList.get(i).getOtherDisplayName(userName));
             startActivity(intent);
         });
 
@@ -98,22 +99,6 @@ public class ContactsView extends AppCompatActivity {
     private List<Chat> generateContacts() {
 
         List<Chat> contacts = new ArrayList<>();
-
-//        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-//        User user1 = new User("oror", "oror", "Or Haroni", default_pic);
-//        User user2 = new User("123", "123", "Naor Nahman", default_pic);
-//        User user3 = new User("1234", "1234", "Adar Katz", default_pic);
-//        User user4 = new User("12345", "12345", "Hemi Lebovich", default_pic);
-//        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
-//        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
-//        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
-//        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
-//
-//        contacts.add(new Chat(chat1));
-//        contacts.add(new Chat(chat2));
-//        contacts.add(new Chat(chat3));
-//        contacts.add(new Chat(chat4));
-
         return contacts;
     }
 

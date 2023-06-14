@@ -53,4 +53,12 @@ public class Chat {
     public String getFictiveLastMessageDate(){
         return "Last Date";
     }
+    public String getOtherDisplayName(String my_name){
+        if (users.get(0).getUsername().equals(my_name)){
+            return users.get(1).getUsername();
+        }
+        else{
+            return users.get(0).getUsername();
+        }
+    }
 }

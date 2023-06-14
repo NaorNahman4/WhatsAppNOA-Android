@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.R;
@@ -31,6 +32,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_acitivity);
 
+        Intent intent = getIntent();
+        String displayName = intent.getStringExtra("displayName");
+        TextView textViewDisplayName = findViewById(R.id.textViewUsername);
+        textViewDisplayName.setText(displayName);
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
