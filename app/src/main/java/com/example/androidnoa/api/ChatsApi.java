@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.androidnoa.Chat;
 import com.example.androidnoa.MyApplication;
 import com.example.androidnoa.R;
+import com.example.androidnoa.models.UserName;
 
 import java.util.List;
 
@@ -37,6 +38,14 @@ public class ChatsApi {
         token = token.substring(1, token.length() - 1);
         System.out.println("naor token inside" + token);
         Call<List<Chat>> call = webServiceAPI.GetChats(token);
+        call.enqueue(callback);
+    }
+    //Add new Chat
+    public void CreateMyChat(String token, String userName,  Callback<Chat> callback){
+        //make the string without the first and the last chars
+        token = token.substring(1, token.length() - 1);
+        UserName userName1 = new UserName(userName);
+        Call<Chat> call = webServiceAPI.CreateChat(userName1, token);
         call.enqueue(callback);
     }
 }

@@ -92,14 +92,48 @@ public class ContactsView extends AppCompatActivity {
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         btnAdd.setOnClickListener(view ->{
             Intent intent = new Intent(this, AddChatActivity.class);
+            intent.putExtra("token", token);
             startActivity(intent);
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve the intent that started this activity
+        Intent lastIntent = getIntent();
 
-    private List<Chat> generateContacts() {
+        // Retrieve the token value from the intent
+        String token = lastIntent.getStringExtra("token");
+        String userName = lastIntent.getStringExtra("user");
 
-        List<Chat> contacts = new ArrayList<>();
-        return contacts;
+        ListView lstFeed = findViewById(R.id.lstContacts);
+        ChatsApi chatsApi = new ChatsApi();
+        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                System.out.println("naor get my chats response: ");
+                System.out.println("naor" + response.code());
+                if (response.isSuccessful()) {
+                    System.out.println("naor get my chats successful");
+                    List<Chat> chats = response.body();
+                    contactList = chats;
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
+                            ContactsView.this,
+                            userName);
+                    lstFeed.setAdapter(feedAdapter);
+                } else {
+                    // Handle unsuccessful response
+                    System.out.println("naor get my chats unsuccessful");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
+                System.out.println("naor failed to get my chats");
+                // Handle failure
+            }
+        });
+
+
     }
-
 }
