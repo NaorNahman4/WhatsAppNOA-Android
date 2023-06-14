@@ -1,6 +1,9 @@
 package com.example.androidnoa.api;
 
 
+
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,6 +49,9 @@ public class UsersApi {
                 int statusCode = response.code();
                 if (statusCode == 200) {
                     Toast.makeText(MyApplication.context, "User registered successfully", Toast.LENGTH_LONG).show();
+                    new Thread(() ->{
+                        db.userDao().insert(request);
+                    }).start();
                 }
                 else {
                     Toast.makeText(MyApplication.context, "User is taken", Toast.LENGTH_LONG).show();
