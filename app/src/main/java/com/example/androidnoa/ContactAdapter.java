@@ -15,6 +15,7 @@ public class ContactAdapter extends BaseAdapter {
     List<Chat> contactList;
 
     Context prevActivity;
+    String user;
 
     private class ViewHolder {
         int id;
@@ -25,9 +26,10 @@ public class ContactAdapter extends BaseAdapter {
     }
 
     //Constructor
-    public ContactAdapter(List<Chat> contactList, Context prevActivity) {
+    public ContactAdapter(List<Chat> contactList, Context prevActivity, String user) {
         this.contactList = contactList;
         this.prevActivity = prevActivity;
+        this.user = user;
     }
 
     @Override
@@ -68,9 +70,14 @@ public class ContactAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
         }
 
+
         Chat chat = this.contactList.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.displayName.setText(chat.getUsers().get(0).getDisplayName());
+        String displayName = chat.getUsers().get(0).getDisplayName();
+        if (displayName.equals(user)){
+            displayName = chat.getUsers().get(1).getDisplayName();
+        }
+        viewHolder.displayName.setText(displayName);
        // viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
         viewHolder.lastMessageContent.setText(chat.getFictiveLastMessage());
         viewHolder.lastMessageDate.setText(chat.getFictiveLastMessageDate());

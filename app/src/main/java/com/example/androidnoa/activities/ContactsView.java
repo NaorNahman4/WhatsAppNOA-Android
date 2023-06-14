@@ -43,7 +43,7 @@ public class ContactsView extends AppCompatActivity {
 
         // Retrieve the token value from the intent
         String token = lastIntent.getStringExtra("token");
-
+        String user = lastIntent.getStringExtra("user");
 
         ListView lstFeed = findViewById(R.id.lstContacts);
         ChatsApi chatsApi = new ChatsApi();
@@ -56,7 +56,9 @@ public class ContactsView extends AppCompatActivity {
                     System.out.println("naor get my chats successful");
                     List<Chat> chats = response.body();
                     contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this);
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
+                            ContactsView.this,
+                            user);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
@@ -72,10 +74,6 @@ public class ContactsView extends AppCompatActivity {
         });
 
 
-//        contactList = generateContacts();
-//        final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this);
-//        lstFeed.setAdapter(feedAdapter);
-//
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(this, ChatActivity.class);
             startActivity(intent);

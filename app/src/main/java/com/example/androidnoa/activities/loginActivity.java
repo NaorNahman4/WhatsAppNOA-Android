@@ -48,6 +48,7 @@ public class loginActivity extends AppCompatActivity {
                                     // Open the activity and pass the token as an extra
                                     Intent intent = new Intent(loginActivity.this, ContactsView.class);
                                     intent.putExtra("token", token);
+                                    intent.putExtra("user", user);
                                     startActivity(intent);
                                 } else {
                                     // Handle the case when the status is not 200

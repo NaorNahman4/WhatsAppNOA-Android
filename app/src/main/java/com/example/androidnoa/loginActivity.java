@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.androidnoa.activities.ContactsView;
 import com.example.androidnoa.activities.RegisterActivity;
 import com.example.androidnoa.activities.ShowAllUsersActivity;
 
