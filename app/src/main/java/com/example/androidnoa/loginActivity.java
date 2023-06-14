@@ -8,6 +8,7 @@ import android.hardware.usb.UsbRequest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class loginActivity extends AppCompatActivity {
     public static appDB db;
@@ -17,16 +18,19 @@ public class loginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginactivity);
         //Initializing the appDB once
-        db = Room.databaseBuilder(getApplicationContext(), appDB.class, "User")
-                .allowMainThreadQueries()
-                .build();
+            db = Room.databaseBuilder(getApplicationContext(), appDB.class, "User").allowMainThreadQueries()
+                    .build();
+
 
         Button btnLogin = findViewById(R.id.buttonLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent2 = new Intent(loginActivity.this, ContactsView.class);
-                startActivity(intent2);
+                Intent intent = new Intent(loginActivity.this, ContactsView.class);
+                EditText username = findViewById(R.id.editTextUser);
+                String usernameLabel = username.getText().toString();
+                intent.putExtra("username", usernameLabel);
+                startActivity(intent);
             }
         });
         Button btnRegister = findViewById(R.id.buttonRegister);

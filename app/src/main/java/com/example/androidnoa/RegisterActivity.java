@@ -134,8 +134,9 @@ public class RegisterActivity extends AppCompatActivity {
         User newUser = new User(username, password, disName, pic);
         try {
             userDao = db.userDao();
+            //Adding the user to the data
             AsyncTask.execute(() -> {
-                userDao.insert(newUser);
+                    userDao.insert(newUser);
             });
             return newUser;
         } catch (Exception e) {

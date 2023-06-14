@@ -12,18 +12,29 @@ import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import static com.example.androidnoa.loginActivity.db;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ContactsView extends AppCompatActivity {
-
+    private User activeUser;
+    private int id;
+    private int activeToken;
     List<Chat> contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_view);
+
+        //Getting the username of the user that logged in
+        Intent prevIntent = getIntent();
+        String username = prevIntent.getStringExtra("username");
+
+        //Later on with the server we will get the token, with it will get the whole user
+        //and will save it in activeUser field for later usage
 
         ListView lstFeed = (ListView) findViewById(R.id.lstContacts);
 
@@ -70,15 +81,15 @@ public class ContactsView extends AppCompatActivity {
 
         List<Chat> contacts = new ArrayList<>();
 
-        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-        User user1 = new User("oror", "oror", "Or Haroni", default_pic);
-        User user2 = new User("123", "123", "Naor Nahman", default_pic);
-        User user3 = new User("1234", "1234", "Adar Katz", default_pic);
-        User user4 = new User("12345", "12345", "Hemi Lebovich", default_pic);
-        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
-        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
-        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
-        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
+        User user1 = db.userDao().getUserById(1);
+        User user2 = db.userDao().getUserById(5);
+        User user3 = db.userDao().getUserById(1);
+        User user4 = db.userDao().getUserById(18);
+
+        List<User> chat1 = new ArrayList<>(); chat1.add(user2); chat1.add(user1);
+        List<User> chat2 = new ArrayList<>(); chat2.add(user3); chat2.add(user2);
+        List<User> chat3 = new ArrayList<>(); chat3.add(user4); chat3.add(user3);
+        List<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user4);
 
         contacts.add(new Chat(chat1));
         contacts.add(new Chat(chat2));
