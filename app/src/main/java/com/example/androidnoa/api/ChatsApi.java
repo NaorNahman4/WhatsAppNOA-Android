@@ -53,32 +53,14 @@ public class ChatsApi {
         call.enqueue(callback);
     }
 
-    public List<Message> GetMessagesByChatId(String token, int id){
+    public void GetMessagesByChatId(String token, int id,Callback<List<Message>> callback){
         //make the string without the first and the last chars
         token = token.substring(1, token.length() - 1);
-        final List<Message>[] messages = new List[]{new ArrayList<>()};
+       // final List<Message>[] messages = new List[]{new ArrayList<>()};
         Call<List<Message>> call = webServiceAPI.GetMessagesByChatId(token, id);
-        call.enqueue(new Callback<List<Message>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
-                System.out.println(response.code());
-                if (response.isSuccessful()) {
-                    messages[0] = response.body();
+        call.enqueue(callback);
 
-                } else {
-                    // Handle unsuccessful response
-                    System.out.println("Cant get messages- unsuccesfull");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Message>> call, Throwable t) {
-                System.out.println("naor failed to get my chats");
-                // Handle failure
-            }
-        });
-
-        return messages[0];
+     //   return messages[0];
     }
 
 }

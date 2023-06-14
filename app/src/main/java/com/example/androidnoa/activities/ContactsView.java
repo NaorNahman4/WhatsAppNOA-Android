@@ -1,6 +1,5 @@
 package com.example.androidnoa.activities;
 
-
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import androidx.annotation.NonNull;
@@ -12,11 +11,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-
+import android.widget.Toast;
 
 import com.example.androidnoa.Chat;
 import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
+import com.example.androidnoa.MyApplication;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
 import com.example.androidnoa.adapters.ChatAdapter;
@@ -34,10 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
-    private List<Message> msg;
+    List<Message> msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,39 +56,52 @@ public class ContactsView extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
                 if (response.isSuccessful()) {
-                    System.out.println("naor get my chats successful");
                     List<Chat> chats = response.body();
                     contactList = chats;
                     final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
-                    System.out.println("naor get my chats unsuccessful");
+                    System.out.println("naor get my chats unsuccessful getmyChats");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
-                System.out.println("naor failed to get my chats");
+                System.out.println("naor failed to get my chats getmyChats");
                 // Handle failure
             }
         });
 
-
-
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
-            msg = chatsApi.GetMessagesByChatId(token, chatId);
-            handleResponse(msg);
+            chatsApi.GetMessagesByChatId(token, chatId,(new Callback<List<Message>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
+                    System.out.println(response.code());
+                    if (response.isSuccessful()) {
+                       msg = response.body();
+                       if(msg != null){
+                       handleResponse(msg);
+                       }
 
+                    } else {
+                        // Handle unsuccessful response
+                        System.out.println("Cant get messages- unsuccesfull");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Message>> call, Throwable t) {
+                    System.out.println("naor failed to get my chats");
+                    // Handle failure
+                }
+            }));
         });
-
     }
 
     private List<Chat> generateContacts() {
-
         List<Chat> contacts = new ArrayList<>();
-
         int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
         User user1 = db.userDao().getUserById(1);
         User user2 = db.userDao().getUserById(2);
@@ -108,16 +120,13 @@ public class ContactsView extends AppCompatActivity {
         return contacts;
     }
 
-
-    public void handleResponse(List<Message> msgList){
+    public void handleResponse(List<Message> msgList) {
         List<String> list = new ArrayList<>();
-        for(Message m : msgList){
+        for (Message m : msgList) {
             list.add(m.getContent());
         }
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putStringArrayListExtra("list", (ArrayList<String>) list);
         startActivity(intent);
-
     }
-
 }
