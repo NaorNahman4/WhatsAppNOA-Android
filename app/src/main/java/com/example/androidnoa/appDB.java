@@ -9,4 +9,7 @@ import androidx.room.TypeConverters;
 public abstract  class appDB extends RoomDatabase {
     public abstract UserDao userDao();
 
+    public abstract ChatDao chatDao();
+
+    public abstract MessageDao messageDao();
 }

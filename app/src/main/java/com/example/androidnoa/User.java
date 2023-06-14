@@ -68,6 +68,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", displayName='" + displayName + '\'' +
+                ", profilePic=" + profilePic +
                 '}';
     }
 }
