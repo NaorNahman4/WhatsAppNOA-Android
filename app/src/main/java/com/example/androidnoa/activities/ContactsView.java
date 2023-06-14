@@ -60,7 +60,7 @@ public class ContactsView extends AppCompatActivity {
                     System.out.println("naor get my chats successful");
                     List<Chat> chats = response.body();
                     contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this,userName);
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
