@@ -60,7 +60,7 @@ public class ContactsView extends AppCompatActivity {
         userName = lastIntent.getStringExtra("user");
 
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
-        Button btnSettings = findViewById(R.id.btnSettings);
+        FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
 
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi();
