@@ -6,9 +6,13 @@ import androidx.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidnoa.R;
@@ -51,8 +55,6 @@ public class loginActivity extends AppCompatActivity {
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
-
-
         //Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +81,15 @@ public class loginActivity extends AppCompatActivity {
                     }
                 String password = editTextPassword.getText().toString();
                 if (username.isEmpty() && password.isEmpty()) {
-                    Toast.makeText(loginActivity.this, "Please fill username and password", Toast.LENGTH_SHORT).show();
+                    showCustomToast("Please fill username and password");
                     return;
                 }
                 if (username.isEmpty()) {
-                    Toast.makeText(loginActivity.this, "Please fill username", Toast.LENGTH_SHORT).show();
+                    showCustomToast("Please fill username");
                     return;
                 }
                 if (password.isEmpty()) {
-                    Toast.makeText(loginActivity.this, "Please fill password", Toast.LENGTH_SHORT).show();
+                    showCustomToast("Please fill password");
                     return;
                 }
                 UsersApi usersApi = new UsersApi();
@@ -101,8 +103,6 @@ public class loginActivity extends AppCompatActivity {
                                 String token = response.body().string();
 
                                 if (status.equals("200")) {
-                                    System.out.println("naor log in successful");
-                                    System.out.println("naor token befor log in: " + token);
                                     // Open the activity and pass the token as an extra
                                     Intent intent = new Intent(loginActivity.this, ContactsView.class);
                                     intent.putExtra("token", token);
@@ -111,21 +111,21 @@ public class loginActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 } else {
                                     // Handle the case when the status is not 200
-                                    Toast.makeText(loginActivity.this, "Login unsuccessful", Toast.LENGTH_SHORT).show();
+                                    showCustomToast("Login request failed");
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                         } else {
                             // Handle unsuccessful response
-                            Toast.makeText(loginActivity.this, "Login request failed", Toast.LENGTH_SHORT).show();
+                            showCustomToast("Login request failed");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         // Handle network or API call failure
-                        Toast.makeText(loginActivity.this, "Login request failed", Toast.LENGTH_SHORT).show();
+                        showCustomToast("Login request failed");
                     }
                 });
             }
@@ -166,5 +166,20 @@ public class loginActivity extends AppCompatActivity {
         loginActivity.editTextUser.setText("");
         loginActivity.editTextPassword.setText("");
     }
+    public  void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_warning,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 32);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
 
 }

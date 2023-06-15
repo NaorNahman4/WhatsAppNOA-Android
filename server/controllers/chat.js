@@ -92,6 +92,7 @@ const sendMessage = async (req, res) => {
         const username = decode(req.headers.authorization);
         const id = req.params.id;
         const msg = req.body.msg;
+        console.log(msg);
         //Check if chat exist and a chat of user
         if (chatService.getChatById(username, id)) {
             res.status(200).json(await chatService.sendMessage(username, id, msg));
