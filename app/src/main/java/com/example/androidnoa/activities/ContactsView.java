@@ -121,12 +121,6 @@ public class ContactsView extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Retrieve the intent that started this activity
-        Intent lastIntent = getIntent();
-    }
 
     public void handleResponse(List<Message> msgList) {
         List<String> list = new ArrayList<>();
