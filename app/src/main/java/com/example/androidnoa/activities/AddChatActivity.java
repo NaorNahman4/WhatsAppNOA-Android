@@ -68,7 +68,6 @@ public class AddChatActivity extends AppCompatActivity {
                         showCustomToast("Cannot add yourself");
                     }else if(resCode == 500){
                         showCustomToast("Chat exists already");
-
                     }
                     else{
                         showCustomToast("Unrecognized Error");

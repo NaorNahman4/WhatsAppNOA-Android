@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,18 +58,36 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
-
         messages = new ArrayList<>();
         messages = (ArrayList<Message>)intent.getSerializableExtra("list");
-        chatAdapter = new ChatAdapter(messages);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public void scrollToPositionWithOffset(int position, int offset) {
+                super.scrollToPositionWithOffset(position, -(recyclerView.getHeight() - offset));
+            }
+        };
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        chatAdapter = new ChatAdapter(messages, currentUser);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatAdapter);
+
+        recyclerView.scrollToPosition(messages.size() - 1);
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage();
+            }
+        });
+
+        editTextMessage.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    sendMessage(); // Call the sendMessage() method when the Enter key is pressed
+                    return true; // Consume the event
+                }
+                return false;
             }
         });
     }
@@ -113,5 +132,6 @@ public class ChatActivity extends AppCompatActivity {
         // Format the date and time
         return dateFormat.format(calendar.getTime());
     }
+
 
 }

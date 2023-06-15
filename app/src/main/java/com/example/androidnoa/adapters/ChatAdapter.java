@@ -26,9 +26,12 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
 
     private List<Message> messages;
+    private User currentUser; // Add currentUser field
 
-    public ChatAdapter(List<Message> messages) {
+
+    public ChatAdapter(List<Message> messages, User currentUser) { // Update the constructor
         this.messages = messages;
+        this.currentUser = currentUser; // Set the currentUser field
     }
 
     @Override
@@ -62,12 +65,26 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
         public void bind(Message message) {
             User sender = message.getSender();
-            System.out.println("naor sender: " + sender);
             String username = sender.getUsername();
-            System.out.println("naor username: " + username);
-            textViewSender.setText(username);
             textViewContent.setText(message.getContent());
             textViewCreated.setText(message.getCreated());
+
+            // Check if the message is from the current user
+            if (sender.getUsername().equals(currentUser.getUsername())) {
+                // Set layout params for the current user's messages to align to the right
+                textViewContent.setBackgroundResource(R.drawable.current_user_message_background);
+                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+                layoutParams.setMarginStart(30); // Adjust the margin as per your preference
+                itemView.setLayoutParams(layoutParams);
+            } else {
+                // Set layout params for the other user's messages to align to the right
+                textViewContent.setBackgroundResource(R.drawable.other_user_message_background);
+                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) itemView.getLayoutParams();
+                layoutParams.setMarginStart(700); // Adjust the margin as per your preference
+                itemView.setLayoutParams(layoutParams);
+            }
         }
+
+
     }
 }
