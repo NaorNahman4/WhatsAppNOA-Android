@@ -38,6 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ContactsView extends AppCompatActivity {
+    private Thread updateThread;
     List<Chat> contactList;
     List<Message> msg;
     User currentUser;
@@ -62,7 +63,7 @@ public class ContactsView extends AppCompatActivity {
 
         userName = lastIntent.getStringExtra("username");
         currentUser = (User) lastIntent.getSerializableExtra("user");
-        if(currentUser == null){
+        if (currentUser == null) {
             userApi = new UsersApi();
             try {
 
@@ -90,45 +91,13 @@ public class ContactsView extends AppCompatActivity {
 
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi();
-        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-                if (response.isSuccessful()) {
-                    List<Chat> chats = response.body();
-                    contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName,token);
-                    lstFeed.setAdapter(feedAdapter);
-                } else {
-                    // Handle unsuccessful response
-                    System.out.println("naor get my chats unsuccessful getmyChats");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Chat>> call, Throwable t) {
-                System.out.println("naor failed to get my chats getmyChats");
-                // Handle failure
-            }
-        });
-
-
-        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
-        FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
-
-        lstFeed = findViewById(R.id.lstContacts);
-        chatsApi = new ChatsApi();
-
-//        //Getting all the chats of the user
 //        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
 //            @Override
 //            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
 //                if (response.isSuccessful()) {
 //                    List<Chat> chats = response.body();
 //                    contactList = chats;
-//                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
-//                            ContactsView.this,
-//                            userName,
-//                            token);
+//                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName,token);
 //                    lstFeed.setAdapter(feedAdapter);
 //                } else {
 //                    // Handle unsuccessful response
@@ -143,19 +112,63 @@ public class ContactsView extends AppCompatActivity {
 //            }
 //        });
 
+
+        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
+        FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
+
+        lstFeed = findViewById(R.id.lstContacts);
+        chatsApi = new ChatsApi();
+
+
+        //Thread that activates a function that takes all the user chats
+        //and put inside the chatDao
+        updateThread = new Thread(() -> {
+            if (contactList != null) {
+                for (Chat chat : contactList) {
+                    db.chatDao().update(chat);
+                }
+            }
+        });
+        //Getting all the chats of the user into ChatDao
+        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+
+            @Override
+            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                if (response.isSuccessful()) {
+                    contactList = response.body();
+                    updateThread.start();
+                } else {
+                    // Handle unsuccessful response
+                    System.out.println("naor get my chats unsuccessful getmyChats");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
+                System.out.println("naor failed to get my chats getmyChats");
+                // Handle failure
+            }
+
+        });
+        try {
+            updateThread.join();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         //After click, getting all the messages for the chat
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
 
-            chatsApi.GetMessagesByChatId(token, chatId,(new Callback<List<Message>>() {
+            chatsApi.GetMessagesByChatId(token, chatId, (new Callback<List<Message>>() {
 
                 @Override
                 public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
                     if (response.isSuccessful()) {
-                       msg = response.body();
-                       if(msg != null){
-                       handleResponse(msg, chatId);
-                       }
+                        msg = response.body();
+                        if (msg != null) {
+                            handleResponse(msg, chatId);
+                        }
 
                     } else {
                         // Handle unsuccessful response
@@ -169,7 +182,7 @@ public class ContactsView extends AppCompatActivity {
                     // Handle failure
                 }
             }));
-            });
+        });
 
         // Open settings
         btnSettings.setOnClickListener(new View.OnClickListener() {
@@ -194,13 +207,13 @@ public class ContactsView extends AppCompatActivity {
 
         new Thread(() -> {
             //Getting all the chats in the dao
-            List<Chat> testList  = db.chatDao().index();
+            List<Chat> testList = db.chatDao().index();
             contactList = new ArrayList<>();
-            for (Chat chat : testList){
+            for (Chat chat : testList) {
                 //Checking if its a chat of active user
                 String u1 = chat.getUsers().get(0).getUsername();
                 String u2 = chat.getUsers().get(1).getUsername();
-                if(u1.equals(userName)|| u2.equals(userName) ){
+                if (u1.equals(userName) || u2.equals(userName)) {
                     contactList.add(chat);
                 }
             }
@@ -226,7 +239,7 @@ public class ContactsView extends AppCompatActivity {
         }
     }
 
-    public void handleResponse(List<Message> msgList,int chatId) {
+    public void handleResponse(List<Message> msgList, int chatId) {
 //        List<String> list = new ArrayList<>();
 //        for (Message m : msgList) {
 //            list.add(m.getContent());
