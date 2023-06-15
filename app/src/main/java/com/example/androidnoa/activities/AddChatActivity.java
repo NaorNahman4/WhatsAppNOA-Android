@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.androidnoa.Chat;
 import com.example.androidnoa.ContactAdapter;
@@ -49,10 +50,26 @@ public class AddChatActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<Chat> call, @NonNull Response<Chat> response) {
                     System.out.println("naor create chat response: ");
                     System.out.println("naor"  + response.code());
+                    int resCode = response.code();
                     if (response.isSuccessful()) {
                         System.out.println("naor create chat successful");
                         newChat = response.body();
                        t.start();
+                    }
+                    else if(resCode == 404){
+                        Toast.makeText(AddChatActivity.this, "User is not exist"
+                        ,Toast.LENGTH_LONG).show();
+                    }
+                    else if(resCode == 501){
+                        Toast.makeText(AddChatActivity.this, "Cannot add yourself"
+                                ,Toast.LENGTH_LONG).show();
+                    }else if(resCode == 500){
+                        Toast.makeText(AddChatActivity.this, "Chat exists already"
+                                ,Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(AddChatActivity.this, "Unrecognized Error"
+                                ,Toast.LENGTH_LONG).show();
                     }
                 }
 
