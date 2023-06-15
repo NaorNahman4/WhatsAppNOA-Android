@@ -58,13 +58,20 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
-
         messages = new ArrayList<>();
         messages = (ArrayList<Message>)intent.getSerializableExtra("list");
-        chatAdapter = new ChatAdapter(messages, currentUser);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public void scrollToPositionWithOffset(int position, int offset) {
+                super.scrollToPositionWithOffset(position, -(recyclerView.getHeight() - offset));
+            }
+        };
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        chatAdapter = new ChatAdapter(messages, currentUser);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(chatAdapter);
+
+        recyclerView.scrollToPosition(messages.size() - 1);
 
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
