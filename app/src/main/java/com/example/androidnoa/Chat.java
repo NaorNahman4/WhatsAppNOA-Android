@@ -53,12 +53,23 @@ public class Chat {
     public String getFictiveLastMessageDate(){
         return "Last Date";
     }
-    public String getOtherDisplayName(String my_name){
-        if (users.get(0).getUsername().equals(my_name)){
+    public String getOtherDisplayName(String my_name) {
+        if (users.get(0).getUsername().equals(my_name)) {
             return users.get(1).getUsername();
-        }
-        else{
+        } else {
             return users.get(0).getUsername();
         }
+    }
+    public String getLastMessageContent(){
+        if (this.messages == null || this.messages.size() == 0){
+            return "";
+        }
+        return this.messages.get(messages.size() - 1).getContent();
+    }
+    public String getLastMessageDate(){
+        if (this.messages == null || this.messages.size() == 0){
+            return "";
+        }
+        return this.messages.get(messages.size() - 1).getCreated();
     }
 }
