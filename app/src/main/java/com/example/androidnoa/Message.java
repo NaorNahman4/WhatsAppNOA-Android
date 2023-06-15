@@ -3,10 +3,11 @@ package com.example.androidnoa;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Message {
+public class Message implements Serializable {
 
     @PrimaryKey(autoGenerate=true)
     private int id;

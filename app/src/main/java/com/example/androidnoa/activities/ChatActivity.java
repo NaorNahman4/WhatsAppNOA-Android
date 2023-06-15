@@ -81,7 +81,7 @@ public class ChatActivity extends AppCompatActivity {
             String created = getCurrentDateTime(); // Get the current date and time
             User sender = currentUser; // Get the current user
             Message messageSend = new Message(created,sender,messageText);
-            chatsApi.sendMessage(token, chatId,(new Callback<Message>() {
+            chatsApi.sendMessage(token, chatId,messageText,(new Callback<Message>() {
                 @Override
                 public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                     if (response.isSuccessful()) {

@@ -73,10 +73,10 @@ public class ChatsApi {
 
     }
 
-    public void sendMessage(String token, int id, Callback<Message> callback){
+    public void sendMessage(String token, int id,String msg, Callback<Message> callback){
         //make the string without the first and the last chars
         token = token.substring(1, token.length() - 1);
-        Call<Message> call = webServiceAPI.sendMessage(token, id);
+        Call<Message> call = webServiceAPI.sendMessage(token, id,msg);
         call.enqueue(callback);
     }
 
