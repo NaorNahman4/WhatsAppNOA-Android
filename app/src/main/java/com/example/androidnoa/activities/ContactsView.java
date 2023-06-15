@@ -37,6 +37,8 @@ import retrofit2.Response;
 public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
     List<Message> msg;
+    User currentUser;
+    String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,10 @@ public class ContactsView extends AppCompatActivity {
         Intent lastIntent = getIntent();
 
         // Retrieve the token value from the intent
-        String token = lastIntent.getStringExtra("token");
-        String userName = lastIntent.getStringExtra("user");
+        token = lastIntent.getStringExtra("token");
+        String username = lastIntent.getStringExtra("username");
+        currentUser = (User) lastIntent.getSerializableExtra("user");
+
 
         ListView lstFeed = findViewById(R.id.lstContacts);
         ChatsApi chatsApi = new ChatsApi();
@@ -58,7 +62,7 @@ public class ContactsView extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<Chat> chats = response.body();
                     contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName);
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, username);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
@@ -75,16 +79,16 @@ public class ContactsView extends AppCompatActivity {
 
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
+
+
             chatsApi.GetMessagesByChatId(token, chatId,(new Callback<List<Message>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
-                    System.out.println(response.code());
                     if (response.isSuccessful()) {
                        msg = response.body();
                        if(msg != null){
-                       handleResponse(msg);
+                       handleResponse(msg, chatId);
                        }
-
                     } else {
                         // Handle unsuccessful response
                         System.out.println("Cant get messages- unsuccesfull");
@@ -98,9 +102,6 @@ public class ContactsView extends AppCompatActivity {
                 }
             }));
             });
-         
-        });
-
         Button btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,16 +125,17 @@ public class ContactsView extends AppCompatActivity {
         Intent lastIntent = getIntent();
     }
 
-    public void handleResponse(List<Message> msgList) {
-        List<String> list = new ArrayList<>();
-        for (Message m : msgList) {
-            list.add(m.getContent());
-        }
+    public void handleResponse(List<Message> msgList,int chatId) {
+//        List<String> list = new ArrayList<>();
+//        for (Message m : msgList) {
+//            list.add(m.getContent());
+//        }
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putStringArrayListExtra("list", (ArrayList<String>) list);
+        intent.putExtra("list", (ArrayList<Message>) msgList);
+        intent.putExtra("user", (User) currentUser);
+        intent.putExtra("token", (String) token);
+        intent.putExtra("chatId", (int) chatId);
         startActivity(intent);
     }
-}
-
 }
 

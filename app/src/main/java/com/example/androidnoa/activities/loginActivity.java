@@ -12,10 +12,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.androidnoa.R;
+import com.example.androidnoa.User;
 import com.example.androidnoa.api.UsersApi;
 import com.example.androidnoa.appDB;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -27,10 +30,14 @@ public class loginActivity extends AppCompatActivity {
     public static appDB db;
     public static EditText editTextUser;
     public static EditText editTextPassword;
+    private User currectUser;
+    private List<User> usersList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginactivity);
+        usersList=new ArrayList<>();
 
         editTextUser = findViewById(R.id.editTextUser);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -47,11 +54,28 @@ public class loginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 EditText editTextUser = findViewById(R.id.editTextUser);
                 EditText editTextPassword = findViewById(R.id.editTextPassword);
-                String user = editTextUser.getText().toString();
+                String username = editTextUser.getText().toString();
+                Thread backgroundThread = new Thread(() -> {
+                    if (db != null && db.userDao() != null) {
+                        usersList = db.userDao().index();
+                    }
+                });
+                backgroundThread.start(); // Start the background thread
+                try {
+                    backgroundThread.join(); // Wait for the background thread to finish
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                    currectUser=null;
+                    for (User user : usersList) {
+                        if(user.getUsername().equals(username)){
+                            currectUser=user;
+                        }
+                    }
                 String password = editTextPassword.getText().toString();
 
                 UsersApi usersApi = new UsersApi();
-                usersApi.Login(user, password, new Callback<ResponseBody>() {
+                usersApi.Login(username, password, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
@@ -64,7 +88,8 @@ public class loginActivity extends AppCompatActivity {
                                     // Open the activity and pass the token as an extra
                                     Intent intent = new Intent(loginActivity.this, ContactsView.class);
                                     intent.putExtra("token", token);
-                                    intent.putExtra("user", user);
+                                    intent.putExtra("username", username);
+                                    intent.putExtra("user", currectUser);
                                     startActivity(intent);
                                 } else {
                                     // Handle the case when the status is not 200

@@ -6,27 +6,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.androidnoa.Message;
 import com.example.androidnoa.R;
+
+import java.util.List;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.androidnoa.R;
+import com.example.androidnoa.models.MessageAllDetails;
 
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
 
-    private List<String> messages;
+    private List<Message> messages;
 
-    public ChatAdapter(List<String> messages) {
+    public ChatAdapter(List<Message> messages) {
         this.messages = messages;
     }
 
     @Override
     public ChatViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_details, parent, false);
         return new ChatViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ChatViewHolder holder, int position) {
-        String message = messages.get(position);
+        Message message = messages.get(position);
         holder.bind(message);
     }
 
@@ -36,15 +48,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     }
 
     public class ChatViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewMessage;
+        private TextView textViewSender;
+        private TextView textViewContent;
+        private TextView textViewCreated;
 
         public ChatViewHolder(View itemView) {
             super(itemView);
-            textViewMessage = itemView.findViewById(R.id.textViewMessage);
+            textViewSender = itemView.findViewById(R.id.textViewSender);
+            textViewContent = itemView.findViewById(R.id.textViewContent);
+            textViewCreated = itemView.findViewById(R.id.textViewCreated);
         }
 
-        public void bind(String message) {
-            textViewMessage.setText(message);
+        public void bind(Message message) {
+            textViewSender.setText(message.getSender().getUsername());
+            textViewContent.setText(message.getContent());
+            textViewCreated.setText(message.getCreated());
         }
     }
 }
