@@ -8,6 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundtry1"
     tools:context=".activities.RegisterActivity">
 
     <LinearLayout
@@ -35,6 +36,7 @@
             <EditText
                 android:id="@+id/editTextUser"
                 android:layout_width="match_parent"
+                android:background="@color/etBackground"
                 android:layout_height="wrap_content"
                 android:hint="Enter your username" />
 
@@ -56,6 +58,7 @@
             <EditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
+                android:background="@color/etBackground"
                 android:layout_height="wrap_content"
                 android:hint="Enter your password"
                 android:inputType="textPassword" />
@@ -78,6 +81,7 @@
             <EditText
                 android:id="@+id/editTextDisplayName"
                 android:layout_width="match_parent"
+                android:background="@color/etBackground"
                 android:layout_height="wrap_content"
                 android:hint="Enter your display name" />
 
@@ -106,6 +110,7 @@
             <Button
                 android:id="@+id/buttonAddPicture"
                 android:layout_width="wrap_content"
+                android:backgroundTint="@color/Secondary"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Add Picture" />

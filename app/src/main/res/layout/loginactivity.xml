@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundtry1"
     tools:context=".activities.loginActivity">
 
     <LinearLayout
@@ -20,19 +21,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:layout_margin="8dp"
+            android:background="@color/etBackground">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User:"
+                android:text="@string/tvUser"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/editTextUser"
+                android:autofillHints="username"
+                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your username" />
+                android:hint="@string/etEnterUser" />
 
         </LinearLayout>
 
@@ -41,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:layout_margin="8dp"
+            android:background="@color/etBackground">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -53,6 +58,7 @@
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="password"
                 android:hint="@string/enter_your_password"
                 android:inputType="textPassword" />
 
@@ -63,7 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/Primary"
             android:text="@string/login"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
@@ -72,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/Primary"
             android:text="@string/btnRegister"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
@@ -85,7 +91,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:backgroundTint="#00ACC1"
+        android:backgroundTint="@color/Secondary"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/btnShowAllUsers"/>
