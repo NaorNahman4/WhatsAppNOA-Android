@@ -24,6 +24,7 @@ import com.example.androidnoa.User;
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 
+import com.example.androidnoa.api.UsersApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.ls.LSOutput;
@@ -39,7 +40,9 @@ import retrofit2.Response;
 public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
     List<Message> msg;
-
+    User currentUser;
+    String token;
+    UsersApi userApi;
     private String token;
     private String userName;
     private ListView lstFeed;
@@ -57,7 +60,58 @@ public class ContactsView extends AppCompatActivity {
 
         // Retrieve the token value from the intent
         token = lastIntent.getStringExtra("token");
-        userName = lastIntent.getStringExtra("user");
+
+        String username = lastIntent.getStringExtra("username");
+        currentUser = (User) lastIntent.getSerializableExtra("user");
+        if(currentUser == null){
+            userApi = new UsersApi();
+            try {
+
+
+                userApi.GetMyDetails(username, token, new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            currentUser = response.body();
+                        } else {
+                            System.out.println("naor get my details unsuccessful getmydetails");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        System.out.println("naor failed2 to get my details getmydetails");
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        ListView lstFeed = findViewById(R.id.lstContacts);
+        ChatsApi chatsApi = new ChatsApi();
+        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                if (response.isSuccessful()) {
+                    List<Chat> chats = response.body();
+                    contactList = chats;
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, username);
+                    lstFeed.setAdapter(feedAdapter);
+                } else {
+                    // Handle unsuccessful response
+                    System.out.println("naor get my chats unsuccessful getmyChats");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
+                System.out.println("naor failed to get my chats getmyChats");
+                // Handle failure
+            }
+        });
+
 
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
@@ -93,15 +147,16 @@ public class ContactsView extends AppCompatActivity {
         //After click, getting all the messages for the chat
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
-            chatsApi.GetMessagesByChatId(token, chatId, (new Callback<List<Message>>() {
+
+            chatsApi.GetMessagesByChatId(token, chatId,(new Callback<List<Message>>() {
+
                 @Override
                 public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
-                    System.out.println(response.code());
                     if (response.isSuccessful()) {
-                        msg = response.body();
-                        if (msg != null) {
-                            handleResponse(msg);
-                        }
+                       msg = response.body();
+                       if(msg != null){
+                       handleResponse(msg, chatId);
+                       }
 
                     } else {
                         // Handle unsuccessful response
@@ -115,6 +170,8 @@ public class ContactsView extends AppCompatActivity {
                     // Handle failure
                 }
             }));
+            });
+        Button btnSettings = findViewById(R.id.btnSettings);
         });
 
         // Open settings
@@ -172,16 +229,17 @@ public class ContactsView extends AppCompatActivity {
         }
     }
 
-    public void handleResponse(List<Message> msgList) {
-        List<String> list = new ArrayList<>();
-        for (Message m : msgList) {
-            list.add(m.getContent());
-        }
+    public void handleResponse(List<Message> msgList,int chatId) {
+//        List<String> list = new ArrayList<>();
+//        for (Message m : msgList) {
+//            list.add(m.getContent());
+//        }
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putStringArrayListExtra("list", (ArrayList<String>) list);
+        intent.putExtra("list", (ArrayList<Message>) msgList);
+        intent.putExtra("user", (User) currentUser);
+        intent.putExtra("token", (String) token);
+        intent.putExtra("chatId", (int) chatId);
         startActivity(intent);
     }
 }
-
-
 

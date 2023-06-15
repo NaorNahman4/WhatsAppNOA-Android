@@ -1,8 +1,14 @@
 package com.example.androidnoa.models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.example.androidnoa.User;
 
+@Entity
 public class MessageAllDetails {
+
+    @PrimaryKey(autoGenerate=true)
     private int id;
     private String created;
     private User sender;
@@ -40,8 +46,7 @@ public class MessageAllDetails {
         this.content = content;
     }
 
-    public MessageAllDetails(int id, String created, User sender, String content) {
-        this.id = id;
+    public MessageAllDetails(String created, User sender, String content) {
         this.created = created;
         this.sender = sender;
         this.content = content;

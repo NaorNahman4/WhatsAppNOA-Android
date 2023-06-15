@@ -15,6 +15,7 @@ import com.example.androidnoa.R;
 
 import com.example.androidnoa.models.Id;
 
+import com.example.androidnoa.models.MesStr;
 import com.example.androidnoa.models.UserName;
 
 
@@ -68,10 +69,17 @@ public class ChatsApi {
     public void GetMessagesByChatId(String token, int id, Callback<List<Message>> callback){
         //make the string without the first and the last chars
         token = token.substring(1, token.length() - 1);
-
         Call<List<Message>> call = webServiceAPI.GetMessagesByChatId(token, id);
         call.enqueue(callback);
 
+    }
+
+    public void sendMessage(String token, int id,String msg, Callback<Message> callback){
+        //make the string without the first and the last chars
+        token = token.substring(1, token.length() - 1);
+        MesStr mesStr = new MesStr(msg);
+        Call<Message> call = webServiceAPI.sendMessage(id,mesStr,token);
+        call.enqueue(callback);
     }
 
     public void deleteMyChat(String token, int id, Callback<ResponseBody> callback){
@@ -81,6 +89,5 @@ public class ChatsApi {
         Call<ResponseBody> call = webServiceAPI.deleteChat(token, id);
         call.enqueue(callback);
     }
-
 
 }
