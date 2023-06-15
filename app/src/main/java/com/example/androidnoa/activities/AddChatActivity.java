@@ -8,8 +8,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidnoa.Chat;
@@ -57,19 +62,16 @@ public class AddChatActivity extends AppCompatActivity {
                        t.start();
                     }
                     else if(resCode == 404){
-                        Toast.makeText(AddChatActivity.this, "User is not exist"
-                        ,Toast.LENGTH_LONG).show();
+                        showCustomToast("User is not exist");
                     }
                     else if(resCode == 501){
-                        Toast.makeText(AddChatActivity.this, "Cannot add yourself"
-                                ,Toast.LENGTH_LONG).show();
+                        showCustomToast("Cannot add yourself");
                     }else if(resCode == 500){
-                        Toast.makeText(AddChatActivity.this, "Chat exists already"
-                                ,Toast.LENGTH_LONG).show();
+                        showCustomToast("Chat exists already");
+
                     }
                     else{
-                        Toast.makeText(AddChatActivity.this, "Unrecognized Error"
-                                ,Toast.LENGTH_LONG).show();
+                        showCustomToast("Unrecognized Error");
                     }
                 }
 
@@ -86,5 +88,19 @@ public class AddChatActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }
+    public  void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_warning,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 32);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 }

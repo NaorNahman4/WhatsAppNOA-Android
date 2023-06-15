@@ -13,9 +13,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -96,15 +101,15 @@ public class RegisterActivity extends AppCompatActivity {
             String password = editTextPassword.getText().toString();
             String displayName = editTextDisplayName.getText().toString();
             if(user.isEmpty()){
-                Toast.makeText(this, "Please fill username", Toast.LENGTH_SHORT).show();
+                showCustomToast("Please fill username");
                 return;
             }
             if(password.isEmpty()){
-                Toast.makeText(this, "Please fill password", Toast.LENGTH_SHORT).show();
+                showCustomToast("Please fill password");
                 return;
             }
             if(displayName.isEmpty()){
-                Toast.makeText(this, "Please fill display name", Toast.LENGTH_SHORT).show();
+                showCustomToast("Please fill display name");
                 return;
             }
             UsersApi usersApi = new UsersApi();
@@ -127,6 +132,22 @@ public class RegisterActivity extends AppCompatActivity {
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+    public  void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_warning,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 32);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
+
+
 }
 
 
