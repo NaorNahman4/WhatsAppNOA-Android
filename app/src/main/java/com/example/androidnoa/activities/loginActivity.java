@@ -34,6 +34,8 @@ public class loginActivity extends AppCompatActivity {
 
         editTextUser = findViewById(R.id.editTextUser);
         editTextPassword = findViewById(R.id.editTextPassword);
+        Button btnLogin = findViewById(R.id.buttonLogin);
+        Button btnRegister = findViewById(R.id.buttonRegister);
 
         //Initialize Room
         db = Room.databaseBuilder(getApplicationContext(),
@@ -41,7 +43,8 @@ public class loginActivity extends AppCompatActivity {
                 .fallbackToDestructiveMigration()
                 .build();
 
-        Button btnLogin = findViewById(R.id.buttonLogin);
+
+        //Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +90,8 @@ public class loginActivity extends AppCompatActivity {
                 });
             }
         });
-        Button btnRegister = findViewById(R.id.buttonRegister);
+
+        //Register
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,4 +107,13 @@ public class loginActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Initialize empty strings in the next page
+        loginActivity.editTextUser.setText("");
+        loginActivity.editTextPassword.setText("");
+    }
+
 }
