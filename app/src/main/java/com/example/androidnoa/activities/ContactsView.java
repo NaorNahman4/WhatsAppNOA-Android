@@ -98,8 +98,6 @@ public class ContactsView extends AppCompatActivity {
                 }
             }));
             });
-         
-        });
 
         Button btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(new View.OnClickListener() {
@@ -135,5 +133,5 @@ public class ContactsView extends AppCompatActivity {
     }
 }
 
-}
+
 
