@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,7 +61,7 @@ public class ChatActivity extends AppCompatActivity {
 
         messages = new ArrayList<>();
         messages = (ArrayList<Message>)intent.getSerializableExtra("list");
-        chatAdapter = new ChatAdapter(messages);
+        chatAdapter = new ChatAdapter(messages, currentUser);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(chatAdapter);
@@ -69,6 +70,17 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 sendMessage();
+            }
+        });
+
+        editTextMessage.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    sendMessage(); // Call the sendMessage() method when the Enter key is pressed
+                    return true; // Consume the event
+                }
+                return false;
             }
         });
     }
@@ -113,5 +125,6 @@ public class ChatActivity extends AppCompatActivity {
         // Format the date and time
         return dateFormat.format(calendar.getTime());
     }
+
 
 }
