@@ -50,8 +50,13 @@ public class ContactsView extends AppCompatActivity {
         String token = lastIntent.getStringExtra("token");
         String userName = lastIntent.getStringExtra("user");
 
+        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
+        Button btnSettings = findViewById(R.id.btnSettings);
+
         ListView lstFeed = findViewById(R.id.lstContacts);
         ChatsApi chatsApi = new ChatsApi();
+
+        //Getting all the chats of the user
         chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
             @Override
             public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
@@ -73,6 +78,7 @@ public class ContactsView extends AppCompatActivity {
             }
         });
 
+        //After click, getting all the messages for the chat
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
             chatsApi.GetMessagesByChatId(token, chatId,(new Callback<List<Message>>() {
@@ -99,7 +105,7 @@ public class ContactsView extends AppCompatActivity {
             }));
             });
 
-        Button btnSettings = findViewById(R.id.btnSettings);
+        // Open settings
         btnSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +114,7 @@ public class ContactsView extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
+        //Open add intent
         btnAdd.setOnClickListener(view ->{
             Intent intent = new Intent(this, AddChatActivity.class);
             intent.putExtra("token", token);
