@@ -2,16 +2,23 @@ package com.example.androidnoa.api;
 
 import static com.example.androidnoa.activities.loginActivity.db;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.androidnoa.Chat;
+import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.MyApplication;
 import com.example.androidnoa.R;
+
+import com.example.androidnoa.models.Id;
+
 import com.example.androidnoa.models.UserName;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -26,12 +33,15 @@ public class ChatsApi {
     WebServiceAPI webServiceAPI;
 
     public ChatsApi() {
-        retrofit = new Retrofit.Builder()
+
+        retrofit= new Retrofit.Builder()
                 .baseUrl(MyApplication.context.getString(R.string.BaseURL))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+
         webServiceAPI = retrofit.create(WebServiceAPI.class);
+
     }
 
     public WebServiceAPI getWebServiceAPI() {
@@ -58,8 +68,10 @@ public class ChatsApi {
     public void GetMessagesByChatId(String token, int id, Callback<List<Message>> callback){
         //make the string without the first and the last chars
         token = token.substring(1, token.length() - 1);
+
         Call<List<Message>> call = webServiceAPI.GetMessagesByChatId(token, id);
         call.enqueue(callback);
+
     }
 
 

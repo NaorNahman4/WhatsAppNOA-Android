@@ -33,7 +33,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_acitivity);
 
         Intent intent = getIntent();
-        String displayName = intent.getStringExtra("displayName");
+        String displayName = "test";
         TextView textViewDisplayName = findViewById(R.id.textViewUsername);
         textViewDisplayName.setText(displayName);
         recyclerView = findViewById(R.id.recyclerView);
@@ -41,6 +41,7 @@ public class ChatActivity extends AppCompatActivity {
         buttonSend = findViewById(R.id.buttonSend);
 
         messages = new ArrayList<>();
+        messages = intent.getStringArrayListExtra("list");
         chatAdapter = new ChatAdapter(messages);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
@@ -64,4 +65,5 @@ public class ChatActivity extends AppCompatActivity {
             editTextMessage.setText("");
         }
     }
+
 }
