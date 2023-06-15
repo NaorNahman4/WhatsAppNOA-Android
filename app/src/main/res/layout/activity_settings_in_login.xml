@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundtry1"
     tools:context=".activities.SettingsActivity">
 
     <!-- Settings Title -->
@@ -45,6 +46,7 @@
             android:id="@+id/lightThemeRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/Secondary"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:checked="true"
@@ -54,6 +56,7 @@
             android:id="@+id/darkThemeRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/Secondary"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:text="Dark" />
@@ -90,6 +93,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:backgroundTint="@color/etBackground"
         app:layout_constraintTop_toTopOf="@+id/serverIpTextView"
         app:layout_constraintStart_toEndOf="@+id/serverIpTextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,6 +108,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="Save settings"
+        android:backgroundTint="@color/Secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
