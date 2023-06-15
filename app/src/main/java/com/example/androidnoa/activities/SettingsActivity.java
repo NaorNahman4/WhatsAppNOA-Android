@@ -52,8 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("logOut", 0);
-                setResult(Activity.RESULT_OK, resultIntent);
+                resultIntent.putExtra("logOut", ContactsView.REQUEST_LOGOUT); // Indicate logout action
+                setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });

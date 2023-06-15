@@ -37,6 +37,8 @@ import retrofit2.Response;
 public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
     List<Message> msg;
+    public static final int REQUEST_SETTINGS = 1; // Request code for settings activity
+    public static final int REQUEST_LOGOUT = 2; // Request code for logout action
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +65,10 @@ public class ContactsView extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     List<Chat> chats = response.body();
                     contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName);
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
+                            ContactsView.this,
+                            userName,
+                            token);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
@@ -110,7 +115,7 @@ public class ContactsView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ContactsView.this, SettingsActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_SETTINGS);
             }
         });
 
@@ -121,7 +126,24 @@ public class ContactsView extends AppCompatActivity {
             startActivity(intent);
         });
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve the intent that started this activity
+    }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SETTINGS && resultCode == RESULT_OK) {
+            int logOut = data.getIntExtra("logOut", 0);
+            if (logOut == REQUEST_LOGOUT) {
+                // User has successfully logged out
+                finish();
+            }
+        }
+    }
     public void handleResponse(List<Message> msgList) {
         List<String> list = new ArrayList<>();
         for (Message m : msgList) {

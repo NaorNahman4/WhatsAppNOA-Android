@@ -74,5 +74,13 @@ public class ChatsApi {
 
     }
 
+    public void deleteMyChat(String token, int id, Callback<ResponseBody> callback){
+        //make the string without the first and the last chars
+        token = token.substring(1, token.length() - 1);
+
+        Call<ResponseBody> call = webServiceAPI.deleteChat(token, id);
+        call.enqueue(callback);
+    }
+
 
 }

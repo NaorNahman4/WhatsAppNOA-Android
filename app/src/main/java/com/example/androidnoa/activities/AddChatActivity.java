@@ -41,7 +41,6 @@ public class AddChatActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         System.out.println("naor create chat successful");
                         Chat chat = response.body();
-                        System.out.println("naor chat id: " + chat.getId());
                     }
                 }
 
