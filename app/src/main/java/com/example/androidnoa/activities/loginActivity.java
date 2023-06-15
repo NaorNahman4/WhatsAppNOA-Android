@@ -15,6 +15,7 @@ import com.example.androidnoa.R;
 import com.example.androidnoa.User;
 import com.example.androidnoa.api.UsersApi;
 import com.example.androidnoa.appDB;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,14 +42,18 @@ public class loginActivity extends AppCompatActivity {
 
         editTextUser = findViewById(R.id.editTextUser);
         editTextPassword = findViewById(R.id.editTextPassword);
+        Button btnLogin = findViewById(R.id.buttonLogin);
+        Button btnRegister = findViewById(R.id.buttonRegister);
 
         //Initialize Room
         db = Room.databaseBuilder(getApplicationContext(),
                 appDB.class, "User")
+                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
 
-        Button btnLogin = findViewById(R.id.buttonLogin);
+
+        //Login
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,9 +78,21 @@ public class loginActivity extends AppCompatActivity {
                         }
                     }
                 String password = editTextPassword.getText().toString();
-
+                if (user.isEmpty() && password.isEmpty()) {
+                    Toast.makeText(loginActivity.this, "Please fill username and password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (user.isEmpty()) {
+                    Toast.makeText(loginActivity.this, "Please fill username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.isEmpty()) {
+                    Toast.makeText(loginActivity.this, "Please fill password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 UsersApi usersApi = new UsersApi();
                 usersApi.Login(username, password, new Callback<ResponseBody>() {
+
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
@@ -113,7 +130,8 @@ public class loginActivity extends AppCompatActivity {
                 });
             }
         });
-        Button btnRegister = findViewById(R.id.buttonRegister);
+
+        //Register
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +140,17 @@ public class loginActivity extends AppCompatActivity {
             }
         });
 
+        //Settings
+        FloatingActionButton btnSettings = findViewById(R.id.btnSettingLogin);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(loginActivity.this, SettingsInLoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         //FOR TESTING THE LOCAL DB !!!
         Button btnShowAllUsers = findViewById(R.id.btnShowAllUsers);
         btnShowAllUsers.setOnClickListener(view -> {
@@ -129,4 +158,13 @@ public class loginActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //Initialize empty strings in the next page
+        loginActivity.editTextUser.setText("");
+        loginActivity.editTextPassword.setText("");
+    }
+
 }

@@ -115,6 +115,4 @@ public class ChatActivity extends AppCompatActivity {
         return dateFormat.format(calendar.getTime());
     }
 
-
-
 }

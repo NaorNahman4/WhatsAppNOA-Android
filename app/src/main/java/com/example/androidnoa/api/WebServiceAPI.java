@@ -16,6 +16,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -44,8 +45,8 @@ public interface WebServiceAPI {
     @POST("Chats")
     Call<Chat> CreateChat(@Body UserName userName, @Header("Authorization") String token);
 
-
-
+    @DELETE("Chats/{id}")
+    Call<ResponseBody> deleteChat(@Header("Authorization") String token,@Path("id") int id);
 //
 //    @POST("api/ConnectToFirebase")
 //    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);

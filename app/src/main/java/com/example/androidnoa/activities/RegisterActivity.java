@@ -16,6 +16,8 @@ import android.util.Base64;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.room.Room;
 
@@ -68,15 +70,13 @@ public class RegisterActivity extends AppCompatActivity {
         defaultPictureBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.default_pic);
 
         btnRegister.setOnClickListener(v -> {
-            //Initialize empty strings in the next page
-            loginActivity.editTextUser.setText("");
-            loginActivity.editTextPassword.setText("");
 
             // Get the values from the input fields
             EditText editTextUser = findViewById(R.id.editTextUser);
             EditText editTextPassword = findViewById(R.id.editTextPassword);
             EditText editTextDisplayName = findViewById(R.id.editTextDisplayName);
             String img;
+
             if (imageViewPicture == null) {
                 // Use the default picture if no image is selected
                 img = encodeImageToBase64(defaultPictureBitmap);
@@ -95,16 +95,23 @@ public class RegisterActivity extends AppCompatActivity {
             String user = editTextUser.getText().toString();
             String password = editTextPassword.getText().toString();
             String displayName = editTextDisplayName.getText().toString();
-
+            if(user.isEmpty()){
+                Toast.makeText(this, "Please fill username", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(password.isEmpty()){
+                Toast.makeText(this, "Please fill password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(displayName.isEmpty()){
+                Toast.makeText(this, "Please fill display name", Toast.LENGTH_SHORT).show();
+                return;
+            }
             UsersApi usersApi = new UsersApi();
             usersApi.Register(user, password, displayName, img);
             finish();
         });
         btnAlreadyHaveAnAccount.setOnClickListener(v -> {
-            //Initialize empty strings in the next page
-            loginActivity.editTextUser.setText("");
-            loginActivity.editTextPassword.setText("");
-
             //Instead of create more intents, just return to the last one
             finish();
         });
@@ -120,7 +127,6 @@ public class RegisterActivity extends AppCompatActivity {
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
-
 }
 
 
