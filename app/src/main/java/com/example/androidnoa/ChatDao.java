@@ -18,6 +18,9 @@ public interface ChatDao {
     @Query("SELECT * FROM Chat WHERE id = :id")
     Chat getUserById(int id);
 
+    @Query("UPDATE Chat SET messages = :newMessages WHERE id = :chatId")
+    void updateChatMessages(int chatId, List<Message> newMessages);
+
     @Insert
     void insert(Chat... Chat);
 

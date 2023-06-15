@@ -1,5 +1,7 @@
 package com.example.androidnoa.activities;
 
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -59,7 +61,7 @@ public class ChatActivity extends AppCompatActivity {
         editTextMessage = findViewById(R.id.editTextMessage);
         buttonSend = findViewById(R.id.buttonSend);
         messages = new ArrayList<>();
-        messages = (ArrayList<Message>)intent.getSerializableExtra("list");
+        messages = (ArrayList<Message>) intent.getSerializableExtra("list");
         LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
             @Override
             public void scrollToPositionWithOffset(int position, int offset) {
@@ -99,13 +101,13 @@ public class ChatActivity extends AppCompatActivity {
             ChatsApi chatsApi = new ChatsApi();
             String created = getCurrentDateTime(); // Get the current date and time
             User sender = currentUser; // Get the current user
-            Message messageSend = new Message(created,sender,messageText);
-            chatsApi.sendMessage(token, chatId,messageText,(new Callback<Message>() {
+            Message messageSend = new Message(created, sender, messageText);
+            chatsApi.sendMessage(token, chatId, messageText, (new Callback<Message>() {
                 @Override
                 public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                     if (response.isSuccessful()) {
-                        Message message= response.body();
-                        System.out.println("naor sent message : "+message);
+                        Message message = response.body();
+                        System.out.println("naor sent message : " + message);
                     } else {
                         // Handle unsuccessful response
                         System.out.println("Cant get messages- unsuccesfull");
@@ -119,11 +121,22 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }));
             messages.add(messageSend);
-            chatAdapter.notifyDataSetChanged();
-            recyclerView.smoothScrollToPosition(messages.size() - 1);
-            editTextMessage.setText("");
+            Thread t = new Thread(() -> {
+                db.chatDao().updateChatMessages(chatId, messages);
+            });
+            t.start();
+            try {
+                t.join();
+                chatAdapter.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(messages.size() - 1);
+                editTextMessage.setText("");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
+
     private String getCurrentDateTime() {
         // Get current date and time
         Calendar calendar = Calendar.getInstance();
