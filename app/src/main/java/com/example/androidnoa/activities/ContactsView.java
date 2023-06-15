@@ -97,27 +97,31 @@ public class ContactsView extends AppCompatActivity {
                     // Handle failure
                 }
             }));
+            });
+         
+        });
+
+        Button btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ContactsView.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(view ->{
+            Intent intent = new Intent(this, AddChatActivity.class);
+            intent.putExtra("token", token);
+            startActivity(intent);
         });
     }
-
-    private List<Chat> generateContacts() {
-        List<Chat> contacts = new ArrayList<>();
-        int default_pic = getResources().getIdentifier("default_pic", "drawable", getPackageName());
-        User user1 = db.userDao().getUserById(1);
-        User user2 = db.userDao().getUserById(2);
-        User user3 = db.userDao().getUserById(3);
-        User user4 = db.userDao().getUserById(4);
-        ArrayList<User> chat1 = new ArrayList<>(); chat1.add(user1); chat1.add(user2);
-        ArrayList<User> chat2 = new ArrayList<>(); chat2.add(user1); chat2.add(user3);
-        ArrayList<User> chat3 = new ArrayList<>(); chat3.add(user1); chat3.add(user4);
-        ArrayList<User> chat4 = new ArrayList<>(); chat4.add(user2); chat4.add(user3);
-
-        contacts.add(new Chat(chat1));
-        contacts.add(new Chat(chat2));
-        contacts.add(new Chat(chat3));
-        contacts.add(new Chat(chat4));
-
-        return contacts;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve the intent that started this activity
+        Intent lastIntent = getIntent();
     }
 
     public void handleResponse(List<Message> msgList) {
@@ -130,3 +134,6 @@ public class ContactsView extends AppCompatActivity {
         startActivity(intent);
     }
 }
+
+}
+

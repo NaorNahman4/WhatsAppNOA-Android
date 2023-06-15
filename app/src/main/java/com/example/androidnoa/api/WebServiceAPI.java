@@ -4,7 +4,9 @@ package com.example.androidnoa.api;
 import com.example.androidnoa.Chat;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.User;
-import com.example.androidnoa.models.Id;
+
+import com.example.androidnoa.models.UserName;
+
 import com.example.androidnoa.models.UserNameAndPass;
 import com.example.androidnoa.models.UserAllDetails;
 
@@ -32,6 +34,11 @@ public interface WebServiceAPI {
 
     @GET("Chats/{id}/Messages")
     Call<List<Message>> GetMessagesByChatId(@Header("Authorization") String token,@Path("id") int id);
+
+    @POST("Chats")
+    Call<Chat> CreateChat(@Body UserName userName, @Header("Authorization") String token);
+
+
 //
 //    @POST("api/ConnectToFirebase")
 //    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);
