@@ -65,5 +65,4 @@ public class ChatActivity extends AppCompatActivity {
             editTextMessage.setText("");
         }
     }
-
 }
