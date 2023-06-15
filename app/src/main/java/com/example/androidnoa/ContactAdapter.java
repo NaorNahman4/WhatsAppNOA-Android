@@ -25,6 +25,7 @@ import retrofit2.Response;
 
 public class ContactAdapter extends BaseAdapter {
 
+    private Thread t;
     List<Chat> contactList;
 
     Context prevActivity;
@@ -86,6 +87,7 @@ public class ContactAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
 
             Button btnDel = convertView.findViewById(R.id.btnDelete);
+
             btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -99,6 +101,15 @@ public class ContactAdapter extends BaseAdapter {
                                     if(response.isSuccessful()){
                                         //toast message success
                                         Toast.makeText(prevActivity, "Chat deleted", Toast.LENGTH_SHORT).show();
+                                        //Create thread for the deleting
+                                        t = new Thread(() -> {
+                                            Chat toDelete = contactList.get(position);
+                                            db.chatDao().delete(toDelete);
+                                            contactList.remove(position);
+                                            //Need to put live data
+                                            notifyDataSetChanged();
+                                        });
+                                        t.start();
                                     }
                                     else{
                                         //toast message fail
@@ -112,13 +123,11 @@ public class ContactAdapter extends BaseAdapter {
                                     Toast.makeText(prevActivity, "Chat not deleted", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                    //Removing from Room
-                    new Thread(() -> {
-                        db.chatDao().delete(contactList.get(position));
-                    }).start();
-                    //Remove from DB
-                    contactList.remove(position);
-                    notifyDataSetChanged();
+                    try{
+                        t.join();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
             });
 

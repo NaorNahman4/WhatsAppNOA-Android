@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.androidnoa.Chat;
+import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.R;
 import com.example.androidnoa.UserDao;
 import com.example.androidnoa.api.ChatsApi;
@@ -25,6 +26,7 @@ public class AddChatActivity extends AppCompatActivity {
     private UserDao userDao;
     private String token;
     private Chat newChat;
+    private Thread t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,12 @@ public class AddChatActivity extends AppCompatActivity {
             EditText chatName = findViewById(R.id.etContactName);
             String chatNameStr = chatName.getText().toString();
             ChatsApi chatsApi = new ChatsApi();
+            t =  new Thread(() -> {
+                db.chatDao().insert(newChat);
+                runOnUiThread(() -> {
+                    finish();
+                });
+            });
             chatsApi.CreateMyChat(token, chatNameStr , new Callback<Chat>() {
                 @Override
                 public void onResponse(@NonNull Call<Chat> call, @NonNull Response<Chat> response) {
@@ -44,9 +52,7 @@ public class AddChatActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         System.out.println("naor create chat successful");
                         newChat = response.body();
-                        new Thread(() -> {
-                            db.chatDao().insert(response.body());
-                        }).start();
+                       t.start();
                     }
                 }
 
@@ -54,9 +60,14 @@ public class AddChatActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Call<Chat> call, @NonNull Throwable t) {
                     System.out.println("naor create chat failed");
                     System.out.println("naor"  + t.getMessage());
+                    finish();
                 }
             });
-            finish();
+            try {
+                t.join();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         });
     }
 }
