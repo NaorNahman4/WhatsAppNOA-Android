@@ -40,6 +40,7 @@ public class loginActivity extends AppCompatActivity {
         //Initialize Room
         db = Room.databaseBuilder(getApplicationContext(),
                 appDB.class, "User")
+                .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
 
@@ -54,6 +55,7 @@ public class loginActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString();
 
                 UsersApi usersApi = new UsersApi();
+                //Login
                 usersApi.Login(user, password, new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
