@@ -1,5 +1,7 @@
 package com.example.androidnoa;
 
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -110,6 +112,11 @@ public class ContactAdapter extends BaseAdapter {
                                     Toast.makeText(prevActivity, "Chat not deleted", Toast.LENGTH_SHORT).show();
                                 }
                             });
+                    //Removing from Room
+                    new Thread(() -> {
+                        db.chatDao().delete(contactList.get(position));
+                    }).start();
+                    //Remove from DB
                     contactList.remove(position);
                     notifyDataSetChanged();
                 }

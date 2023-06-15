@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -37,6 +39,11 @@ import retrofit2.Response;
 public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
     List<Message> msg;
+
+    private String token;
+    private String userName;
+    private ListView lstFeed;
+    private ChatsApi chatsApi;
     public static final int REQUEST_SETTINGS = 1; // Request code for settings activity
     public static final int REQUEST_LOGOUT = 2; // Request code for logout action
 
@@ -49,52 +56,52 @@ public class ContactsView extends AppCompatActivity {
         Intent lastIntent = getIntent();
 
         // Retrieve the token value from the intent
-        String token = lastIntent.getStringExtra("token");
-        String userName = lastIntent.getStringExtra("user");
+        token = lastIntent.getStringExtra("token");
+        userName = lastIntent.getStringExtra("user");
 
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         Button btnSettings = findViewById(R.id.btnSettings);
 
-        ListView lstFeed = findViewById(R.id.lstContacts);
-        ChatsApi chatsApi = new ChatsApi();
+        lstFeed = findViewById(R.id.lstContacts);
+        chatsApi = new ChatsApi();
 
-        //Getting all the chats of the user
-        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-                if (response.isSuccessful()) {
-                    List<Chat> chats = response.body();
-                    contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
-                            ContactsView.this,
-                            userName,
-                            token);
-                    lstFeed.setAdapter(feedAdapter);
-                } else {
-                    // Handle unsuccessful response
-                    System.out.println("naor get my chats unsuccessful getmyChats");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Chat>> call, Throwable t) {
-                System.out.println("naor failed to get my chats getmyChats");
-                // Handle failure
-            }
-        });
+//        //Getting all the chats of the user
+//        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+//            @Override
+//            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+//                if (response.isSuccessful()) {
+//                    List<Chat> chats = response.body();
+//                    contactList = chats;
+//                    final ContactAdapter feedAdapter = new ContactAdapter(contactList,
+//                            ContactsView.this,
+//                            userName,
+//                            token);
+//                    lstFeed.setAdapter(feedAdapter);
+//                } else {
+//                    // Handle unsuccessful response
+//                    System.out.println("naor get my chats unsuccessful getmyChats");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<Chat>> call, Throwable t) {
+//                System.out.println("naor failed to get my chats getmyChats");
+//                // Handle failure
+//            }
+//        });
 
         //After click, getting all the messages for the chat
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
             int chatId = contactList.get(i).getId();
-            chatsApi.GetMessagesByChatId(token, chatId,(new Callback<List<Message>>() {
+            chatsApi.GetMessagesByChatId(token, chatId, (new Callback<List<Message>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Message>> call, @NonNull Response<List<Message>> response) {
                     System.out.println(response.code());
                     if (response.isSuccessful()) {
-                       msg = response.body();
-                       if(msg != null){
-                       handleResponse(msg);
-                       }
+                        msg = response.body();
+                        if (msg != null) {
+                            handleResponse(msg);
+                        }
 
                     } else {
                         // Handle unsuccessful response
@@ -108,7 +115,7 @@ public class ContactsView extends AppCompatActivity {
                     // Handle failure
                 }
             }));
-            });
+        });
 
         // Open settings
         btnSettings.setOnClickListener(new View.OnClickListener() {
@@ -120,15 +127,35 @@ public class ContactsView extends AppCompatActivity {
         });
 
         //Open add intent
-        btnAdd.setOnClickListener(view ->{
+        btnAdd.setOnClickListener(view -> {
             Intent intent = new Intent(this, AddChatActivity.class);
             intent.putExtra("token", token);
             startActivity(intent);
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        new Thread(() -> {
+            //Getting all the chats in the dao
+            List<Chat> testList  = db.chatDao().index();
+            contactList = new ArrayList<>();
+            for (Chat chat : testList){
+                //Checking if its a chat of active user
+                String u1 = chat.getUsers().get(0).getUsername();
+                String u2 = chat.getUsers().get(1).getUsername();
+                if(u1.equals(userName)|| u2.equals(userName) ){
+                    contactList.add(chat);
+                }
+            }
+            runOnUiThread(() -> {
+                final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
+                lstFeed.setAdapter(feedAdapter);
+                System.out.println("sadasd");
+            });
+        }).start();
         // Retrieve the intent that started this activity
     }
 
@@ -144,6 +171,7 @@ public class ContactsView extends AppCompatActivity {
             }
         }
     }
+
     public void handleResponse(List<Message> msgList) {
         List<String> list = new ArrayList<>();
         for (Message m : msgList) {

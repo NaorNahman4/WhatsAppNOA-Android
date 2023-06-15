@@ -1,9 +1,12 @@
 package com.example.androidnoa.activities;
 
+import static com.example.androidnoa.activities.loginActivity.db;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,9 +22,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AddChatActivity extends AppCompatActivity {
-    private appDB db;
     private UserDao userDao;
     private String token;
+    private Chat newChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,10 @@ public class AddChatActivity extends AppCompatActivity {
                     System.out.println("naor"  + response.code());
                     if (response.isSuccessful()) {
                         System.out.println("naor create chat successful");
-                        Chat chat = response.body();
+                        newChat = response.body();
+                        new Thread(() -> {
+                            db.chatDao().insert(response.body());
+                        }).start();
                     }
                 }
 
