@@ -16,6 +16,8 @@ import android.util.Base64;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.room.Room;
 
@@ -74,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
             EditText editTextPassword = findViewById(R.id.editTextPassword);
             EditText editTextDisplayName = findViewById(R.id.editTextDisplayName);
             String img;
+
             if (imageViewPicture == null) {
                 // Use the default picture if no image is selected
                 img = encodeImageToBase64(defaultPictureBitmap);
@@ -92,7 +95,18 @@ public class RegisterActivity extends AppCompatActivity {
             String user = editTextUser.getText().toString();
             String password = editTextPassword.getText().toString();
             String displayName = editTextDisplayName.getText().toString();
-
+            if(user.isEmpty()){
+                Toast.makeText(this, "Please fill username", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(password.isEmpty()){
+                Toast.makeText(this, "Please fill password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(displayName.isEmpty()){
+                Toast.makeText(this, "Please fill display name", Toast.LENGTH_SHORT).show();
+                return;
+            }
             UsersApi usersApi = new UsersApi();
             usersApi.Register(user, password, displayName, img);
             finish();

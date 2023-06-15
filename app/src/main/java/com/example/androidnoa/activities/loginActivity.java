@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.androidnoa.R;
 import com.example.androidnoa.api.UsersApi;
 import com.example.androidnoa.appDB;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 
@@ -52,7 +53,18 @@ public class loginActivity extends AppCompatActivity {
                 EditText editTextPassword = findViewById(R.id.editTextPassword);
                 String user = editTextUser.getText().toString();
                 String password = editTextPassword.getText().toString();
-
+                if (user.isEmpty() && password.isEmpty()) {
+                    Toast.makeText(loginActivity.this, "Please fill username and password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (user.isEmpty()) {
+                    Toast.makeText(loginActivity.this, "Please fill username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.isEmpty()) {
+                    Toast.makeText(loginActivity.this, "Please fill password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 UsersApi usersApi = new UsersApi();
                 usersApi.Login(user, password, new Callback<ResponseBody>() {
                     @Override
@@ -99,6 +111,17 @@ public class loginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        //Settings
+        FloatingActionButton btnSettings = findViewById(R.id.btnSettingLogin);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(loginActivity.this, SettingsInLoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         //FOR TESTING THE LOCAL DB !!!
         Button btnShowAllUsers = findViewById(R.id.btnShowAllUsers);
