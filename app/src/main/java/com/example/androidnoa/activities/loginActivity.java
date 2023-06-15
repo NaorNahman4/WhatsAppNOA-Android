@@ -82,6 +82,7 @@ public class loginActivity extends AppCompatActivity {
                             String status = String.valueOf(response.code());
                             try {
                                 String token = response.body().string();
+
                                 if (status.equals("200")) {
                                     System.out.println("naor log in successful");
                                     System.out.println("naor token befor log in: " + token);

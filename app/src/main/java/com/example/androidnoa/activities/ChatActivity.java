@@ -49,6 +49,7 @@ public class ChatActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("user");
+
         token = intent.getStringExtra("token");
         chatId = intent.getIntExtra("chatId", 0);
         String displayName = "test";

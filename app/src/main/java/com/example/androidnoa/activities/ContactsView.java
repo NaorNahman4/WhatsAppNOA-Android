@@ -22,6 +22,7 @@ import com.example.androidnoa.User;
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 
+import com.example.androidnoa.api.UsersApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.ls.LSOutput;
@@ -39,7 +40,7 @@ public class ContactsView extends AppCompatActivity {
     List<Message> msg;
     User currentUser;
     String token;
-
+    UsersApi userApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,31 @@ public class ContactsView extends AppCompatActivity {
         token = lastIntent.getStringExtra("token");
         String username = lastIntent.getStringExtra("username");
         currentUser = (User) lastIntent.getSerializableExtra("user");
+        if(currentUser == null){
+            userApi = new UsersApi();
+            try {
 
+
+                userApi.GetMyDetails(username, token, new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            currentUser = response.body();
+                        } else {
+                            System.out.println("naor get my details unsuccessful getmydetails");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        System.out.println("naor failed2 to get my details getmydetails");
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
 
         ListView lstFeed = findViewById(R.id.lstContacts);
         ChatsApi chatsApi = new ChatsApi();

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnoa.R;
+import com.example.androidnoa.User;
 import com.example.androidnoa.models.MessageAllDetails;
 
 import java.util.List;
@@ -60,7 +61,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
         public void bind(Message message) {
-            textViewSender.setText(message.getSender().getUsername());
+            User sender = message.getSender();
+            System.out.println("naor sender: " + sender);
+            String username = sender.getUsername();
+            System.out.println("naor username: " + username);
+            textViewSender.setText(username);
             textViewContent.setText(message.getContent());
             textViewCreated.setText(message.getCreated());
         }
