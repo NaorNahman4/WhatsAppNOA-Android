@@ -78,11 +78,11 @@ public class loginActivity extends AppCompatActivity {
                         }
                     }
                 String password = editTextPassword.getText().toString();
-                if (user.isEmpty() && password.isEmpty()) {
+                if (username.isEmpty() && password.isEmpty()) {
                     Toast.makeText(loginActivity.this, "Please fill username and password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (user.isEmpty()) {
+                if (username.isEmpty()) {
                     Toast.makeText(loginActivity.this, "Please fill username", Toast.LENGTH_SHORT).show();
                     return;
                 }

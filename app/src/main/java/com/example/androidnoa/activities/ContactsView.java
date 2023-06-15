@@ -41,7 +41,6 @@ public class ContactsView extends AppCompatActivity {
     List<Chat> contactList;
     List<Message> msg;
     User currentUser;
-    String token;
     UsersApi userApi;
     private String token;
     private String userName;
@@ -61,14 +60,14 @@ public class ContactsView extends AppCompatActivity {
         // Retrieve the token value from the intent
         token = lastIntent.getStringExtra("token");
 
-        String username = lastIntent.getStringExtra("username");
+        userName = lastIntent.getStringExtra("username");
         currentUser = (User) lastIntent.getSerializableExtra("user");
         if(currentUser == null){
             userApi = new UsersApi();
             try {
 
 
-                userApi.GetMyDetails(username, token, new Callback<User>() {
+                userApi.GetMyDetails(userName, token, new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
                         if (response.isSuccessful()) {
@@ -89,15 +88,15 @@ public class ContactsView extends AppCompatActivity {
 
         }
 
-        ListView lstFeed = findViewById(R.id.lstContacts);
-        ChatsApi chatsApi = new ChatsApi();
+        lstFeed = findViewById(R.id.lstContacts);
+        chatsApi = new ChatsApi();
         chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
             @Override
             public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
                 if (response.isSuccessful()) {
                     List<Chat> chats = response.body();
                     contactList = chats;
-                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, username);
+                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName,token);
                     lstFeed.setAdapter(feedAdapter);
                 } else {
                     // Handle unsuccessful response
@@ -171,8 +170,6 @@ public class ContactsView extends AppCompatActivity {
                 }
             }));
             });
-        Button btnSettings = findViewById(R.id.btnSettings);
-        });
 
         // Open settings
         btnSettings.setOnClickListener(new View.OnClickListener() {
