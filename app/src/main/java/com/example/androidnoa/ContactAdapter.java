@@ -3,6 +3,9 @@ package com.example.androidnoa;
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -140,7 +143,9 @@ public class ContactAdapter extends BaseAdapter {
         if (displayName.equals(user)){
             displayName = chat.getUsers().get(1).getDisplayName();
         }
+        viewHolder.profilePic.setImageBitmap(getOtherProfilePicBitmap(chat,user));
         viewHolder.displayName.setText(displayName);
+
        // viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
         String lastMessage = chat.getLastMessageContent();
         if(lastMessage.length() > 12){
@@ -149,6 +154,20 @@ public class ContactAdapter extends BaseAdapter {
         viewHolder.lastMessageContent.setText(lastMessage);
         viewHolder.lastMessageDate.setText(chat.getLastMessageDate());
         return convertView;
+    }
+
+    private Bitmap getOtherProfilePicBitmap(Chat chat, String username) {
+        if (chat.users.get(0).getUsername().equals(username)) {
+            String base64String = chat.users.get(1).getProfilePic();
+            return base64ToBitmap(base64String);
+        } else {
+            String base64String = chat.users.get(0).getProfilePic();
+            return base64ToBitmap(base64String);
+        }
+    }
+    public Bitmap base64ToBitmap(String base64String) {
+        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
 }
