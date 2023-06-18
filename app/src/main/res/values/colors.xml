@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="Primary">#4CAF50</color>
     <color name="Secondary">#00ACC1</color>
     <color name="etBackground">#FAEBD7</color>
+    <color name="fontColor">#FF000000</color>
+    <color name="black">#FF000000</color>
 </resources>
