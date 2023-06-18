@@ -4,7 +4,10 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Entity
 public class Message implements Serializable {
@@ -23,7 +26,7 @@ public class Message implements Serializable {
     }
 
     public String getCreated() {
-        return created;
+        return formatDateString(created);
     }
 
     public void setCreated(String created) {
@@ -53,4 +56,28 @@ public class Message implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+    public String formatDateString(String dateString) {
+        //if not in formated
+        if(dateString.length() != 16) {
+            try {
+                // Define input and output date formats
+                SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault());
+                SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault());
+
+                // Parse the input date string
+                Date date = inputFormat.parse(dateString);
+
+                // Format the date to the desired format
+                String formattedDate = outputFormat.format(date);
+
+                return formattedDate;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null; // Handle the error condition appropriately
+            }
+        }
+        else return dateString;
+    }
 }
+
+

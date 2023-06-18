@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundtry1"
+    android:background="@drawable/gray_background"
     tools:context=".activities.SettingsActivity">
 
     <!-- Settings Title -->
@@ -13,9 +13,10 @@
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/tvSettings"
         android:textSize="24sp"
         android:textStyle="bold"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,80 +27,76 @@
         android:id="@+id/themeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Theme"
+        android:text="@string/tvTheme"
+        android:layout_marginTop="50dp"
         android:textSize="18sp"
+        android:padding="5dp"
+        android:background="@color/etBackground"
+        android:textColor="@color/fontColor"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <RadioGroup
         android:id="@+id/themeRadioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/themeTextView"
-        app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
-        android:paddingStart="16dp">
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:paddingStart="16dp"
+        app:layout_constraintStart_toEndOf="@+id/themeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView">
 
         <Button
             android:id="@+id/lightThemeRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Secondary"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
+            android:backgroundTint="@color/Secondary"
             android:checked="true"
-            android:text="Light" />
+            android:text="Light"
+            android:textColor="@color/fontColor" />
 
         <Button
             android:id="@+id/darkThemeRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Secondary"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
-            android:text="Dark" />
+            android:backgroundTint="@color/Secondary"
+            android:text="Dark"
+            android:textColor="@color/fontColor" />
 
     </RadioGroup>
 
-    <!-- Server Configuration -->
-    <TextView
-        android:id="@+id/serverTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Server Configuration"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/themeRadioGroup"
-        app:layout_constraintStart_toStartOf="parent"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"/>
+
 
     <!-- Server IP Address -->
-
     <TextView
         android:id="@+id/serverIpTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:paddingStart="16dp"
-        android:paddingTop="16dp"
-        android:text="Server IP Address"
+        android:layout_height="40dp"
+        android:background="@color/etBackground"
+        android:padding="10dp"
+        android:text="@string/tvServerIP"
+        android:textColor="@color/fontColor"
+        android:layout_marginTop="100dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serverTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/themeRadioGroup" />
 
     <EditText
         android:id="@+id/serverIpEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:background="@color/etBackground"
+        android:hint="@string/etEnterIP"
         android:inputType="text"
-        android:backgroundTint="@color/etBackground"
-        app:layout_constraintTop_toTopOf="@+id/serverIpTextView"
-        app:layout_constraintStart_toEndOf="@+id/serverIpTextView"
+        android:padding="10dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:paddingTop="16dp"
-        android:paddingEnd="16dp"
-        android:hint="Enter server IP address"/>
+        app:layout_constraintStart_toEndOf="@+id/serverIpTextView"
+        app:layout_constraintTop_toBottomOf="@+id/themeRadioGroup" />
 
     <!-- Save Button -->
     <Button
@@ -107,8 +104,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="Save settings"
+        android:text="@string/btnSaveSettings"
         android:backgroundTint="@color/Secondary"
+        android:textColor="@color/fontColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -4,10 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundtry1"
+    android:background="@drawable/gray_background"
     tools:context=".activities.loginActivity">
 
     <LinearLayout
+        android:layout_width="406dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="Welcome to Whatsapp-NOA"
+            android:textColor="@color/fontColor"
+            android:textSize="25sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -20,23 +41,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_margin="8dp"
-            android:background="@color/etBackground">
+            android:background="@color/etBackground"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/tvUser"
+                android:textColor="@color/fontColor"
                 android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/editTextUser"
-                android:autofillHints="username"
-                android:inputType="text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/etEnterUser" />
+                android:autofillHints="username"
+                android:hint="@string/etEnterUser"
+                android:inputType="text" />
 
         </LinearLayout>
 
@@ -44,14 +66,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_margin="8dp"
-            android:background="@color/etBackground">
+            android:background="@color/etBackground"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/password"
+                android:textColor="@color/fontColor"
                 android:textSize="16sp" />
 
             <EditText
@@ -71,8 +94,9 @@
             android:layout_margin="16dp"
             android:backgroundTint="@color/Primary"
             android:text="@string/login"
-            android:textColor="@android:color/white"
+            android:textColor="@color/fontColor"
             android:textSize="18sp" />
+
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
@@ -80,11 +104,20 @@
             android:layout_margin="16dp"
             android:backgroundTint="@color/Primary"
             android:text="@string/btnRegister"
-            android:textColor="@android:color/white"
+            android:textColor="@color/fontColor"
             android:textSize="18sp" />
 
-
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:src="@drawable/noa_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/btnShowAllUsers"
@@ -92,10 +125,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:backgroundTint="@color/Secondary"
-
+        android:text="@string/btnShowAllUsers"
+        android:textColor="@color/fontColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/btnShowAllUsers"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnSettingLogin"
