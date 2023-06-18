@@ -148,7 +148,6 @@ public class ContactAdapter extends BaseAdapter {
         }
         viewHolder.lastMessageContent.setText(lastMessage);
         viewHolder.lastMessageDate.setText(chat.getLastMessageDate());
-      
         return convertView;
     }
 

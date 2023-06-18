@@ -1,10 +1,18 @@
 package com.example.androidnoa.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.room.Room;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
+import androidx.room.Room;
+
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +38,18 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Callback;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 public class loginActivity extends AppCompatActivity {
 
     public static appDB db;
@@ -37,12 +57,15 @@ public class loginActivity extends AppCompatActivity {
     public static EditText editTextPassword;
     private User currectUser;
     private List<User> usersList;
+    private static final int NOTIFICATION_ID = 1;
+    private static final String CHANNEL_ID = "channel_id";
+    private static final int PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.loginactivity);
-        usersList=new ArrayList<>();
+        usersList = new ArrayList<>();
 
         editTextUser = findViewById(R.id.editTextUser);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -51,7 +74,7 @@ public class loginActivity extends AppCompatActivity {
 
         //Initialize Room
         db = Room.databaseBuilder(getApplicationContext(),
-                appDB.class, "User")
+                        appDB.class, "User")
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
@@ -73,12 +96,12 @@ public class loginActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                    currectUser=null;
-                    for (User user : usersList) {
-                        if(user.getUsername().equals(username)){
-                            currectUser=user;
-                        }
+                currectUser=null;
+                for (User user : usersList) {
+                    if(user.getUsername().equals(username)){
+                        currectUser=user;
                     }
+                }
                 String password = editTextPassword.getText().toString();
                 if (username.isEmpty() && password.isEmpty()) {
                     showCustomToast("Please fill username and password");
@@ -157,8 +180,67 @@ public class loginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ShowAllUsersActivity.class);
             startActivity(intent);
         });
+        Button button = findViewById(R.id.mybutton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if the required permission is granted
+                if (ActivityCompat.checkSelfPermission(loginActivity.this, Manifest.permission.ACCESS_NOTIFICATION_POLICY)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, show the notification
+                    showNotification("My Notification", "Hello, this is a notification!");
+                } else {
+                    // Request the permission from the user
+                    ActivityCompat.requestPermissions(loginActivity.this,
+                            new String[]{Manifest.permission.ACCESS_NOTIFICATION_POLICY},
+                            PERMISSION_REQUEST_CODE);
+                    // You can also show a message to the user explaining why the permission is necessary
+                }
+            }
+        });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, show the notification
+                showNotification("My Notification", "Hello, this is a notification!");
+            } else {
+                // Permission denied, handle it accordingly (e.g., show a message to the user)
+                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showNotification(String title, String message) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the notification channel
+            CharSequence channelName = "Channel Name";
+            String channelDescription = "Channel Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+            channel.setDescription(channelDescription);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.bubble_background)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
     @Override
     protected void onStop() {
         super.onStop();
@@ -166,7 +248,7 @@ public class loginActivity extends AppCompatActivity {
         loginActivity.editTextUser.setText("");
         loginActivity.editTextPassword.setText("");
     }
-    public  void showCustomToast(String message) {
+    public void showCustomToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_warning,
                 (ViewGroup) findViewById(R.id.custom_toast_container));
@@ -180,6 +262,5 @@ public class loginActivity extends AppCompatActivity {
         toast.setView(layout);
         toast.show();
     }
-
 
 }
