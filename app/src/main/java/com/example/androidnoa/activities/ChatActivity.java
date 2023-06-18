@@ -141,7 +141,7 @@ public class ChatActivity extends AppCompatActivity {
         // Get current date and time
         Calendar calendar = Calendar.getInstance();
         // Specify the date and time format
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd:MM:yyyy", Locale.getDefault());
         // Format the date and time
         return dateFormat.format(calendar.getTime());
     }
