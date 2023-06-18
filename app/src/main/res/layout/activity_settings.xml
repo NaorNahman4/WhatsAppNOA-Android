@@ -16,6 +16,7 @@
         android:text="@string/tvSettings"
         android:textSize="24sp"
         android:textStyle="bold"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:text="@string/tvTheme"
         android:textSize="18sp"
+        android:background="@color/etBackground"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingStart="16dp"
@@ -70,6 +72,7 @@
         android:layout_height="wrap_content"
         android:text="@string/tvServerConf"
         android:textSize="18sp"
+        android:background="@color/etBackground"
         app:layout_constraintTop_toBottomOf="@+id/themeRadioGroup"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingStart="16dp"
@@ -84,6 +87,7 @@
         android:layout_marginTop="36dp"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
+        android:background="@color/etBackground"
         android:text="@string/tvServerIP"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/serverTextView" />

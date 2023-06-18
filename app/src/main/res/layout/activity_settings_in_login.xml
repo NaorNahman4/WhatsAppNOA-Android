@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Theme"
         android:textSize="18sp"
+        android:background="@color/etBackground"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingStart="16dp"
@@ -50,7 +51,7 @@
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:checked="true"
-            android:text="Light" />
+            android:text="@string/btnLight" />
 
         <Button
             android:id="@+id/darkThemeRadioButton"
@@ -59,7 +60,7 @@
             android:backgroundTint="@color/Secondary"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
-            android:text="Dark" />
+            android:text="@string/btnDark" />
 
     </RadioGroup>
 
@@ -68,8 +69,9 @@
         android:id="@+id/serverTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Server Configuration"
+        android:text="@string/tvServerConf"
         android:textSize="18sp"
+        android:background="@color/etBackground"
         app:layout_constraintTop_toBottomOf="@+id/themeRadioGroup"
         app:layout_constraintStart_toStartOf="parent"
         android:paddingStart="16dp"
@@ -85,6 +87,7 @@
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:text="Server IP Address"
+        android:background="@color/etBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/serverTextView" />
 
@@ -99,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingTop="16dp"
         android:paddingEnd="16dp"
-        android:hint="Enter server IP address"/>
+        android:hint="@string/etEnterServer"/>
 
     <!-- Save Button -->
     <Button
@@ -107,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="Save settings"
+        android:text="@string/btnSaveSettings"
         android:backgroundTint="@color/Secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
