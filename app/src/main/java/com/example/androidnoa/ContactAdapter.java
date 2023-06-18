@@ -145,9 +145,14 @@ public class ContactAdapter extends BaseAdapter {
         }
         viewHolder.profilePic.setImageBitmap(getOtherProfilePicBitmap(chat,user));
         viewHolder.displayName.setText(displayName);
-        viewHolder.lastMessageContent.setText(chat.getLastMessageContent());
+
+       // viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
+        String lastMessage = chat.getLastMessageContent();
+        if(lastMessage.length() > 12){
+            lastMessage = lastMessage.substring(0,12) + "...";
+        }
+        viewHolder.lastMessageContent.setText(lastMessage);
         viewHolder.lastMessageDate.setText(chat.getLastMessageDate());
-      
         return convertView;
     }
 

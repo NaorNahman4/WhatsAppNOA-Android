@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.androidnoa.Message;
@@ -49,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_acitivity);
+
 
         Intent intent = getIntent();
         currentUser = (User) intent.getSerializableExtra("user");
@@ -141,7 +143,7 @@ public class ChatActivity extends AppCompatActivity {
         // Get current date and time
         Calendar calendar = Calendar.getInstance();
         // Specify the date and time format
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd:MM:yyyy", Locale.getDefault());
         // Format the date and time
         return dateFormat.format(calendar.getTime());
     }

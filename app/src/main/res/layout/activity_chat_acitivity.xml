@@ -24,6 +24,7 @@
             android:paddingStart="16dp"
             android:paddingTop="12dp"
             android:paddingEnd="16dp"
+            android:textColor="@color/fontColor"
             android:paddingBottom="12dp" />
 
     </LinearLayout>
@@ -33,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@drawable/backgroundtry1"
+        android:background="@drawable/background"
         android:clipToPadding="false"
         android:elevation="2dp"
         android:paddingStart="8dp"
@@ -64,14 +65,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#F0F0F0"
+            android:background="@color/etBackground"
+            android:textColorHint="@color/fontColor"
+            android:textColorLink="@color/fontColor"
             android:backgroundTint="@color/etBackground"
             android:hint="@string/etTypeMessage"
             android:paddingStart="12dp"
             android:paddingTop="8dp"
             android:paddingEnd="12dp"
             android:paddingBottom="8dp"
-            android:textColor="#221E1E"
+            android:textColor="@color/fontColor"
             android:textSize="16sp" />
 
         <Button
@@ -81,7 +84,7 @@
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/Secondary"
             android:text="Send"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/fontColor"
             android:textSize="16sp"
             android:paddingStart="12dp"
             android:paddingTop="8dp"

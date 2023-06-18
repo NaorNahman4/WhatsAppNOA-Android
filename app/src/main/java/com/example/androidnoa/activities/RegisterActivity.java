@@ -120,6 +120,10 @@ public class RegisterActivity extends AppCompatActivity {
                 showCustomToast("Please fill display name");
                 return;
             }
+            if(displayName.length() > 20){
+                showCustomToast("Display name is too long");
+                return;
+            }
             UsersApi usersApi = new UsersApi();
             User request = new User(user, password, displayName, img);
 

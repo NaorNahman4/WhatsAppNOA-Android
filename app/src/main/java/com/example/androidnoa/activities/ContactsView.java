@@ -12,10 +12,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.androidnoa.Chat;
+import com.example.androidnoa.ChatComparator;
 import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.MyApplication;
@@ -30,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -125,6 +128,7 @@ public class ContactsView extends AppCompatActivity {
                 for (Chat chat : contactList) {
                     db.chatDao().update(chat);
                 }
+                Collections.sort(contactList, new ChatComparator());
             }
         });
         //Getting all the chats of the user into ChatDao
@@ -215,10 +219,10 @@ public class ContactsView extends AppCompatActivity {
                     contactList.add(chat);
                 }
             }
+            Collections.sort(contactList, new ChatComparator());
             runOnUiThread(() -> {
                 final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
                 lstFeed.setAdapter(ContactAdapter);
-                System.out.println("sadasd");
             });
         }).start();
         // Retrieve the intent that started this activity
@@ -252,7 +256,6 @@ public class ContactsView extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     public Chat getChatById(int chatId){
         for(Chat c : contactList){
             if(c.getId() == chatId){
@@ -272,8 +275,5 @@ public class ContactsView extends AppCompatActivity {
           return chat.getUsers().get(0).getDisplayName();
        }
     }
-
-
-
 }
 
