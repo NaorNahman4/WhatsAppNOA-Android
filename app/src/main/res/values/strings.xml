@@ -22,4 +22,7 @@
     <string name="tvServerIP">Server IP Address</string>
     <string name="etEnterIP">Enter server IP address</string>
     <string name="btnSaveSettings">Save settings</string>
+    <string name="btnLight">Light</string>
+    <string name="btnDark">Dark</string>
+    <string name="etEnterServer">Enter server IP address</string>
 </resources>
