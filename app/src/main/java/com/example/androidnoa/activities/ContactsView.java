@@ -225,7 +225,6 @@ public class ContactsView extends AppCompatActivity {
             runOnUiThread(() -> {
                 final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
                 lstFeed.setAdapter(ContactAdapter);
-                System.out.println("sadasd");
             });
         }).start();
         // Retrieve the intent that started this activity
