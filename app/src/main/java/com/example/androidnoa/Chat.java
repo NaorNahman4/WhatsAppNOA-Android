@@ -72,4 +72,5 @@ public class Chat {
         }
         return this.messages.get(messages.size() - 1).getCreated();
     }
+
 }

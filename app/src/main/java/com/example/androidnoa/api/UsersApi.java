@@ -4,6 +4,12 @@ package com.example.androidnoa.api;
 
 import static com.example.androidnoa.activities.loginActivity.db;
 
+import android.content.Context;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +30,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+
+
+
+
+
 public class UsersApi {
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
@@ -41,28 +52,9 @@ public class UsersApi {
         return webServiceAPI;
     }
 
-    public void Register(String username, String password, String name, String img){
-        User request = new User(username, password, name, img);
-        Call<ResponseBody> call = webServiceAPI.registerUser(request);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
-                int statusCode = response.code();
-                if (statusCode == 200) {
-                    Toast.makeText(MyApplication.context, "User registered successfully", Toast.LENGTH_LONG).show();
-                    new Thread(() ->{
-                        db.userDao().insert(request);
-                    }).start();
-                }
-                else {
-                    Toast.makeText(MyApplication.context, "User is taken", Toast.LENGTH_LONG).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                System.out.println("On failure ");
-            }
-        });
+    public void Register(User user,Callback<ResponseBody> callback){
+        Call<ResponseBody> call = webServiceAPI.registerUser(user);
+        call.enqueue(callback);
     }
     public void Login(String username, String password, Callback<ResponseBody> callback){
         UserNameAndPass data = new UserNameAndPass(username, password);
@@ -77,5 +69,8 @@ public class UsersApi {
         Call<User> call = webServiceAPI.getUser(username, token);
         call.enqueue(callback);
     }
+
+
+
 
 }

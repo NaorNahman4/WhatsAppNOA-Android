@@ -66,8 +66,6 @@ public class ContactsView extends AppCompatActivity {
         if (currentUser == null) {
             userApi = new UsersApi();
             try {
-
-
                 userApi.GetMyDetails(userName, token, new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
