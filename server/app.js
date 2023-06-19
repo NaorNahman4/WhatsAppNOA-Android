@@ -7,6 +7,17 @@ const io = socketIO(server);
 const path = require('path');
 const connectedUsers =require('./models/connectedUsers.js');
 
+const admin = require('firebase-admin');
+// Initialize Firebase Admin SDK
+
+
+var serviceAccount = require("./config/firebase-admin.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+
+});
+
+
 
 // when starting the serer,delete all the connected users
 const deleteAllConnectedUsers = async () => {
@@ -85,11 +96,12 @@ io.on('connection', async (socket) => {
 const userRoutes = require('./routes/user.js');
 const chatRoutes = require('./routes/chat.js');
 const tokenRoutes = require('./routes/token.js');
+const tokenFBRoutes = require('./routes/tokenFB.js');
 
 
 // Middleware for parsing JSON bodies
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ limit: '1mb', extended: true }));
 
 // Using cors middleware to enable cross-origin requests
 app.use(cors());
@@ -110,6 +122,8 @@ app.use(express.static('../public'));
 app.use('/api/Users', userRoutes);
 app.use('/api/Tokens', tokenRoutes);
 app.use('/api/Chats', chatRoutes);
+app.use('/api/TokensFB', tokenFBRoutes);
+
 
 
 app.listen(process.env.PORT);
