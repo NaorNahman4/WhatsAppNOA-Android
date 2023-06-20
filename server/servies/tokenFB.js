@@ -1,8 +1,11 @@
-const usernameAndToken = require('../models/connectPhoneUsers.js');
+const connectedPhoneUsers = require('../models/connectPhoneUsers.js');
 
 const insertConnectedPhone = async (username, token) => {
+    console.log("insert connected phone");
     try {
-      return await usernameAndToken.insertOne({ username, password }).exec();
+      // addd to momgo db
+      const data = new connectedPhoneUsers({ username: username, token: token });
+      await data.save();
     } catch (error) {
   
       console.error(error);

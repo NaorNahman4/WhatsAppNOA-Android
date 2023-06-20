@@ -49,6 +49,6 @@ public interface WebServiceAPI {
     @DELETE("Chats/{id}")
     Call<ResponseBody> deleteChat(@Header("Authorization") String token,@Path("id") int id);
 
-    @POST("Tokens")
+    @POST("TokensFB")
     Call<ResponseBody> sendTokenToServer(@Body FBToken data);
 }

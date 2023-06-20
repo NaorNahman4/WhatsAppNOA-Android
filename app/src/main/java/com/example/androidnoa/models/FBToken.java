@@ -1,7 +1,11 @@
 package com.example.androidnoa.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class FBToken {
+
     private String token;
+
     private String username;
 
 

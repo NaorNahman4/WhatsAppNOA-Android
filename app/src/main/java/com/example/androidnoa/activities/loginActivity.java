@@ -146,7 +146,7 @@ public class loginActivity extends AppCompatActivity {
                                     FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(loginActivity.this, instanceIdResult -> {
                                         String FBtoken = instanceIdResult.getToken();
                                         FBTokenApi fbTokenApi = new FBTokenApi();
-                                        fbTokenApi.sendTokenToServer( username, FBtoken, new Callback<ResponseBody>(){
+                                        fbTokenApi.sendTokenToServer2(username,FBtoken,new Callback<ResponseBody>(){
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 if (response.isSuccessful()) {
