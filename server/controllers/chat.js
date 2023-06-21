@@ -3,6 +3,16 @@ const userService = require('../servies/user.js')
 const jwt = require('jsonwebtoken');
 const connectPhoneUsers = require('../models/connectPhoneUsers.js');
 
+const admin = require('firebase-admin');
+// Initialize Firebase Admin SDK
+
+
+var serviceAccount = require(".././config/firebase-admin.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+
+});
+
 const CreateChat = async (req, res) => {
     try {
         const me = decode(req.headers.authorization);

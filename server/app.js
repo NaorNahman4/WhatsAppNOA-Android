@@ -7,16 +7,6 @@ const io = socketIO(server);
 const path = require('path');
 const connectedUsers =require('./models/connectedUsers.js');
 
-const admin = require('firebase-admin');
-// Initialize Firebase Admin SDK
-
-
-var serviceAccount = require("./config/firebase-admin.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-
-});
-
 
 
 // when starting the serer,delete all the connected users
