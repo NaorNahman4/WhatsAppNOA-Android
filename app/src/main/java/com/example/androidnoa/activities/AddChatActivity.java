@@ -43,7 +43,7 @@ public class AddChatActivity extends AppCompatActivity {
         addBtn.setOnClickListener(view -> {
             EditText chatName = findViewById(R.id.etContactName);
             String chatNameStr = chatName.getText().toString();
-            ChatsApi chatsApi = new ChatsApi();
+            ChatsApi chatsApi = new ChatsApi("10.0.2.2");
             t =  new Thread(() -> {
                 db.chatDao().insert(newChat);
                 runOnUiThread(() -> {
@@ -76,8 +76,7 @@ public class AddChatActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Chat> call, @NonNull Throwable t) {
-                    System.out.println("naor create chat failed");
-                    System.out.println("naor"  + t.getMessage());
+                    showCustomToast("Invalid server IP / no good communication!");
                     finish();
                 }
             });

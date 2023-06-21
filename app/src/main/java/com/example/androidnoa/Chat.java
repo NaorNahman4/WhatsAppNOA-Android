@@ -6,11 +6,12 @@ import androidx.room.PrimaryKey;
 import com.example.androidnoa.models.UserAllDetails;
 import com.example.androidnoa.models.UserNameAndPass;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Chat {
+public class Chat implements Serializable {
     @PrimaryKey(autoGenerate=true)
     int id;
     List<User> users;

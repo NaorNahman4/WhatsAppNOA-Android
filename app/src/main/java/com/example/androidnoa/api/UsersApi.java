@@ -36,12 +36,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class UsersApi {
+    private String ServerurlUser;
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
 
-    public UsersApi() {
+    public UsersApi(String url) {
+        this.setServerUrl(url);
         retrofit = new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseURL))
+                .baseUrl(this.ServerurlUser)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
@@ -50,6 +52,11 @@ public class UsersApi {
 
     public WebServiceAPI getWebServiceAPI() {
         return webServiceAPI;
+    }
+
+    public void setServerUrl(String serverIp) {
+        String url = "http://" + serverIp + ":8080/api/";
+        this.ServerurlUser = url;
     }
 
     public void Register(User user,Callback<ResponseBody> callback){

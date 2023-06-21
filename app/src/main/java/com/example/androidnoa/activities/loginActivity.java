@@ -51,6 +51,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class loginActivity extends AppCompatActivity {
+    public static String ServerIP = "10.0.2.2";
 
     public static appDB db;
     public static EditText editTextUser;
@@ -115,7 +116,7 @@ public class loginActivity extends AppCompatActivity {
                     showCustomToast("Please fill password");
                     return;
                 }
-                UsersApi usersApi = new UsersApi();
+                UsersApi usersApi = new UsersApi(ServerIP);
                 usersApi.Login(username, password, new Callback<ResponseBody>() {
 
                     @Override
@@ -147,8 +148,7 @@ public class loginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Handle network or API call failure
-                        showCustomToast("Login request failed");
+                        showCustomToast("Invalid server / no good communication!");
                     }
                 });
             }

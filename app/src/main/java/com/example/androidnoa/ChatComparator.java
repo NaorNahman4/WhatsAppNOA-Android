@@ -12,7 +12,7 @@ public class ChatComparator implements Comparator<Chat> {
     private SimpleDateFormat dateFormat;
 
     public ChatComparator() {
-        dateFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
     }
 
     @Override
@@ -51,8 +51,8 @@ public class ChatComparator implements Comparator<Chat> {
 
     public int compareBySubstring(String first, String second) {
         //Comparing by year
-        String first_tmp = first.substring(12);
-        String second_tmp = second.substring(12);
+        String first_tmp = first.substring(15);
+        String second_tmp = second.substring(15);
         try {
             int year1 = Integer.parseInt(first_tmp);
             int year2 = Integer.parseInt(second_tmp);
@@ -65,8 +65,8 @@ public class ChatComparator implements Comparator<Chat> {
             e.printStackTrace();
         }
         //Comparing by month
-        first_tmp = first.substring(10, 12);
-        second_tmp = second.substring(10, 12);
+        first_tmp = first.substring(13, 15);
+        second_tmp = second.substring(13, 15);
         try {
             int month1 = Integer.parseInt(first_tmp);
             int month2 = Integer.parseInt(second_tmp);
@@ -79,8 +79,8 @@ public class ChatComparator implements Comparator<Chat> {
             e.printStackTrace();
         }
         //Comparing by day
-        first_tmp = first.substring(6, 8);
-        second_tmp = second.substring(6, 8);
+        first_tmp = first.substring(9, 11);
+        second_tmp = second.substring(9, 11);
         try {
             int day1 = Integer.parseInt(first_tmp);
             int day2 = Integer.parseInt(second_tmp);
@@ -115,6 +115,20 @@ public class ChatComparator implements Comparator<Chat> {
             if (min1 > min2) {
                 return -1;
             } else if (min2 > min1) {
+                return 1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //Comparing by second
+        first_tmp = first.substring(6, 8);
+        second_tmp = second.substring(6, 8);
+        try {
+            int sec1 = Integer.parseInt(first_tmp);
+            int sec2 = Integer.parseInt(second_tmp);
+            if (sec1 > sec2) {
+                return -1;
+            } else if (sec2 > sec1) {
                 return 1;
             }
         } catch (Exception e) {

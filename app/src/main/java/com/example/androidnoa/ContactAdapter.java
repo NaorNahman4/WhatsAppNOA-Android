@@ -1,7 +1,9 @@
 package com.example.androidnoa;
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import static com.example.androidnoa.activities.loginActivity.db;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,7 +33,7 @@ public class ContactAdapter extends BaseAdapter {
     private Thread t;
     List<Chat> contactList;
 
-    Context prevActivity;
+    Activity prevActivity;
     String user;
     String token;
 
@@ -44,7 +46,7 @@ public class ContactAdapter extends BaseAdapter {
     }
 
     //Constructor
-    public ContactAdapter(List<Chat> contactList, Context prevActivity, String user, String token){
+    public ContactAdapter(List<Chat> contactList, Activity prevActivity, String user, String token){
         this.contactList = contactList;
         this.prevActivity = prevActivity;
         this.user = user;
@@ -90,11 +92,10 @@ public class ContactAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
 
             Button btnDel = convertView.findViewById(R.id.btnDelete);
-
             btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChatsApi chatsApi = new ChatsApi();
+                    ChatsApi chatsApi = new ChatsApi(ServerIP);
                     chatsApi.deleteMyChat(token ,contactList.get(position).getId(),
                             new Callback<ResponseBody>() {
 
@@ -108,9 +109,14 @@ public class ContactAdapter extends BaseAdapter {
                                         t = new Thread(() -> {
                                             Chat toDelete = contactList.get(position);
                                             db.chatDao().delete(toDelete);
-                                            contactList.remove(position);
+                                            prevActivity.runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    contactList.remove(position);
+                                                    notifyDataSetChanged();
+                                                }
+                                            });
                                             //Need to put live data
-                                            notifyDataSetChanged();
                                         });
                                         t.start();
                                     }
@@ -135,8 +141,6 @@ public class ContactAdapter extends BaseAdapter {
             });
 
         }
-
-
         Chat chat = this.contactList.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         String displayName = chat.getUsers().get(0).getDisplayName();
@@ -144,6 +148,9 @@ public class ContactAdapter extends BaseAdapter {
             displayName = chat.getUsers().get(1).getDisplayName();
         }
         viewHolder.profilePic.setImageBitmap(getOtherProfilePicBitmap(chat,user));
+        if (viewHolder.profilePic.getDrawable()==null){
+            viewHolder.profilePic.setImageResource(R.drawable.default_pic);
+        }
         viewHolder.displayName.setText(displayName);
 
        // viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());
@@ -171,4 +178,13 @@ public class ContactAdapter extends BaseAdapter {
     }
 
 }
+
+
+
+
+
+
+
+
+
 
