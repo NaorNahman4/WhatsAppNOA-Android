@@ -53,11 +53,8 @@ public class AddChatActivity extends AppCompatActivity {
             chatsApi.CreateMyChat(token, chatNameStr , new Callback<Chat>() {
                 @Override
                 public void onResponse(@NonNull Call<Chat> call, @NonNull Response<Chat> response) {
-                    System.out.println("naor create chat response: ");
-                    System.out.println("naor"  + response.code());
                     int resCode = response.code();
                     if (response.isSuccessful()) {
-                        System.out.println("naor create chat successful");
                         newChat = response.body();
                        t.start();
                     }
@@ -76,7 +73,7 @@ public class AddChatActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Chat> call, @NonNull Throwable t) {
-                    showCustomToast("Invalid server IP / no good communication!");
+                    showCustomToast("Invalid server call!");
                     finish();
                 }
             });

@@ -11,6 +11,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -57,8 +63,6 @@ public class MyService extends FirebaseMessagingService {
             // Extract the message data
             String content = remoteMessage.getData().get("content");
             String senderUsername = remoteMessage.getData().get("senderUsername");
-            System.out.println("naor content: " + content);
-            System.out.println("naor senderUsername: " + senderUsername);
             // Display a notification or perform custom actions
             showNotification(content, senderUsername, remoteMessage);
             ChatsApi chatsApi = new ChatsApi(ServerIP);
@@ -76,9 +80,6 @@ public class MyService extends FirebaseMessagingService {
                             }
                         }
 
-                    } else {
-                        // Handle unsuccessful response
-                        System.out.println("naor get my chats unsuccessful getmyChats");
                     }
                 }
 

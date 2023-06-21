@@ -129,7 +129,6 @@ public class ChatActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        System.out.println("naor sent message : " + message);
                     } else {
                         showCustomToast("Invalid server / no good communication!");
                         finish();

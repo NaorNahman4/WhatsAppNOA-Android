@@ -143,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    showCustomToast("Invalid server / no good communication!");
+                    showCustomToast("Invalid server call!");
                     finish();
                 }
             });
