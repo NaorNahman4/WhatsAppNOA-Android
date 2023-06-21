@@ -1,6 +1,7 @@
 const chatService = require('../servies/chat.js');
 const userService = require('../servies/user.js')
 const jwt = require('jsonwebtoken');
+const connectPhoneUsers = require('../models/connectPhoneUsers.js');
 
 const CreateChat = async (req, res) => {
     try {
@@ -92,6 +93,26 @@ const sendMessage = async (req, res) => {
         const username = decode(req.headers.authorization);
         const id = req.params.id;
         const msg = req.body.msg;
+        const activeChat = await chatService.getChatById(username, id);
+        const receiverUsername = activeChat.users[0].username === username ? activeChat.users[1].username : activeChat.users[0].username;
+        const senderUser = activeChat.users[0].username === username ? activeChat.users[0] : activeChat.users[1];
+        const receiverUser = await connectPhoneUsers.findOne({ username: receiverUsername });
+        if(receiverUser){
+            const otherUserTokenFB = receiverUser.token;
+            if(otherUserTokenFB){
+                // send the message to the other user with firebse base on the tokenFB
+                const message = {
+                    data: {
+                      content: msg,
+                      senderUsername: username
+                    },
+                    token: otherUserTokenFB
+                  };
+                const response = await admin.messaging().send(message);
+                console.log('Successfully sent message: both connected!', response);
+        }
+        }
+
         console.log(msg);
         //Check if chat exist and a chat of user
         if (chatService.getChatById(username, id)) {
