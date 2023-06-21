@@ -90,6 +90,19 @@ public class loginActivity extends AppCompatActivity {
                 EditText editTextUser = findViewById(R.id.editTextUser);
                 EditText editTextPassword = findViewById(R.id.editTextPassword);
                 String username = editTextUser.getText().toString();
+                String password = editTextPassword.getText().toString();
+                if (username.isEmpty() && password.isEmpty()) {
+                    showCustomToast("Please fill username and password");
+                    return;
+                }
+                if (username.isEmpty()) {
+                    showCustomToast("Please fill username");
+                    return;
+                }
+                if (password.isEmpty()) {
+                    showCustomToast("Please fill password");
+                    return;
+                }
                 Thread backgroundThread = new Thread(() -> {
                     if (db != null && db.userDao() != null) {
                         usersList = db.userDao().index();
@@ -107,19 +120,6 @@ public class loginActivity extends AppCompatActivity {
                         currectUser=user;
                     }
                 }
-                String password = editTextPassword.getText().toString();
-                if (username.isEmpty() && password.isEmpty()) {
-                    showCustomToast("Please fill username and password");
-                    return;
-                }
-                if (username.isEmpty()) {
-                    showCustomToast("Please fill username");
-                    return;
-                }
-                if (password.isEmpty()) {
-                    showCustomToast("Please fill password");
-                    return;
-                }
                 Intent intent2 = new Intent(loginActivity.this, ContactsView.class);
                 UsersApi usersApi = new UsersApi(ServerIP);
                 usersApi.Login(username, password, new Callback<ResponseBody>() {
@@ -130,42 +130,52 @@ public class loginActivity extends AppCompatActivity {
                             String status = String.valueOf(response.code());
                             try {
                                 String token = response.body().string();
-
                                 if (status.equals("200")) {
-                                    // Open the activity and pass the token as an extra
-                                    intent2.putExtra("token", token);
-                                    intent2.putExtra("user", currectUser);
-                                    intent2.putExtra("username", username);
-                                    //Fire base sent token.
+                                    usersApi.GetMyDetails(username, token, new Callback<User>() {
+                                        @Override
+                                        public void onResponse(Call<User> call, Response<User> response) {
+                                            if(response.isSuccessful()){
+                                                currectUser = response.body();
+                                                intent2.putExtra("token", token);
+                                                intent2.putExtra("user", currectUser);
+                                                intent2.putExtra("username", username);
+                                                //Fire base sent token.
 
-                                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(loginActivity.this, instanceIdResult -> {
-                                        FBtoken = instanceIdResult.getToken();
-                                        intent2.putExtra("FBtoken", FBtoken);
-                                        FBTokenApi fbTokenApi = new FBTokenApi();
-                                        fbTokenApi.sendTokenToServer2(username, FBtoken, new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                if (response.isSuccessful()) {
-                                                    String status = String.valueOf(response.code());
-                                                    if (status.equals("200")) {
-                                                        showCustomToast("FBtoken request good");
-                                                        startActivity(intent2); // Move startActivity here
-                                                    } else {
-                                                        // Handle the case when the status is not 200
-                                                        showCustomToast("FBtoken request failed");
-                                                    }
-                                                } else {
-                                                    // Handle unsuccessful response
-                                                    showCustomToast("FBtoken request failed");
-                                                }
-                                            }
+                                                FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(loginActivity.this, instanceIdResult -> {
+                                                    FBtoken = instanceIdResult.getToken();
+                                                    intent2.putExtra("FBtoken", FBtoken);
+                                                    FBTokenApi fbTokenApi = new FBTokenApi();
+                                                    fbTokenApi.sendTokenToServer2(username, FBtoken, new Callback<ResponseBody>() {
+                                                        @Override
+                                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                            if (response.isSuccessful()) {
+                                                                String status = String.valueOf(response.code());
+                                                                if (status.equals("200")) {
+                                                                    startActivity(intent2); // Move startActivity here
+                                                                } else {
+                                                                    // Handle the case when the status is not 200
+                                                                    showCustomToast("Error in FireBase");
+                                                                }
+                                                            } else {
+                                                                // Handle unsuccessful response
+                                                                showCustomToast("Error with the server");
+                                                            }
+                                                        }
 
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                // Handle network or API call failure
-                                                showCustomToast("Login request failed");
+                                                        @Override
+                                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                            // Handle network or API call failure
+                                                            showCustomToast("Login request failed");
+                                                        }
+                                                    });
+                                                });
                                             }
-                                        });
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<User> call, Throwable t) {
+                                            showCustomToast("Error with the server");
+                                        }
                                     });
                                     //I get here and its start without wait for intent2.putExtra("FBtoken", FBtoken);
                                     //startActivity(intent2);
@@ -184,7 +194,7 @@ public class loginActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        showCustomToast("Invalid server / no good communication!");
+                        showCustomToast("Invalid server call!");
                     }
                 });
             }
@@ -209,13 +219,6 @@ public class loginActivity extends AppCompatActivity {
             }
         });
 
-
-        //FOR TESTING THE LOCAL DB !!!
-        Button btnShowAllUsers = findViewById(R.id.btnShowAllUsers);
-        btnShowAllUsers.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ShowAllUsersActivity.class);
-            startActivity(intent);
-        });
         Button button = findViewById(R.id.mybutton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
