@@ -54,7 +54,7 @@ io.on('connection', async (socket) => {
   });
   socket.on('newMessage', async( senderUsername, receiverUsername,msg) => {
    // check if receiver is android or web
-   const ifReceiverConnected = await connectedUsers.findOne({username: receiverUsername}); 
+   var ifReceiverConnected = await connectedUsers.findOne({username: receiverUsername}); 
    // receiver is web and connected
    if(ifReceiverConnected){
     const socketId = await connectedUsers.findOne({username: receiverUsername});
@@ -152,13 +152,11 @@ app.use('/api/Tokens', tokenRoutes);
 app.use('/api/Chats', chatRoutes);
 app.use('/api/TokensFB', tokenFBRoutes);
 
-
-
 app.listen(process.env.PORT);
 
-
-
-
-
-
 server.listen(8080);
+
+
+module.exports = {
+  io
+};

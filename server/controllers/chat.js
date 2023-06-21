@@ -2,6 +2,13 @@ const chatService = require('../servies/chat.js');
 const userService = require('../servies/user.js')
 const jwt = require('jsonwebtoken');
 const connectPhoneUsers = require('../models/connectPhoneUsers.js');
+const { connect } = require('../routes/user.js');
+const connectedUsers = require('../models/connectedUsers.js');
+const usingSocket = require('../app.js');
+const admin = require('firebase-admin');
+// Initialize Firebase Admin SDK
+
+
 
 
 const CreateChat = async (req, res) => {
@@ -96,11 +103,18 @@ const sendMessage = async (req, res) => {
         const msg = req.body.msg;
         const activeChat = await chatService.getChatById(username, id);
         const receiverUsername = activeChat.users[0].username === username ? activeChat.users[1].username : activeChat.users[0].username;
-        const senderUser = activeChat.users[0].username === username ? activeChat.users[0] : activeChat.users[1];
-        const receiverUser = await connectPhoneUsers.findOne({ username: receiverUsername });
-        if(receiverUser){
-            const otherUserTokenFB = receiverUser.token;
-            if(otherUserTokenFB){
+        const senderUser = await connectPhoneUsers.findOne({ username: username }); 
+        const receiverUserAndroid = await connectPhoneUsers.findOne({ username: receiverUsername });
+        const receiverUserWeb = await connectedUsers.findOne({ username: receiverUsername });
+
+        // first check if the sender is android, else web,the message will handle in app.js listen to the event "newMessage"
+        if(senderUser){
+            console.log("send is android");
+            // if the sender is android, check if the receiver is connect android if yes use firebase
+            if(receiverUserAndroid){
+                console.log("send is android, receiver is android");
+            const otherUserTokenFB = receiverUserAndroid.token;
+                if(otherUserTokenFB){
                 // send the message to the other user with firebse base on the tokenFB
                 const message = {
                     data: {
@@ -110,9 +124,19 @@ const sendMessage = async (req, res) => {
                     token: otherUserTokenFB
                   };
                 const response = await admin.messaging().send(message);
-                console.log('Successfully sent message: both connected!', response);
+                }
         }
+        else if(receiverUserWeb){
+            console.log("send is android, receiver is web");
+            // sender is android, receiver is web so we use socket.io
+            const otherUserSocketId = receiverUserWeb.socketId;
+            if(otherUserSocketId){
+                // send the message to the other user with socket.io
+                usingSocket.io.to(otherUserSocketId).emit('render');
+            }
         }
+
+    }
         //Check if chat exist and a chat of user
         if (chatService.getChatById(username, id)) {
             res.status(200).json(await chatService.sendMessage(username, id, msg));
