@@ -5,6 +5,7 @@ import com.example.androidnoa.Chat;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.User;
 
+import com.example.androidnoa.models.FBToken;
 import com.example.androidnoa.models.MesStr;
 import com.example.androidnoa.models.UserName;
 
@@ -47,29 +48,9 @@ public interface WebServiceAPI {
 
     @DELETE("Chats/{id}")
     Call<ResponseBody> deleteChat(@Header("Authorization") String token,@Path("id") int id);
-//
-//    @POST("api/ConnectToFirebase")
-//    Call<Void> ConnectToFirebase(@Body UserFBToken userFBToken);
-//
-//
-//
-//    @GET("api/Contacts")
-//    Call<List<Contact>> getAllContacts(@Header("authorization") String auth);
-//
-//    @POST("api/Contacts")
-//    Call<Void> postContact(@Body Contact contact , @Header("authorization") String auth);
-//
-//    @POST("api/Invitations")
-//    Call<Void> postInvitation(@Body Invitation invitation);
-//
-//
-//    @GET("api/Contacts/{id}/Messages")
-//    Call<List<Message>> getMessages(@Path("id") String id, @Header("authorization") String auth);
-//
-//    @POST("api/Contacts/{id}/Messages")
-//    Call<Void> postMessage(@Path("id") String id, @Body ApiMessage message,
-//                           @Header("authorization") String auth);
-//
-//    @POST("api/Transfer")
-//    Call<Void> transfer(@Body Transfer transfer);
+
+    @POST("TokensFB")
+    Call<ResponseBody> sendTokenToServer(@Body FBToken data);
+    @POST("TokensFB/logout")
+    Call<ResponseBody> logOutUser(@Body FBToken data);
 }
