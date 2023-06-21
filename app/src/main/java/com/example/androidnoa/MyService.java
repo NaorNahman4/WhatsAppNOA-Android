@@ -1,5 +1,6 @@
 package com.example.androidnoa;
 
+import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -46,49 +47,21 @@ public class MyService extends FirebaseMessagingService {
             System.out.println("naor senderUsername: " + senderUsername);
 
             // Display a notification or perform custom actions
-            showNotification(content, senderUsername, remoteMessage);
+            showNotification(content, senderUsername);
         }
     }
 
-    private void showNotification(String content, String senderUsername, RemoteMessage remoteMessage) {
-        // Create an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, loginActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+    private void showNotification(String message, String username) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Message from " + username);
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", null);
+        builder.setCancelable(true);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentText(content)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
-
-        if (remoteMessage.getNotification() != null) {
-            builder.setContentTitle(remoteMessage.getNotification().getTitle());
-            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getNotification().getBody()));
-        } else {
-            // If the notification is not available, use the data payload for the title and body
-            String title = remoteMessage.getData().get("title");
-            String body = remoteMessage.getData().get("body");
-            builder.setContentTitle(title);
-            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
-        }
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            System.out.println("naor no permission");
-            return;
-        }
-        notificationManager.notify(notificationId, builder.build());
-        ++notificationId;
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
+
 
     private int generateNotificationId() {
         // Generate a unique notification ID using a timestamp or other logic
