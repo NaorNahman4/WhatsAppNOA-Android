@@ -124,9 +124,10 @@ public class ContactsView extends AppCompatActivity {
         //Thread that activates a function that takes all the user chats
         //and put inside the chatDao
         updateThread = new Thread(() -> {
+            db.chatDao().deleteAllChats();
             if (contactList != null) {
                 for (Chat chat : contactList) {
-                    db.chatDao().update(chat);
+                    db.chatDao().insert(chat);
                 }
                 Collections.sort(contactList, new ChatComparator());
             }
