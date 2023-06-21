@@ -91,7 +91,6 @@ public class ContactAdapter extends BaseAdapter {
             convertView.setTag(viewHolder);
 
             Button btnDel = convertView.findViewById(R.id.btnDelete);
-
             btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

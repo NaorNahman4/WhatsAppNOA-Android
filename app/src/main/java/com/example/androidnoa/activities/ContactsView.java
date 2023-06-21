@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -89,6 +92,10 @@ public class ContactsView extends AppCompatActivity {
             }
 
         }
+
+        //Adding the Image of the active user
+        ImageView ivUserProfilePic = findViewById(R.id.ivUserProfilePic);
+        ivUserProfilePic.setImageBitmap(base64ToBitmap(currentUser.getProfilePic()));
 
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi();
@@ -275,6 +282,11 @@ public class ContactsView extends AppCompatActivity {
        else{
           return chat.getUsers().get(0).getDisplayName();
        }
+    }
+
+    public Bitmap base64ToBitmap(String base64String) {
+        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 }
 
