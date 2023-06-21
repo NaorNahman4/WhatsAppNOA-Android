@@ -1,5 +1,7 @@
 package com.example.androidnoa;
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,10 +16,23 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidnoa.activities.ChatActivity;
+import com.example.androidnoa.activities.ContactsView;
 import com.example.androidnoa.activities.loginActivity;
+import com.example.androidnoa.adapters.ChatAdapter;
+import com.example.androidnoa.api.ChatsApi;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyService extends FirebaseMessagingService {
     private int notificationId = 1;
@@ -44,9 +59,35 @@ public class MyService extends FirebaseMessagingService {
             String senderUsername = remoteMessage.getData().get("senderUsername");
             System.out.println("naor content: " + content);
             System.out.println("naor senderUsername: " + senderUsername);
-
             // Display a notification or perform custom actions
             showNotification(content, senderUsername, remoteMessage);
+            ChatsApi chatsApi = new ChatsApi(ServerIP);
+            chatsApi.GetMyChats(ChatActivity.instance.getToken(), new Callback<List<Chat>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                    if (response.isSuccessful()) {
+                        List<Chat> chats = response.body();
+                        for(Chat chat : chats){
+                            //Getting the specific chat we want to update
+                            if(chat.getUsers().get(0).getUsername().equals(senderUsername)
+                            || chat.getUsers().get(1).getUsername().equals(senderUsername)){
+                                ChatActivity.instance.setMessages(chat.messages);
+                                setAdapterForMessages(ChatActivity.instance.getMessages());
+                            }
+                        }
+
+                    } else {
+                        // Handle unsuccessful response
+                        System.out.println("naor get my chats unsuccessful getmyChats");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Chat>> call, Throwable t) {
+                    System.out.println("naor failed to get my chats getmyChats");
+                    // Handle failure
+                }
+            });
         }
     }
 
@@ -94,5 +135,22 @@ public class MyService extends FirebaseMessagingService {
         // Generate a unique notification ID using a timestamp or other logic
         // For simplicity, you can use a random number generator as well
         return (int) System.currentTimeMillis();
+    }
+
+    private void setAdapterForMessages(List<Message> messages){
+        ChatAdapter chatAdapter = ChatActivity.instance.getChatAdapter();
+        RecyclerView recyclerView = ChatActivity.instance.getRecyclerView();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this) {
+            @Override
+            public void scrollToPositionWithOffset(int position, int offset) {
+                super.scrollToPositionWithOffset(position, -(recyclerView.getHeight() - offset));
+            }
+        };
+
+        chatAdapter = new ChatAdapter(messages, ChatActivity.instance.getCurrentUser());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(chatAdapter);
+
+        recyclerView.scrollToPosition(messages.size() - 1);
     }
 }

@@ -88,7 +88,6 @@ public class ContactsView extends AppCompatActivity {
                             System.out.println("naor get my details unsuccessful getmydetails");
                         }
                     }
-
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         System.out.println("naor failed2 to get my details getmydetails");
