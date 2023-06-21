@@ -39,6 +39,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ChatActivity extends AppCompatActivity {
+    public static ChatActivity instance;
 
     private RecyclerView recyclerView;
     private ChatAdapter chatAdapter;
@@ -55,6 +56,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_acitivity);
+        instance = this;
 
 
         Intent intent = getIntent();
@@ -127,7 +129,6 @@ public class ChatActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        System.out.println("naor sent message : " + message);
                     } else {
                         showCustomToast("Invalid server / no good communication!");
                         finish();
@@ -165,5 +166,47 @@ public class ChatActivity extends AppCompatActivity {
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
+    }
+
+    //Functions for the FireBase updates!
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
+
+    public void setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+    }
+
+    public ChatAdapter getChatAdapter() {
+        return chatAdapter;
+    }
+
+    public void setChatAdapter(ChatAdapter chatAdapter) {
+        this.chatAdapter = chatAdapter;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 }

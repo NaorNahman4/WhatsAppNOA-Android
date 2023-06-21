@@ -85,13 +85,12 @@ public class ContactsView extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             currentUser = response.body();
                         } else {
-                            System.out.println("naor get my details unsuccessful getmydetails");
+                            showCustomToast("Error from the server");
                         }
                     }
-
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        System.out.println("naor failed2 to get my details getmydetails");
+                        showCustomToast("Invalid server call!");
                     }
                 });
             } catch (Exception e) {
@@ -156,13 +155,13 @@ public class ContactsView extends AppCompatActivity {
                     updateThread.start();
                 } else {
                     // Handle unsuccessful response
-                    System.out.println("naor get my chats unsuccessful getmyChats");
+                    showCustomToast("Error from the server");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
-                showCustomToast("Invalid server IP / no good communication!");
+                showCustomToast("Invalid server call!");
                 finish();
             }
 
@@ -189,13 +188,13 @@ public class ContactsView extends AppCompatActivity {
 
                     } else {
                         // Handle unsuccessful response
-                        System.out.println("Cant get messages- unsuccesfull");
+                        showCustomToast("Error from the server");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Message>> call, Throwable t) {
-                    showCustomToast("Invalid server IP / no good communication!");
+                    showCustomToast("Invalid server call!");
                     finish();
                 }
             }));
@@ -293,22 +292,21 @@ public class ContactsView extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        System.out.println("naor on destroy");
         //log out the user.
         FBTokenApi fbTokenApi = new FBTokenApi();
         fbTokenApi.logOutMyUser(currentUser.getUsername(),fbToken, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){
-                    System.out.println("naor logged out");
+
                 }
                 else{
-                    System.out.println("naor failed to log out");
+                    showCustomToast("Didnt log out successfully");
                 }
             }
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                System.out.println("naor failed to log out");
+                showCustomToast("Error from the server");
             }
         });
     }
