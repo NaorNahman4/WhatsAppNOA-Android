@@ -1,7 +1,7 @@
 const userService = require('../servies/user.js');
 const jwt = require('jsonwebtoken');
 const connectedUsers =require('../models/connectedUsers.js');
-
+const connectedPhoneUsers = require('../models/connectPhoneUsers.js');
 
 const createUser = async (req, res) => {
   console.log("createUser"); 
@@ -31,7 +31,8 @@ const login = async (req, res) => {
     if (user) {
       // check if the user is already logged in, if yes , don't allow login and return error
       const userAlreadyLoggedIn =  await connectedUsers.findOne({username: u});
-      if(userAlreadyLoggedIn){
+      const userAlreadyLoggedInPhone = await connectedPhoneUsers.findOne({username: u});
+      if(userAlreadyLoggedIn || userAlreadyLoggedInPhone){
         res.status(402).json({ error: "User already logged in" });
         return;
       }
@@ -45,6 +46,7 @@ const login = async (req, res) => {
 const getUserPersonel = async (req,res) => {
     const u = req.params.username;
     const user = await userService.findUserByUsername(u);
+  
     if(user){
         res.status(200).json({username : user.username, displayName : user.displayName, profilePic:user.profilePic});
     }else{

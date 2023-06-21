@@ -3,15 +3,6 @@ const userService = require('../servies/user.js')
 const jwt = require('jsonwebtoken');
 const connectPhoneUsers = require('../models/connectPhoneUsers.js');
 
-const admin = require('firebase-admin');
-// Initialize Firebase Admin SDK
-
-
-var serviceAccount = require(".././config/firebase-admin.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-
-});
 
 const CreateChat = async (req, res) => {
     try {
@@ -122,8 +113,6 @@ const sendMessage = async (req, res) => {
                 console.log('Successfully sent message: both connected!', response);
         }
         }
-
-        console.log(msg);
         //Check if chat exist and a chat of user
         if (chatService.getChatById(username, id)) {
             res.status(200).json(await chatService.sendMessage(username, id, msg));
