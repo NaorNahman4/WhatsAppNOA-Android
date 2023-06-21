@@ -58,11 +58,11 @@ public class Message implements Serializable {
     }
     public String formatDateString(String dateString) {
         //if not in formated
-        if(dateString.length() != 16) {
+        if(dateString.length() != 19) {
             try {
                 // Define input and output date formats
                 SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault());
-                SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm dd-MM-yyyy", Locale.getDefault());
+                SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm:ss dd-MM-yyyy", Locale.getDefault());
 
                 // Parse the input date string
                 Date date = inputFormat.parse(dateString);

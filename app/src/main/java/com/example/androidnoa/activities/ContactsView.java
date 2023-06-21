@@ -1,21 +1,31 @@
 package com.example.androidnoa.activities;
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.androidnoa.Chat;
+import com.example.androidnoa.ChatComparator;
 import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.MyApplication;
@@ -31,6 +41,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -66,10 +77,8 @@ public class ContactsView extends AppCompatActivity {
         currentUser = (User) lastIntent.getSerializableExtra("user");
         fbToken = lastIntent.getStringExtra("FBtoken");
         if (currentUser == null) {
-            userApi = new UsersApi();
+            userApi = new UsersApi(ServerIP);
             try {
-
-
                 userApi.GetMyDetails(userName, token, new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
@@ -91,8 +100,12 @@ public class ContactsView extends AppCompatActivity {
 
         }
 
+        //Adding the Image of the active user
+        ImageView ivUserProfilePic = findViewById(R.id.ivUserProfilePic);
+        ivUserProfilePic.setImageBitmap(base64ToBitmap(currentUser.getProfilePic()));
+
         lstFeed = findViewById(R.id.lstContacts);
-        chatsApi = new ChatsApi();
+        chatsApi = new ChatsApi(ServerIP);
 //        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
 //            @Override
 //            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
@@ -119,16 +132,18 @@ public class ContactsView extends AppCompatActivity {
         FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
 
         lstFeed = findViewById(R.id.lstContacts);
-        chatsApi = new ChatsApi();
+        chatsApi = new ChatsApi(ServerIP);
 
 
         //Thread that activates a function that takes all the user chats
         //and put inside the chatDao
         updateThread = new Thread(() -> {
+            db.chatDao().deleteAllChats();
             if (contactList != null) {
                 for (Chat chat : contactList) {
-                    db.chatDao().update(chat);
+                    db.chatDao().insert(chat);
                 }
+                Collections.sort(contactList, new ChatComparator());
             }
         });
         //Getting all the chats of the user into ChatDao
@@ -147,8 +162,8 @@ public class ContactsView extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Chat>> call, Throwable t) {
-                System.out.println("naor failed to get my chats getmyChats");
-                // Handle failure
+                showCustomToast("Invalid server IP / no good communication!");
+                finish();
             }
 
         });
@@ -180,8 +195,8 @@ public class ContactsView extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<List<Message>> call, Throwable t) {
-                    System.out.println("naor failed to get my chats");
-                    // Handle failure
+                    showCustomToast("Invalid server IP / no good communication!");
+                    finish();
                 }
             }));
         });
@@ -219,10 +234,10 @@ public class ContactsView extends AppCompatActivity {
                     contactList.add(chat);
                 }
             }
+            Collections.sort(contactList, new ChatComparator());
             runOnUiThread(() -> {
                 final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
                 lstFeed.setAdapter(ContactAdapter);
-                System.out.println("sadasd");
             });
         }).start();
         // Retrieve the intent that started this activity
@@ -255,7 +270,6 @@ public class ContactsView extends AppCompatActivity {
         intent.putExtra("otherUserName", otherUserName);
         startActivity(intent);
     }
-
 
     public Chat getChatById(int chatId){
         for(Chat c : contactList){
@@ -300,5 +314,24 @@ public class ContactsView extends AppCompatActivity {
     }
 
 
+    public Bitmap base64ToBitmap(String base64String) {
+        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    public void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_warning,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 32);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
 }
 
