@@ -62,6 +62,7 @@ public class loginActivity extends AppCompatActivity {
     private User currectUser;
     private List<User> usersList;
     private static final int NOTIFICATION_ID = 1;
+    private String FBtoken;
     private static final String CHANNEL_ID = "channel_id";
     private static final int PERMISSION_REQUEST_CODE = 100;
 
@@ -127,6 +128,8 @@ public class loginActivity extends AppCompatActivity {
                 }
 
                 UsersApi usersApi = new UsersApi();
+                Intent intent2 = new Intent(loginActivity.this, ContactsView.class);
+
                 usersApi.Login(username, password, new Callback<ResponseBody>() {
 
                     @Override
@@ -138,21 +141,23 @@ public class loginActivity extends AppCompatActivity {
 
                                 if (status.equals("200")) {
                                     // Open the activity and pass the token as an extra
-                                    Intent intent = new Intent(loginActivity.this, ContactsView.class);
-                                    intent.putExtra("token", token);
-                                    intent.putExtra("username", username);
-                                    intent.putExtra("user", currectUser);
+                                    intent2.putExtra("token", token);
+                                    intent2.putExtra("user", currectUser);
+                                    intent2.putExtra("username", username);
                                     //Fire base sent token.
+
                                     FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(loginActivity.this, instanceIdResult -> {
-                                        String FBtoken = instanceIdResult.getToken();
+                                        FBtoken = instanceIdResult.getToken();
+                                        intent2.putExtra("FBtoken", FBtoken);
                                         FBTokenApi fbTokenApi = new FBTokenApi();
-                                        fbTokenApi.sendTokenToServer2(username,FBtoken,new Callback<ResponseBody>(){
+                                        fbTokenApi.sendTokenToServer2(username, FBtoken, new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 if (response.isSuccessful()) {
                                                     String status = String.valueOf(response.code());
                                                     if (status.equals("200")) {
                                                         showCustomToast("FBtoken request good");
+                                                        startActivity(intent2); // Move startActivity here
                                                     } else {
                                                         // Handle the case when the status is not 200
                                                         showCustomToast("FBtoken request failed");
@@ -162,6 +167,7 @@ public class loginActivity extends AppCompatActivity {
                                                     showCustomToast("FBtoken request failed");
                                                 }
                                             }
+
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                 // Handle network or API call failure
@@ -169,7 +175,8 @@ public class loginActivity extends AppCompatActivity {
                                             }
                                         });
                                     });
-                                    startActivity(intent);
+                                    //I get here and its start without wait for intent2.putExtra("FBtoken", FBtoken);
+                                    //startActivity(intent2);
                                 } else {
                                     // Handle the case when the status is not 200
                                     showCustomToast("Login request failed");

@@ -11,7 +11,16 @@ const insertConnectedPhone = async (username, token) => {
       console.error(error);
     }
   };
+  const logOutUser = async (username, token) => {
+    console.log("log out user");
+    try {
+      // remove from mongo db
+      await connectedPhoneUsers.deleteOne({ username: username});
+    } catch (error) {
+      console.error(error);
+    }
+  };
   module.exports = {
-    insertConnectedPhone
+    insertConnectedPhone,logOutUser
   }
   

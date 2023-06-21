@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const getTokenFB = require('../controllers/tokenFB.js')
+const tokenFB = require('../controllers/tokenFB.js')
 
 //api/TokenFB
-router.route('/').post(getTokenFB.getTokenFB);
+router.route('/').post(tokenFB.getTokenFB);
+//api/TokenFB
+router.route('/logout').post(tokenFB.deleteFB);
 
 module.exports = router;

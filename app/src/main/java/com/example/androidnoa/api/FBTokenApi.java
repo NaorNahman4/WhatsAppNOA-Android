@@ -33,4 +33,9 @@ public class FBTokenApi {
         Call<ResponseBody> call = webServiceAPI.sendTokenToServer(request);
         call.enqueue(callback);
     }
+    public void logOutMyUser(String username,String fbToken, Callback<ResponseBody> callback) {
+        FBToken request = new FBToken(fbToken,username);
+        Call<ResponseBody> call = webServiceAPI.logOutUser(request);
+        call.enqueue(callback);
+    }
 }

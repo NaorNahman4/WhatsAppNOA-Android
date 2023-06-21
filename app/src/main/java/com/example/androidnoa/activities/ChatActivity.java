@@ -20,15 +20,15 @@ import com.example.androidnoa.User;
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.R;
 import com.example.androidnoa.api.ChatsApi;
-import com.example.androidnoa.models.MessageAllDetails;
+import com.example.androidnoa.api.FBTokenApi;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +44,7 @@ public class ChatActivity extends AppCompatActivity {
     private User currentUser;
     private String token;
     private int chatId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

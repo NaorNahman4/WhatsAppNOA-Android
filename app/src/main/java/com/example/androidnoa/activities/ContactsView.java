@@ -24,6 +24,7 @@ import com.example.androidnoa.User;
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 
+import com.example.androidnoa.api.FBTokenApi;
 import com.example.androidnoa.api.UsersApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -47,6 +48,7 @@ public class ContactsView extends AppCompatActivity {
     private String userName;
     private ListView lstFeed;
     private ChatsApi chatsApi;
+    private String fbToken;
     public static final int REQUEST_SETTINGS = 1; // Request code for settings activity
     public static final int REQUEST_LOGOUT = 2; // Request code for logout action
 
@@ -60,9 +62,9 @@ public class ContactsView extends AppCompatActivity {
 
         // Retrieve the token value from the intent
         token = lastIntent.getStringExtra("token");
-
         userName = lastIntent.getStringExtra("username");
         currentUser = (User) lastIntent.getSerializableExtra("user");
+        fbToken = lastIntent.getStringExtra("FBtoken");
         if (currentUser == null) {
             userApi = new UsersApi();
             try {
@@ -274,7 +276,28 @@ public class ContactsView extends AppCompatActivity {
           return chat.getUsers().get(0).getDisplayName();
        }
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("naor on destroy");
+        //log out the user.
+        FBTokenApi fbTokenApi = new FBTokenApi();
+        fbTokenApi.logOutMyUser(currentUser.getUsername(),fbToken, new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    System.out.println("naor logged out");
+                }
+                else{
+                    System.out.println("naor failed to log out");
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                System.out.println("naor failed to log out");
+            }
+        });
+    }
 
 
 }

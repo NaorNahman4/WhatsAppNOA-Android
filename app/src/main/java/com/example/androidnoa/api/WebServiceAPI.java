@@ -51,4 +51,6 @@ public interface WebServiceAPI {
 
     @POST("TokensFB")
     Call<ResponseBody> sendTokenToServer(@Body FBToken data);
+    @POST("TokensFB/logout")
+    Call<ResponseBody> logOutUser(@Body FBToken data);
 }
