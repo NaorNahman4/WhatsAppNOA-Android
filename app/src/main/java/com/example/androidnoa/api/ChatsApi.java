@@ -33,16 +33,28 @@ public class ChatsApi {
     Retrofit retrofit;
     WebServiceAPI webServiceAPI;
 
-    public ChatsApi() {
+    private String serverUrl;
 
+    public ChatsApi(String url) {
+
+        this.setServerUrl(url);
         retrofit= new Retrofit.Builder()
-                .baseUrl(MyApplication.context.getString(R.string.BaseURL))
+                .baseUrl(this.serverUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
 
         webServiceAPI = retrofit.create(WebServiceAPI.class);
 
+    }
+
+    public String getServerUrl() {
+        return serverUrl;
+    }
+
+    public void setServerUrl(String serverIp) {
+        String url = "http://" + serverIp + ":8080/api/";
+        this.serverUrl = url;
     }
 
     public WebServiceAPI getWebServiceAPI() {

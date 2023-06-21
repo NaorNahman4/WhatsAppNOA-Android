@@ -1,6 +1,7 @@
 package com.example.androidnoa.activities;
 
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -124,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                 showCustomToast("Display name is too long");
                 return;
             }
-            UsersApi usersApi = new UsersApi();
+            UsersApi usersApi = new UsersApi(ServerIP);
             User request = new User(user, password, displayName, img);
 
             usersApi.Register(request, new Callback<ResponseBody>() {
@@ -142,7 +143,8 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    System.out.println("On failure ");
+                    showCustomToast("Invalid server / no good communication!");
+                    finish();
                 }
             });
             finish();
@@ -167,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    public  void showCustomToast(String message) {
+    public void showCustomToast(String message) {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.toast_warning,
                 (ViewGroup) findViewById(R.id.custom_toast_container));

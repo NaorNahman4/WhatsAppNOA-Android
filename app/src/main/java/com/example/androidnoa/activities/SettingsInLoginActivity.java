@@ -1,12 +1,19 @@
 package com.example.androidnoa.activities;
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidnoa.R;
 
@@ -19,8 +26,6 @@ public class SettingsInLoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_in_login);
-
-
 
         Button btnBlack = findViewById(R.id.darkThemeRadioButton);
         btnBlack.setOnClickListener(new View.OnClickListener() {
@@ -41,8 +46,29 @@ public class SettingsInLoginActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                EditText serverIpEditText = findViewById(R.id.serverIpEditText);
+                if (serverIpEditText.getText().toString().equals("")) {
+                    showCustomToast("Cant save empty ip");
+                } else {
+                    ServerIP = serverIpEditText.getText().toString();
+                    finish();
+                }
             }
         });
+    }
+
+    public void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_warning,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
+
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 32);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
     }
 }

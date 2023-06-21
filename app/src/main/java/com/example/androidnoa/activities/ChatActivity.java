@@ -1,5 +1,5 @@
 package com.example.androidnoa.activities;
-
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import androidx.annotation.NonNull;
@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidnoa.Message;
 import com.example.androidnoa.User;
@@ -100,7 +104,7 @@ public class ChatActivity extends AppCompatActivity {
         String messageText = editTextMessage.getText().toString().trim();
         if (!messageText.isEmpty()) {
             // post request to the server to send the message
-            ChatsApi chatsApi = new ChatsApi();
+            ChatsApi chatsApi = new ChatsApi(ServerIP);
             String created = getCurrentDateTime(); // Get the current date and time
             User sender = currentUser; // Get the current user
             Message messageSend = new Message(created, sender, messageText);
@@ -109,33 +113,32 @@ public class ChatActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<Message> call, @NonNull Response<Message> response) {
                     if (response.isSuccessful()) {
                         Message message = response.body();
+                        Thread t = new Thread(() -> {
+                            messages.add(messageSend);
+                            db.chatDao().updateChatMessages(chatId, messages);
+                        });
+                        t.start();
+                        try {
+                            t.join();
+                            chatAdapter.notifyDataSetChanged();
+                            recyclerView.smoothScrollToPosition(messages.size() - 1);
+                            editTextMessage.setText("");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("naor sent message : " + message);
                     } else {
-                        // Handle unsuccessful response
-                        System.out.println("Cant get messages- unsuccesfull");
+                        showCustomToast("Invalid server / no good communication!");
+                        finish();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<Message> call, Throwable t) {
-                    System.out.println("naor failed to get my chats");
+                    showCustomToast("Invalid server / no good communication!");
+                    finish();
                     // Handle failure
                 }
             }));
-            messages.add(messageSend);
-            Thread t = new Thread(() -> {
-                db.chatDao().updateChatMessages(chatId, messages);
-            });
-            t.start();
-            try {
-                t.join();
-                chatAdapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(messages.size() - 1);
-                editTextMessage.setText("");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
         }
     }
 
@@ -148,5 +151,18 @@ public class ChatActivity extends AppCompatActivity {
         return dateFormat.format(calendar.getTime());
     }
 
+    public void showCustomToast(String message) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.toast_warning,
+                (ViewGroup) findViewById(R.id.custom_toast_container));
 
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(message);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.TOP, 0, 32);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
+        toast.show();
+    }
 }

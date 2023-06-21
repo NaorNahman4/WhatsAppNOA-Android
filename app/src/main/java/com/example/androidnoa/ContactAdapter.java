@@ -1,5 +1,6 @@
 package com.example.androidnoa;
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import android.app.Activity;
@@ -94,7 +95,7 @@ public class ContactAdapter extends BaseAdapter {
             btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChatsApi chatsApi = new ChatsApi();
+                    ChatsApi chatsApi = new ChatsApi(ServerIP);
                     chatsApi.deleteMyChat(token ,contactList.get(position).getId(),
                             new Callback<ResponseBody>() {
 
