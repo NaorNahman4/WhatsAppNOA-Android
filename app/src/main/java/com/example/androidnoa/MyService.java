@@ -1,22 +1,11 @@
 package com.example.androidnoa;
 
 import static com.example.androidnoa.activities.loginActivity.ServerIP;
-
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.IBinder;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -26,8 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnoa.activities.ChatActivity;
-import com.example.androidnoa.activities.ContactsView;
-import com.example.androidnoa.activities.loginActivity;
+
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -64,7 +52,7 @@ public class MyService extends FirebaseMessagingService {
             String content = remoteMessage.getData().get("content");
             String senderUsername = remoteMessage.getData().get("senderUsername");
             // Display a notification or perform custom actions
-            showNotification(content, senderUsername, remoteMessage);
+            showNotification(content, senderUsername);
             ChatsApi chatsApi = new ChatsApi(ServerIP);
             chatsApi.GetMyChats(ChatActivity.instance.getToken(), new Callback<List<Chat>>() {
                 @Override
@@ -92,44 +80,32 @@ public class MyService extends FirebaseMessagingService {
         }
     }
 
-    private void showNotification(String content, String senderUsername, RemoteMessage remoteMessage) {
-        // Create an explicit intent for an Activity in your app
-        Intent intent = new Intent(this, loginActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+    private void showNotification(String title, String message) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the notification channel
+            CharSequence channelName = "Channel Name";
+            String channelDescription = "Channel Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentText(content)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+            NotificationChannel channel = new NotificationChannel("channel_id", channelName, importance);
+            channel.setDescription(channelDescription);
 
-        if (remoteMessage.getNotification() != null) {
-            builder.setContentTitle(remoteMessage.getNotification().getTitle());
-            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getNotification().getBody()));
-        } else {
-            // If the notification is not available, use the data payload for the title and body
-            String title = remoteMessage.getData().get("title");
-            String body = remoteMessage.getData().get("body");
-            builder.setContentTitle(title);
-            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
+            // Register the channel with the system
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                .setSmallIcon(R.drawable.bubble_background)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            System.out.println("naor no permission");
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        notificationManager.notify(notificationId, builder.build());
-        ++notificationId;
+        notificationManager.notify(1, builder.build());
     }
 
     private int generateNotificationId() {
