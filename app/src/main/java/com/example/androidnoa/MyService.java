@@ -48,17 +48,21 @@ public class MyService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         // Handle the received FCM message
         if (remoteMessage.getData().size() > 0) {
+            System.out.println("On Message triggered");
             // Extract the message data
             String content = remoteMessage.getData().get("content");
             String senderUsername = remoteMessage.getData().get("senderUsername");
+            System.out.println(content);
+            System.out.println(senderUsername);
             // Display a notification or perform custom actions
-            showNotification(content, senderUsername);
+            showNotification(senderUsername, content);
             ChatsApi chatsApi = new ChatsApi(ServerIP);
             chatsApi.GetMyChats(ChatActivity.instance.getToken(), new Callback<List<Chat>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
                     if (response.isSuccessful()) {
                         List<Chat> chats = response.body();
+                        System.out.println("On Message triggered Good!!!!");
                         for(Chat chat : chats){
                             //Getting the specific chat we want to update
                             if(chat.getUsers().get(0).getUsername().equals(senderUsername)
