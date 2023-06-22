@@ -9,16 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,17 +24,13 @@ import com.example.androidnoa.Chat;
 import com.example.androidnoa.ChatComparator;
 import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
-import com.example.androidnoa.MyApplication;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
-import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 
 import com.example.androidnoa.api.FBTokenApi;
 import com.example.androidnoa.api.UsersApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +42,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ContactsView extends AppCompatActivity {
-    private Thread updateThread;
     List<Chat> contactList;
     List<Message> msg;
     User currentUser;
@@ -88,6 +79,7 @@ public class ContactsView extends AppCompatActivity {
                             showCustomToast("Error from the server");
                         }
                     }
+
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
                         showCustomToast("Invalid server call!");
@@ -105,27 +97,6 @@ public class ContactsView extends AppCompatActivity {
 
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi(ServerIP);
-//        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-//                if (response.isSuccessful()) {
-//                    List<Chat> chats = response.body();
-//                    contactList = chats;
-//                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName,token);
-//                    lstFeed.setAdapter(feedAdapter);
-//                } else {
-//                    // Handle unsuccessful response
-//                    System.out.println("naor get my chats unsuccessful getmyChats");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Chat>> call, Throwable t) {
-//                System.out.println("naor failed to get my chats getmyChats");
-//                // Handle failure
-//            }
-//        });
-
 
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
@@ -133,44 +104,6 @@ public class ContactsView extends AppCompatActivity {
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi(ServerIP);
 
-
-        //Thread that activates a function that takes all the user chats
-        //and put inside the chatDao
-        updateThread = new Thread(() -> {
-            db.chatDao().deleteAllChats();
-            if (contactList.size() != 0) {
-                for (Chat chat : contactList) {
-                    db.chatDao().insert(chat);
-                }
-                Collections.sort(contactList, new ChatComparator());
-            }
-        });
-        //Getting all the chats of the user into ChatDao
-        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-
-            @Override
-            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-                if (response.isSuccessful()) {
-                    contactList = response.body();
-                    updateThread.start();
-                } else {
-                    // Handle unsuccessful response
-                    showCustomToast("Error from the server");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Chat>> call, Throwable t) {
-                showCustomToast("Invalid server call!");
-                finish();
-            }
-
-        });
-        try {
-            updateThread.join();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
 
         //After click, getting all the messages for the chat
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -217,51 +150,47 @@ public class ContactsView extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        new Thread(() -> {
-            //Getting all the chats from server and updating room
-            chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-                @Override
-                public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-                    if (response.isSuccessful()) {
-                        contactList = response.body();
-                        db.chatDao().deleteAllChats();
-                        if (contactList.size() != 0) {
-                            for (Chat chat : contactList) {
-                                db.chatDao().insert(chat);
-                            }
-                            List<Chat> testList = db.chatDao().index();
-                            contactList = new ArrayList<>();
-                            for (Chat chat : testList) {
-                                //Checking if its a chat of active user
-                                String u1 = chat.getUsers().get(0).getUsername();
-                                String u2 = chat.getUsers().get(1).getUsername();
-                                if (u1.equals(userName) || u2.equals(userName)) {
-                                    contactList.add(chat);
-                                }
-                            }
-                            Collections.sort(contactList, new ChatComparator());
-                        }
-                    } else {
-                        // Handle unsuccessful response
-                        showCustomToast("Error from the server");
-                    }
+    protected void onResume() {
+        Thread tmpT = new Thread(() -> {
+            db.chatDao().deleteAllChats();
+            if (contactList.size() != 0) {
+                for (Chat chat : contactList) {
+                    db.chatDao().insert(chat);
                 }
+                Collections.sort(contactList, new ChatComparator());
 
-                @Override
-                public void onFailure(Call<List<Chat>> call, Throwable t) {
-                    showCustomToast("Invalid server call!");
-                    finish();
+                runOnUiThread(() -> {
+                    final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
+                    lstFeed.setAdapter(ContactAdapter);
+                });
+            }
+        });
+        super.onResume();
+        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+
+            @Override
+            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                if (response.isSuccessful()) {
+                    contactList = response.body();
+                    tmpT.start();
+                } else {
+                    // Handle unsuccessful response
+                    showCustomToast("Error from the server");
                 }
+            }
 
-            });
-            runOnUiThread(() -> {
-                final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
-                lstFeed.setAdapter(ContactAdapter);
-            });
-        }).start();
-        // Retrieve the intent that started this activity
+            @Override
+            public void onFailure(Call<List<Chat>> call, Throwable t) {
+                showCustomToast("Invalid server call!");
+                finish();
+            }
+
+        });
+        try {
+            tmpT.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -292,9 +221,9 @@ public class ContactsView extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public Chat getChatById(int chatId){
-        for(Chat c : contactList){
-            if(c.getId() == chatId){
+    public Chat getChatById(int chatId) {
+        for (Chat c : contactList) {
+            if (c.getId() == chatId) {
                 return c;
             }
         }
@@ -304,28 +233,28 @@ public class ContactsView extends AppCompatActivity {
 
     public String getOtherDisplayName(int chatId) {
         Chat chat = getChatById(chatId);
-       if(chat.getUsers().get(0).getUsername().equals(userName)){
-           return chat.getUsers().get(1).getDisplayName();
-       }
-       else{
-          return chat.getUsers().get(0).getDisplayName();
-       }
+        if (chat.getUsers().get(0).getUsername().equals(userName)) {
+            return chat.getUsers().get(1).getDisplayName();
+        } else {
+            return chat.getUsers().get(0).getDisplayName();
+        }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //log out the user.
         FBTokenApi fbTokenApi = new FBTokenApi();
-        fbTokenApi.logOutMyUser(currentUser.getUsername(),fbToken, new Callback<ResponseBody>() {
+        fbTokenApi.logOutMyUser(currentUser.getUsername(), fbToken, new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
-                }
-                else{
+                } else {
                     showCustomToast("Didnt log out successfully");
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 showCustomToast("Error from the server");
