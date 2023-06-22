@@ -52,7 +52,7 @@ public class MyService extends FirebaseMessagingService {
             String content = remoteMessage.getData().get("content");
             String senderUsername = remoteMessage.getData().get("senderUsername");
             // Display a notification or perform custom actions
-            showNotification(content, senderUsername);
+            showNotification(senderUsername, content);
             ChatsApi chatsApi = new ChatsApi(ServerIP);
             chatsApi.GetMyChats(ChatActivity.instance.getToken(), new Callback<List<Chat>>() {
                 @Override
