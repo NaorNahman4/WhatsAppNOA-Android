@@ -4,15 +4,9 @@
     package="com.example.androidnoa">
 
     <!-- Add the Internet permission -->
-
-    <!-- Add the Internet permission -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Add the Read External Storage permission if needed -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Add the Read External Storage permission if needed -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- Add the Access Notification Policy permission -->
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <application
         android:name=".MyApplication"
         android:allowBackup="true"

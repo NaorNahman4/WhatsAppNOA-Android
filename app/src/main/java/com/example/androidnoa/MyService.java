@@ -1,23 +1,11 @@
 package com.example.androidnoa;
 
 import static com.example.androidnoa.activities.loginActivity.ServerIP;
-
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.IBinder;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -27,8 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnoa.activities.ChatActivity;
-import com.example.androidnoa.activities.ContactsView;
-import com.example.androidnoa.activities.loginActivity;
+
 import com.example.androidnoa.adapters.ChatAdapter;
 import com.example.androidnoa.api.ChatsApi;
 import com.google.firebase.messaging.FirebaseMessagingService;
