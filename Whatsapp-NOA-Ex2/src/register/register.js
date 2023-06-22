@@ -9,6 +9,7 @@ import { sendSwal } from '../chat/chat';
 import { registerServer } from '../serverCalls/register.js';
 
 
+
 function Register() {
   const ClickEnter = (event) => {
     if (event.key === 'Enter') {
@@ -29,13 +30,6 @@ function Register() {
     var name = displaynamev.current.value;
     var img;
 
-    if (!image) {
-      img = defaultUserPic;
-    }
-    else {
-      img = image;
-    }
-
     if (username === '') {
       sendSwal("Please insert username", "warning");
     }
@@ -46,6 +40,15 @@ function Register() {
       sendSwal("Please insert display name", "warning");
     }
     else {
+      if (!image) {
+        await convertToBase64Pic('../pictures/user-profile.png').then(result => {
+          img = result;
+          console.log(img);
+        });
+      }
+      else {
+        img = image;
+      }
       const data = { "username": username, "password": password, "displayName": name, "profilePic": img };
       const statusNum = await registerServer(data);
       const chatList = [];
@@ -92,13 +95,27 @@ function Register() {
     }
   }
 
+  function convertToBase64Pic(url) {
+    return fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
+    });
+  }
+  
+  
+
 
   return (
     <>
       <div className="upper-bg">
         <img src={logo} className="logo" alt="Logo"></img>
       </div>
-
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-register">
           <header className="reg-head">Create an account</header><br></br>

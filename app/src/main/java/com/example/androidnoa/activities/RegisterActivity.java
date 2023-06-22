@@ -94,8 +94,9 @@ public class RegisterActivity extends AppCompatActivity {
 
             if (imageViewPicture.getDrawable() != null && imageViewPicture.getDrawable() instanceof BitmapDrawable) {
                 // convert image to bitmap and then to base64
-                Bitmap bitmap = ((BitmapDrawable) imageViewPicture.getDrawable()).getBitmap();
-                img = encodeImageToBase64(bitmap);
+                Bitmap tempBit = imageViewToBitmap(imageViewPicture);
+                img = bitmapToBase64(tempBit);
+                img = "data:text/html;base64," + img;
                 //img = convertImageViewToBase64(imageViewPicture);
             } else {
                 // Use the default picture if no image is selected
@@ -103,8 +104,9 @@ public class RegisterActivity extends AppCompatActivity {
                 tmp.setImageResource(R.drawable.default_pic);
                 // convert image to bitmap and then to base64
                 Bitmap bitmap = ((BitmapDrawable) tmp.getDrawable()).getBitmap();
-                //img = encodeImageToBase64(bitmap);
+
                 img = convertImageViewToBase64(tmp);
+                img = "data:text/html;base64," + img;
                 }
             String user = editTextUser.getText().toString();
             String password = editTextPassword.getText().toString();
@@ -138,13 +140,12 @@ public class RegisterActivity extends AppCompatActivity {
                         }).start();
                     }
                     else {
-                        showCustomToast("User already exists");
+                        showCustomToast("User already existwfegetgegs");
                     }
                 }
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     showCustomToast("Invalid server call!");
-                    finish();
                 }
             });
             finish();
@@ -230,10 +231,6 @@ public class RegisterActivity extends AppCompatActivity {
         drawable.draw(canvas);
         return bitmap;
     }
-
-
-
-
 
 }
 
