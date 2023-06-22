@@ -4,11 +4,15 @@
     package="com.example.androidnoa">
 
     <!-- Add the Internet permission -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Add the Read External Storage permission if needed -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
+    <!-- Add the Internet permission -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Add the Read External Storage permission if needed -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- Add the Access Notification Policy permission -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -31,9 +35,6 @@
         <activity
             android:name=".activities.SettingsInLoginActivity"
             android:exported="false" /> <!-- Add your activity declarations -->
-        <activity
-            android:name=".activities.ShowAllUsersActivity"
-            android:exported="false" />
         <activity
             android:name=".activities.SettingsActivity"
             android:exported="false" />
