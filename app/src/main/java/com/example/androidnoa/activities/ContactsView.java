@@ -138,7 +138,7 @@ public class ContactsView extends AppCompatActivity {
         //and put inside the chatDao
         updateThread = new Thread(() -> {
             db.chatDao().deleteAllChats();
-            if (contactList != null) {
+            if (contactList.size() != 0) {
                 for (Chat chat : contactList) {
                     db.chatDao().insert(chat);
                 }
@@ -188,14 +188,13 @@ public class ContactsView extends AppCompatActivity {
 
                     } else {
                         // Handle unsuccessful response
-                        showCustomToast("Error from the server");
+                        showCustomToast("Chat is not exist anymore");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Message>> call, Throwable t) {
-                    showCustomToast("Invalid server call!");
-                    finish();
+                    showCustomToast("Chat is not exist anymore");
                 }
             }));
         });
@@ -218,22 +217,45 @@ public class ContactsView extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
+    protected void onRestart() {
+        super.onRestart();
         new Thread(() -> {
-            //Getting all the chats in the dao
-            List<Chat> testList = db.chatDao().index();
-            contactList = new ArrayList<>();
-            for (Chat chat : testList) {
-                //Checking if its a chat of active user
-                String u1 = chat.getUsers().get(0).getUsername();
-                String u2 = chat.getUsers().get(1).getUsername();
-                if (u1.equals(userName) || u2.equals(userName)) {
-                    contactList.add(chat);
+            //Getting all the chats from server and updating room
+            chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+                @Override
+                public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
+                    if (response.isSuccessful()) {
+                        contactList = response.body();
+                        db.chatDao().deleteAllChats();
+                        if (contactList.size() != 0) {
+                            for (Chat chat : contactList) {
+                                db.chatDao().insert(chat);
+                            }
+                            List<Chat> testList = db.chatDao().index();
+                            contactList = new ArrayList<>();
+                            for (Chat chat : testList) {
+                                //Checking if its a chat of active user
+                                String u1 = chat.getUsers().get(0).getUsername();
+                                String u2 = chat.getUsers().get(1).getUsername();
+                                if (u1.equals(userName) || u2.equals(userName)) {
+                                    contactList.add(chat);
+                                }
+                            }
+                            Collections.sort(contactList, new ChatComparator());
+                        }
+                    } else {
+                        // Handle unsuccessful response
+                        showCustomToast("Error from the server");
+                    }
                 }
-            }
-            Collections.sort(contactList, new ChatComparator());
+
+                @Override
+                public void onFailure(Call<List<Chat>> call, Throwable t) {
+                    showCustomToast("Invalid server call!");
+                    finish();
+                }
+
+            });
             runOnUiThread(() -> {
                 final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
                 lstFeed.setAdapter(ContactAdapter);

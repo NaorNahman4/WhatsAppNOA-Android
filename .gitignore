@@ -13,4 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-/server/node_modules
+/Whatsapp-NOA-Ex2/node_modules
+/Whatsapp-NOA-Ex2/server/node_modules
