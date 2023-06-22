@@ -42,7 +42,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ContactsView extends AppCompatActivity {
-    private Thread updateThread;
     List<Chat> contactList;
     List<Message> msg;
     User currentUser;
@@ -98,27 +97,6 @@ public class ContactsView extends AppCompatActivity {
 
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi(ServerIP);
-//        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-//            @Override
-//            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-//                if (response.isSuccessful()) {
-//                    List<Chat> chats = response.body();
-//                    contactList = chats;
-//                    final ContactAdapter feedAdapter = new ContactAdapter(contactList, ContactsView.this, userName,token);
-//                    lstFeed.setAdapter(feedAdapter);
-//                } else {
-//                    // Handle unsuccessful response
-//                    System.out.println("naor get my chats unsuccessful getmyChats");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Chat>> call, Throwable t) {
-//                System.out.println("naor failed to get my chats getmyChats");
-//                // Handle failure
-//            }
-//        });
-
 
         FloatingActionButton btnAdd = findViewById(R.id.btnAdd);
         FloatingActionButton btnSettings = findViewById(R.id.btnSettings);
@@ -126,49 +104,6 @@ public class ContactsView extends AppCompatActivity {
         lstFeed = findViewById(R.id.lstContacts);
         chatsApi = new ChatsApi(ServerIP);
 
-
-        //Thread that activates a function that takes all the user chats
-        //and put inside the chatDao
-//        updateThread = new Thread(() -> {
-//            db.chatDao().deleteAllChats();
-//            if (contactList.size() != 0) {
-//                for (Chat chat : contactList) {
-//                    db.chatDao().insert(chat);
-//                }
-//                Collections.sort(contactList, new ChatComparator());
-//
-//                runOnUiThread(() -> {
-//                    final ContactAdapter ContactAdapter = new ContactAdapter(contactList, ContactsView.this, userName, token);
-//                    lstFeed.setAdapter(ContactAdapter);
-//                });
-//            }
-//        });
-        //Getting all the chats of the user into ChatDao
-//        chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
-//
-//            @Override
-//            public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
-//                if (response.isSuccessful()) {
-//                    contactList = response.body();
-//                    updateThread.start();
-//                } else {
-//                    // Handle unsuccessful response
-//                    showCustomToast("Error from the server");
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Chat>> call, Throwable t) {
-//                showCustomToast("Invalid server call!");
-//                finish();
-//            }
-//
-//        });
-//        try {
-//            updateThread.join();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         //After click, getting all the messages for the chat
         lstFeed.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -252,7 +187,7 @@ public class ContactsView extends AppCompatActivity {
 
         });
         try {
-            updateThread.join();
+            tmpT.join();
         } catch (Exception e) {
             e.printStackTrace();
         }
