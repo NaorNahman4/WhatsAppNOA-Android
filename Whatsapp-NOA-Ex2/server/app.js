@@ -133,8 +133,8 @@ io.on('connection', async (socket) => {
   
   
  // Middleware for parsing JSON bodies 
- app.use(express.json({ limit: '1mb' })); 
- app.use(express.urlencoded({ limit: '1mb', extended: true })); 
+ app.use(express.json({ limit: '10mb' })); 
+ app.use(express.urlencoded({ limit: '10mb', extended: true })); 
   
  // Using cors middleware to enable cross-origin requests 
  app.use(cors()); 

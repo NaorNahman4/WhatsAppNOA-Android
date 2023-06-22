@@ -56,7 +56,7 @@ public class User implements Serializable {
     }
 
     public String getProfilePic() {
-        return profilePic;
+        return profilePic.substring(profilePic.indexOf(","));
     }
 
     public void setProfilePic(String profilePic) {
