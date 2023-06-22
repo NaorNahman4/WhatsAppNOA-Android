@@ -259,6 +259,11 @@ public class ContactsView extends AppCompatActivity {
                 showCustomToast("Error from the server");
             }
         });
+
+        new Thread(() -> {
+            db.userDao().deleteAllUsers();
+            db.chatDao().deleteAllChats();
+        }).start();
     }
 
 
