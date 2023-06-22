@@ -59,10 +59,10 @@ public class MyService extends FirebaseMessagingService {
                 public void onResponse(@NonNull Call<List<Chat>> call, @NonNull Response<List<Chat>> response) {
                     if (response.isSuccessful()) {
                         List<Chat> chats = response.body();
-                        for(Chat chat : chats){
+                        for (Chat chat : chats) {
                             //Getting the specific chat we want to update
-                            if(chat.getUsers().get(0).getUsername().equals(senderUsername)
-                            || chat.getUsers().get(1).getUsername().equals(senderUsername)){
+                            if (chat.getUsers().get(0).getUsername().equals(senderUsername)
+                                    || chat.getUsers().get(1).getUsername().equals(senderUsername)) {
                                 ChatActivity.instance.setMessages(chat.messages);
                                 setAdapterForMessages(ChatActivity.instance.getMessages());
                             }
@@ -107,6 +107,7 @@ public class MyService extends FirebaseMessagingService {
         }
         notificationManager.notify(1, builder.build());
     }
+
 
     private int generateNotificationId() {
         // Generate a unique notification ID using a timestamp or other logic
