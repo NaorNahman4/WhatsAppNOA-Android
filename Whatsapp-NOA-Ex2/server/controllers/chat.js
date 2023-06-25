@@ -123,7 +123,10 @@ const sendMessage = async (req, res) => {
         const senderUser = await connectPhoneUsers.findOne({ username: username });  
         const receiverUserAndroid = await connectPhoneUsers.findOne({ username: receiverUsername }); 
         const receiverUserWeb = await connectedUsers.findOne({ username: receiverUsername }); 
-        // first check if the sender is android, else web,the message will handle in app.js listen to the event "newMessage" 
+        //Check if chat exist and a chat of user 
+        if (chatService.getChatById(username, id)) { 
+            const messageResponse = await chatService.sendMessage(username, id, msg);
+             // first check if the sender is android, else web,the message will handle in app.js listen to the event "newMessage" 
         if(senderUser){ 
             console.log("send is android"); 
             // if the sender is android, check if the receiver is connect android if yes use firebase 
@@ -149,9 +152,7 @@ const sendMessage = async (req, res) => {
             socket.emit('androidToWeb', otherUserSocketId); 
         } 
     } 
-        //Check if chat exist and a chat of user 
-        if (chatService.getChatById(username, id)) { 
-            res.status(200).json(await chatService.sendMessage(username, id, msg)); 
+            res.status(200).json(messageResponse); 
         } else { 
             //404 tells that not found this chat. 
             res.status(404); 
