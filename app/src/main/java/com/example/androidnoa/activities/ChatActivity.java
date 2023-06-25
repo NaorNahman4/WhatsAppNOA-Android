@@ -209,4 +209,12 @@ public class ChatActivity extends AppCompatActivity {
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
+
+    public int getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(int chatId) {
+        this.chatId = chatId;
+    }
 }

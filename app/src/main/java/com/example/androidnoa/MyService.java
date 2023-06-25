@@ -61,8 +61,7 @@ public class MyService extends FirebaseMessagingService {
                         List<Chat> chats = response.body();
                         for (Chat chat : chats) {
                             //Getting the specific chat we want to update
-                            if (chat.getUsers().get(0).getUsername().equals(senderUsername)
-                                    || chat.getUsers().get(1).getUsername().equals(senderUsername)) {
+                            if (chat.getId() == ChatActivity.instance.getChatId()) {
                                 ChatActivity.instance.setMessages(chat.messages);
                                 setAdapterForMessages(ChatActivity.instance.getMessages());
                             }
