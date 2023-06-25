@@ -1,5 +1,6 @@
 package com.example.androidnoa.activities;
 
+import static com.example.androidnoa.activities.loginActivity.ServerIP;
 import static com.example.androidnoa.activities.loginActivity.db;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ public class AddChatActivity extends AppCompatActivity {
         addBtn.setOnClickListener(view -> {
             EditText chatName = findViewById(R.id.etContactName);
             String chatNameStr = chatName.getText().toString();
-            ChatsApi chatsApi = new ChatsApi("10.0.2.2");
+            ChatsApi chatsApi = new ChatsApi(ServerIP);
             t =  new Thread(() -> {
                 db.chatDao().insert(newChat);
                 runOnUiThread(() -> {
