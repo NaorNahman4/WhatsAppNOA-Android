@@ -128,10 +128,8 @@ const sendMessage = async (req, res) => {
             const messageResponse = await chatService.sendMessage(username, id, msg);
              // first check if the sender is android, else web,the message will handle in app.js listen to the event "newMessage" 
         if(senderUser){ 
-            console.log("send is android"); 
             // if the sender is android, check if the receiver is connect android if yes use firebase 
             if(receiverUserAndroid){ 
-                console.log("send is android, receiver is android"); 
             const otherUserTokenFB = receiverUserAndroid.token; 
                 if(otherUserTokenFB){ 
                 // send the message to the other user with firebse base on the tokenFB 
@@ -146,7 +144,6 @@ const sendMessage = async (req, res) => {
                 } 
         } 
         else if(receiverUserWeb){ 
-            console.log("send is android, receiver is web"); 
             // sender is android, receiver is web so we use socket.io 
             const otherUserSocketId = receiverUserWeb.socketId; 
             socket.emit('androidToWeb', otherUserSocketId); 

@@ -1,7 +1,6 @@
 const connectedPhoneUsers = require('../models/connectPhoneUsers.js');
 
 const insertConnectedPhone = async (username, token) => {
-    console.log("insert connected phone");
     try {
       // addd to momgo db
       const data = new connectedPhoneUsers({ username: username, token: token });
@@ -12,7 +11,6 @@ const insertConnectedPhone = async (username, token) => {
     }
   };
   const logOutUser = async (username, token) => {
-    console.log("log out user");
     try {
       // remove from mongo db
       await connectedPhoneUsers.deleteOne({ username: username});

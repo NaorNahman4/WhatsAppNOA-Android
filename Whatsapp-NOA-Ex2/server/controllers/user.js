@@ -4,15 +4,11 @@ const connectedUsers =require('../models/connectedUsers.js');
 const connectedPhoneUsers = require('../models/connectPhoneUsers.js');
 
 const createUser = async (req, res) => {
-  console.log("createUser"); 
   const username = req.body.username;
   const password = req.body.password;
   const displayName = req.body.displayName;
   const profilePic = req.body.profilePic;
-  console.log(username);
-  console.log(username, password, displayName, profilePic);
   const user = await userService.findUserByUsername(username);
-  console.log(user);
   if (!user) {
     res.status(200).json(await userService.createUser(username, password, displayName, profilePic));
   }else{
@@ -25,8 +21,6 @@ const createUser = async (req, res) => {
 const login = async (req, res) => {
     const u = req.body.username;
     const p = req.body.password;
-    console.log(u);
-    console.log( p);
     const user = await userService.getUser(u, p);
     if (user) {
       // check if the user is already logged in, if yes , don't allow login and return error

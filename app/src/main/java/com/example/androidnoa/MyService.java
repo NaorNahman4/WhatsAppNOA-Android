@@ -72,7 +72,7 @@ public class MyService extends FirebaseMessagingService {
 
                 @Override
                 public void onFailure(Call<List<Chat>> call, Throwable t) {
-                    System.out.println("naor failed to get my chats getmyChats");
+                    System.out.println("failed to get my chats getmyChats");
                     // Handle failure
                 }
             });
