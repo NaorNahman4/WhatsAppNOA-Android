@@ -8,7 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.androidnoa.Chat;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.User;
 import com.example.androidnoa.adapters.ChatAdapter;
@@ -50,6 +54,7 @@ public class ChatActivity extends AppCompatActivity {
     private User currentUser;
     private String token;
     private int chatId;
+    private String otherProfilePic;
 
 
     @Override
@@ -63,7 +68,7 @@ public class ChatActivity extends AppCompatActivity {
         currentUser = (User) intent.getSerializableExtra("user");
         token = intent.getStringExtra("token");
         chatId = intent.getIntExtra("chatId", 0);
-        String displayName = intent.getStringExtra("otherUserName");
+        String displayName = intent.getStringExtra("otherDisplayName");
         TextView textViewDisplayName = findViewById(R.id.textViewUsername);
         textViewDisplayName.setText(displayName);
         recyclerView = findViewById(R.id.recyclerView);
@@ -101,6 +106,34 @@ public class ChatActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+    ChatsApi chatsApi = new ChatsApi(ServerIP);
+    chatsApi.GetMyChats(token, new Callback<List<Chat>>() {
+        @Override
+        public void onResponse(Call<List<Chat>> call, Response<List<Chat>> response) {
+            if(response.isSuccessful()){
+                List<Chat> chats = response.body();
+                for(Chat chat: chats){
+                    if(chat.getUsers().get(0).getDisplayName().equals(displayName)){
+                        otherProfilePic = chat.getUsers().get(0).getProfilePic();
+                    }else if(chat.getUsers().get(1).getDisplayName().equals(displayName)){
+                        otherProfilePic = chat.getUsers().get(1).getProfilePic();
+                    }
+                }
+                ImageView ivUserProfilePic = findViewById(R.id.ivUserProfilePic);
+                ivUserProfilePic.setImageBitmap(base64ToBitmap(otherProfilePic));
+            }
+        }
+        @Override
+        public void onFailure(Call<List<Chat>> call, Throwable t) {
+
+        }
+    });
+
+
+
+
     }
 
     private void sendMessage() {
@@ -217,4 +250,10 @@ public class ChatActivity extends AppCompatActivity {
     public void setChatId(int chatId) {
         this.chatId = chatId;
     }
+
+    public Bitmap base64ToBitmap(String base64String) {
+        byte[] decodedBytes = Base64.decode(base64String, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
 }
