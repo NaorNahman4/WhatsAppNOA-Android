@@ -19,9 +19,17 @@ import android.widget.Toast;
 
 import com.example.androidnoa.R;
 import com.example.androidnoa.activities.loginActivity;
+import com.example.androidnoa.api.FBTokenApi;
 import com.example.androidnoa.api.UsersApi;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SettingsActivity extends AppCompatActivity {
+    private String fbToken;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +38,28 @@ public class SettingsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-
-
+        Intent intent = getIntent();
+        fbToken = intent.getStringExtra("FBtoken");
+        username = intent.getStringExtra("username");
         Button btnBlack = findViewById(R.id.darkThemeRadioButton);
         btnBlack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); // Change to the dark theme
+                FBTokenApi  fbTokenApi = new FBTokenApi();
+                fbTokenApi.sendTokenToServer2(username, fbToken, new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        showCustomToast("Failed to send token to server");
+                    }
+                } );
             }
+
         });
 
         Button btnWhite = findViewById(R.id.lightThemeRadioButton);
@@ -46,6 +67,18 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO); // Change to the light theme
+                FBTokenApi  fbTokenApi = new FBTokenApi();
+                fbTokenApi.sendTokenToServer2(username, fbToken, new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        showCustomToast("Failed to send token to server");
+                    }
+                } );
             }
         });
 
