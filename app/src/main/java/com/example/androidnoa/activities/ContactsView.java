@@ -116,6 +116,11 @@ public class ContactsView extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         msg = response.body();
                         if (msg != null) {
+                            for ( Message message : msg) {
+                                User sender = message.getSender();
+                                sender.setProfilePic("");
+                                message.setSender(sender);
+                            }
                             handleResponse(msg, chatId);
                         }
 
