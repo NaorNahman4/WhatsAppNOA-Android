@@ -26,8 +26,9 @@ import com.example.androidnoa.ContactAdapter;
 import com.example.androidnoa.Message;
 import com.example.androidnoa.R;
 import com.example.androidnoa.User;
-import com.example.androidnoa.api.ChatsApi;
 
+
+import com.example.androidnoa.api.ChatsApi;
 import com.example.androidnoa.api.FBTokenApi;
 import com.example.androidnoa.api.UsersApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -69,6 +70,7 @@ public class ContactsView extends AppCompatActivity {
         fbToken = lastIntent.getStringExtra("FBtoken");
         if (currentUser == null) {
             userApi = new UsersApi(ServerIP);
+            ChatsApi chatsApi = new ChatsApi(ServerIP);
             try {
                 userApi.GetMyDetails(userName, token, new Callback<User>() {
                     @Override
@@ -142,6 +144,8 @@ public class ContactsView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ContactsView.this, SettingsActivity.class);
+                intent.putExtra("FBtoken", fbToken);
+                intent.putExtra("username", userName);
                 startActivityForResult(intent, REQUEST_SETTINGS);
             }
         });
