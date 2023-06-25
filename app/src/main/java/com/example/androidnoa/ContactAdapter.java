@@ -144,13 +144,13 @@ public class ContactAdapter extends BaseAdapter {
         Chat chat = this.contactList.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         String displayName = chat.getUsers().get(0).getDisplayName();
-        if (displayName.equals(user)){
+        if (chat.getUsers().get(0).getUsername().equals(user)){
             displayName = chat.getUsers().get(1).getDisplayName();
         }
         viewHolder.profilePic.setImageBitmap(getOtherProfilePicBitmap(chat,user));
-        if (viewHolder.profilePic.getDrawable()==null){
-            viewHolder.profilePic.setImageResource(R.drawable.default_pic);
-        }
+//        if (viewHolder.profilePic.getDrawable()==null){
+//            viewHolder.profilePic.setImageResource(R.drawable.default_pic);
+//        }
         viewHolder.displayName.setText(displayName);
 
        // viewHolder.profilePic.setImageResource(chat.getUsers().get(0).getProfilePic());

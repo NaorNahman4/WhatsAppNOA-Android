@@ -219,13 +219,13 @@ public class ContactsView extends AppCompatActivity {
 //        for (Message m : msgList) {
 //            list.add(m.getContent());
 //        }
-        String otherUserName = getOtherDisplayName(chatId);
+        String otherDisplayName = getOtherDisplayName(chatId);
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra("list", (ArrayList<Message>) msgList);
         intent.putExtra("user", (User) currentUser);
         intent.putExtra("token", (String) token);
         intent.putExtra("chatId", (int) chatId);
-        intent.putExtra("otherUserName", otherUserName);
+        intent.putExtra("otherDisplayName", otherDisplayName);
         startActivity(intent);
     }
 
@@ -245,6 +245,15 @@ public class ContactsView extends AppCompatActivity {
             return chat.getUsers().get(1).getDisplayName();
         } else {
             return chat.getUsers().get(0).getDisplayName();
+        }
+    }
+
+    public String getOtherProfilePic(int chatId) {
+        Chat chat = getChatById(chatId);
+        if (chat.getUsers().get(0).getUsername().equals(userName)) {
+            return chat.getUsers().get(1).getProfilePic();
+        } else {
+            return chat.getUsers().get(0).getProfilePic();
         }
     }
 
